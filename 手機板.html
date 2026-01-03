@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🐾 APPLE價格POP輸出系統 (手機友善版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- SheetJS 用於解析 Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+            /* 使用 dvh 避免手機瀏覽器網址列遮擋 */
+            height: 100dvh; 
+            overscroll-behavior: none; /* 防止下拉重整 */
+        }
+
+        /* 手機版 Tab 樣式 */
+        .mobile-tab-btn {
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .mobile-tab-btn.active {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        /* 預設列印背景圖樣式 */
+        .pop-bg {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* 紙張模擬與預覽設定 */
+        .a4-sheet {
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 0 auto 20px auto;
+            position: relative;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* A4 尺寸定義 */
+        .sheet-portrait { width: 210mm; height: 297mm; }
+        .sheet-landscape { width: 297mm; height: 210mm; }
+
+        /* 網格佈局容器 */
+        .grid-container {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            padding: 10mm;
+            box-sizing: border-box;
+            justify-content: center;
+            align-content: start;
+            gap: 2mm;
+        }
+
+        /* 卡片通用樣式 */
+        .card {
+            border: 1px dashed #ccc;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
+            background-color: rgba(255,255,255,0.8);
+        }
+
+        /* 單張卡片刪除按鈕 */
+        .delete-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 24px; /* 加大觸控區 */
+            height: 24px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* 整頁刪除按鈕 */
+        .page-delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #dc2626;
+            color: white;
+            width: 36px; /* 加大觸控區 */
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        .page-delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .highlight {
+            color: #cc3300;
+            vertical-align: baseline;
+        }
+
+        /* 1. 小卡 */
+        .card-small {
+            width: 85mm;
+            height: 55mm;
+            padding: 0mm 5mm 8mm 5mm; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            line-height: 1.1; 
+        }
+        .card-small .main-text {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #000;
+            text-align: left;
+        }
+        .card-small .highlight {
+            color: #cc3300;
+            font-size: 18pt;
+        }
+        .card-small .note {
+            font-size: 10pt; 
+            font-weight: normal;
+            color: #000;
+            margin-top: 0px; 
+            width: 100%;
+        }
+
+        /* 2. 中卡 */
+        .card-medium {
+            width: 125mm;
+            height: 55mm;
+            padding: 0mm 5mm 8mm 5mm; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+        .card-medium .main-text {
+            font-size: 20pt;
+            font-weight: bold;
+            color: #000;
+            text-align: left;
+            vertical-align: baseline;
+        }
+        .card-medium .highlight {
+            font-size: 26pt;
+            color: #cc3300;
+            vertical-align: baseline;
+        }
+        .card-medium .note {
+            font-size: 14pt;
+            font-weight: normal;
+            color: #000;
+            margin-top: 0px;
+            width: 100%;
+        }
+
+        /* 3. 大卡修正版 */
+        .card-large {
+            width: 185mm;
+            height: 65mm;
+            padding: 8mm 5mm 2mm 5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .card-large .line-name {
+            font-size: 42pt;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1; 
+            margin-bottom: 1mm;
+        }
+        .card-large .line-note {
+            font-size: 20pt;
+            color: #000;
+            text-align: right;
+            width: 100%;
+            line-height: 1.1;
+            margin-bottom: auto; 
+        }
+        .card-large .line-price {
+            font-size: 34pt;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: baseline; 
+            line-height: 1; 
+        }
+        .card-large .highlight {
+            font-size: 66pt;
+            color: #cc3300;
+            line-height: 1; 
+        }
+
+        /* 頁碼標示 */
+        .page-number {
+            position: absolute;
+            bottom: 5mm;
+            right: 5mm;
+            font-size: 10pt;
+            color: #999;
+        }
+
+        #preview-area {
+            transform-origin: top center;
+            transition: transform 0.2s;
+        }
+
+        /* === 列印核心修正 === */
+        @media print {
+            @page { margin: 0; }
+            body * { visibility: hidden; }
+            .no-print, header, aside, .page-number, .page-delete-btn, .mobile-tabs { display: none !important; }
+            html, body {
+                width: 100%; height: auto; overflow: visible !important;
+                display: block !important; margin: 0 !important; padding: 0 !important; background: white !important;
+            }
+            main {
+                visibility: visible !important; display: block !important; position: static !important;
+                margin: 0 !important; padding: 0 !important; width: 100% !important; height: auto !important;
+                overflow: visible !important;
+            }
+            #scroll-container {
+                visibility: visible !important; display: block !important; overflow: visible !important;
+                margin: 0 !important; padding: 0 !important;
+            }
+            .grid-container {
+                padding-bottom: 0 !important; padding-left: 10mm !important; padding-right: 10mm !important;
+                gap: 0.3mm !important; height: auto !important;
+            }
+            .grid-small { padding-top: 1mm !important; }
+            .grid-medium, .grid-large { padding-top: 5mm !important; }
+            #preview-area, #preview-area * { visibility: visible !important; }
+            #preview-area {
+                position: static !important; transform: none !important; width: 100% !important;
+                margin: 0 !important; padding: 0 !important; left: 0 !important; top: 0 !important;
+            }
+            .a4-sheet {
+                margin: 0 !important; box-shadow: none !important; border: none !important;
+                position: relative !important; left: 0 !important; top: 0 !important; height: auto !important;
+                min-height: 200mm; page-break-after: always;
+            }
+            .a4-sheet:last-of-type { page-break-after: auto !important; page-break-inside: avoid !important; margin-bottom: 0 !important; }
+            .card { border: none !important; }
+            .delete-btn { display: none !important; }
+        }
+    </style>
+</head>
+<body class="flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md p-3 z-30 no-print flex flex-col md:flex-row items-start md:items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <!-- 店貓展示區 -->
+            <div class="flex gap-1 md:gap-2 mr-1">
+                <img src="1.ico" onerror="this.style.display='none'" class="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-blue-100 shadow-sm" title="店貓1">
+                <img src="2.ico" onerror="this.style.display='none'" class="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-blue-100 shadow-sm" title="店貓2">
+                <img src="3.ico" onerror="this.style.display='none'" class="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-blue-100 shadow-sm" title="店貓3">
+                <img src="4.ico" onerror="this.style.display='none'" class="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-blue-100 shadow-sm" title="店貓4">
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <img src="icon256.ico" onerror="this.style.display='none'" alt="Logo" class="h-8 w-8 object-contain">
+                <h1 class="text-lg md:text-2xl font-bold text-gray-800 leading-tight">APPLE價格POP<br class="md:hidden">輸出系統</h1>
+            </div>
+        </div>
+        
+        <div class="text-xs md:text-sm self-end md:self-auto">
+            <a href="https://www.instagram.com/tsikkong/?igsh=MTdqYmV6YmNoeGhpZg%3D%3D&utm_source=qr#" target="_blank" class="flex items-center gap-2 text-blue-500 hover:text-blue-700 hover:underline transition-colors font-medium">
+                <i class="fab fa-instagram text-lg"></i>
+                <span>沒有要斗內，但可以點進來支持一下</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 手機版分頁 Tab (Mobile Tabs) -->
+    <div class="mobile-tabs flex md:hidden bg-white border-b shrink-0 z-20 sticky top-0">
+        <button onclick="switchTab('edit')" id="tab-edit" class="mobile-tab-btn flex-1 py-3 text-center text-gray-600 active">
+            <i class="fas fa-edit mr-1"></i> 編輯設定
+        </button>
+        <button onclick="switchTab('preview')" id="tab-preview" class="mobile-tab-btn flex-1 py-3 text-center text-gray-600">
+            <i class="fas fa-eye mr-1"></i> 預覽結果
+            <span id="mobile-badge" class="ml-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 hidden">0</span>
+        </button>
+    </div>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        <!-- 左側控制面板 (Editor Panel) -->
+        <!-- 增加 md:flex, md:w-96 讓它在平板/桌面以上維持左側欄，手機版則佔滿寬度 -->
+        <aside id="editor-panel" class="w-full md:w-96 bg-white border-r border-gray-200 flex flex-col p-4 overflow-y-auto no-print z-20 h-full">
+            
+            <!-- 尺寸選擇 -->
+            <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                <h3 class="font-bold text-gray-700 mb-2 text-sm"><i class="fas fa-ruler-combined mr-1"></i> 1. 選擇尺寸</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
+                        <input type="radio" name="size" value="small" class="mr-3 w-5 h-5 text-blue-600" checked onchange="changeSize()">
+                        <div>
+                            <div class="font-bold text-sm">小卡 (8.5x5.5cm)</div>
+                            <div class="text-xs text-gray-500">直式A4 | 10張/頁</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
+                        <input type="radio" name="size" value="medium" class="mr-3 w-5 h-5 text-blue-600" onchange="changeSize()">
+                        <div>
+                            <div class="font-bold text-sm">中卡 (12.5x5.5cm)</div>
+                            <div class="text-xs text-gray-500">橫式A4 | 6張/頁</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
+                        <input type="radio" name="size" value="large" class="mr-3 w-5 h-5 text-blue-600" onchange="changeSize()">
+                        <div>
+                            <div class="font-bold text-sm">大卡 (18.5x6.5cm)</div>
+                            <div class="text-xs text-gray-500">直式A4 | 4張/頁</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 資料輸入 -->
+            <div class="mb-4">
+                <h3 class="font-bold text-gray-700 mb-2 text-sm"><i class="fas fa-keyboard mr-1"></i> 2. 輸入資料</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-gray-600">品名</label>
+                        <input type="text" id="input-name" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="例如：貓罐頭">
+                    </div>
+
+                    <!-- 價格類別選擇 -->
+                    <div class="p-2 bg-gray-50 border rounded">
+                        <label class="block text-xs font-bold mb-2 text-gray-600">類別選擇</label>
+                        <div class="flex flex-wrap items-center gap-2 text-sm">
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="price-type" value="special" class="mr-1 text-blue-600" checked onchange="toggleCustomInput()">
+                                特價
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="price-type" value="addon" class="mr-1 text-blue-600" onchange="toggleCustomInput()">
+                                加購價
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="price-type" value="custom" class="mr-1 text-blue-600" onchange="toggleCustomInput()">
+                                自訂
+                            </label>
+                            <input type="text" id="input-custom-text" disabled maxlength="3" class="border rounded p-1 w-20 text-center text-sm disabled:bg-gray-200 outline-none focus:ring-1 focus:ring-blue-500" placeholder="3字內">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="w-1/3">
+                            <label class="block text-xs font-bold mb-1 text-gray-600">組數 (選填)</label>
+                            <input type="number" inputmode="numeric" id="input-qty" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="3">
+                        </div>
+                        <div class="w-2/3">
+                            <label class="block text-xs font-bold mb-1 text-gray-600">價格</label>
+                            <input type="number" inputmode="numeric" id="input-price" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="100">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-gray-600">備註</label>
+                        <input type="text" id="input-note" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="售完為止">
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 mt-4">
+                    <button onclick="addCard()" class="flex-1 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg transition shadow">
+                        <i class="fas fa-plus mr-1"></i> 產生
+                    </button>
+                    <button onclick="copyLast()" class="flex-1 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-3 px-4 rounded-lg transition shadow">
+                        <i class="fas fa-copy mr-1"></i> 複製前筆
+                    </button>
+                </div>
+            </div>
+
+            <!-- 操作按鈕 -->
+            <div class="mb-4 border-t pt-4">
+                <h3 class="font-bold text-gray-700 mb-2 text-sm"><i class="fas fa-cogs mr-1"></i> 3. 功能操作</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="openBatchModal()" class="bg-gray-600 hover:bg-gray-700 text-white text-sm py-3 px-3 rounded-lg">
+                        <i class="fas fa-file-import mr-1"></i> 批量匯入
+                    </button>
+                    <button onclick="clearAll()" class="bg-red-600 hover:bg-red-700 text-white text-sm py-3 px-3 rounded-lg">
+                        <i class="fas fa-trash-alt mr-1"></i> 全部清除
+                    </button>
+                </div>
+                
+                <!-- 背景設定 (唯讀提示) -->
+                <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-center">
+                    <p class="text-xs text-gray-500 font-bold">
+                        <i class="fas fa-image mr-1"></i> 背景圖片：系統預設
+                    </p>
+                </div>
+
+                <!-- 自訂字型設定 -->
+                <div class="mt-4 p-3 bg-purple-50 border border-purple-200 rounded">
+                    <label class="block text-xs font-bold mb-2">自訂字型設定</label>
+                    <div class="mb-1">
+                        <select id="font-selector" onchange="changeLocalFont()" class="w-full border rounded p-2 text-sm mb-1 focus:ring-2 focus:ring-purple-500 outline-none bg-white">
+                            <!-- JS 會自動填入選項 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 列印區 -->
+            <div class="mt-auto bg-gray-800 text-white p-4 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-2 text-sm">
+                    <span>目前頁數: <span id="page-count">0</span></span>
+                    <span>總卡片: <span id="card-count">0</span></span>
+                </div>
+                <button onclick="printPop()" class="w-full bg-white text-gray-900 hover:bg-gray-200 active:bg-gray-300 font-bold py-3 px-4 rounded-lg shadow-lg transition flex items-center justify-center text-lg">
+                    <i class="fas fa-print mr-2"></i> 列印 POP
+                </button>
+                <div class="text-xs text-center text-gray-400 mt-2 md:hidden">
+                    建議使用電腦連接印表機進行列印
+                </div>
+            </div>
+            <!-- 底部墊高，避免被手機導航條遮住 -->
+            <div class="h-10 md:hidden"></div>
+        </aside>
+
+        <!-- 右側預覽區 (Preview Panel) -->
+        <!-- 手機版預設隱藏 (hidden)，透過 JS 切換顯示；桌面版 (md:flex) 預設顯示 -->
+        <main id="preview-panel" class="hidden md:flex flex-1 flex-col h-full bg-gray-500 relative w-full">
+            <!-- 預覽控制條 -->
+            <div class="bg-gray-700 text-white p-2 flex flex-wrap justify-between items-center shadow z-10 no-print gap-2">
+                <div class="flex items-center gap-4">
+                    <span class="font-bold text-sm"><i class="fas fa-search mr-1"></i>預覽</span>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs">縮放:</label>
+                        <input type="range" min="0.3" max="1.5" step="0.1" value="0.6" oninput="updateZoom(this.value)" class="w-24 md:w-32">
+                        <span id="zoom-val" class="text-xs w-8 text-right">60%</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs">頁面:</label>
+                    <input type="number" id="jump-page" min="1" value="1" class="w-12 text-black px-1 rounded text-center text-sm">
+                    <button onclick="jumpToPage()" class="bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded text-xs">Go</button>
+                </div>
+            </div>
+
+            <!-- 滾動區域 -->
+            <div class="flex-1 overflow-auto p-4 md:p-8 flex justify-center items-start bg-gray-500" id="scroll-container">
+                <div id="preview-area" class="flex flex-col gap-8 origin-top-center transition-transform duration-200">
+                    <!-- 這裡會動態生成 A4 紙張 -->
+                    <div class="text-white text-center mt-10 opacity-50">
+                        <i class="fas fa-arrow-left md:hidden mr-2"></i>
+                        <span class="md:hidden">請切換至「編輯設定」新增卡片</span>
+                        <span class="hidden md:inline">請從左側新增卡片</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 批量匯入 Modal -->
+    <div id="batch-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print px-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl h-3/4 flex flex-col">
+            <h2 class="text-xl font-bold mb-2">批量匯入</h2>
+            <div class="flex gap-4 mb-4 border-b">
+                <div class="pb-2 border-b-2 border-blue-500 font-bold cursor-pointer text-blue-600">文字輸入</div>
+                <div class="pb-2 text-gray-500 text-sm self-end ml-auto">支援 Excel (.xls, .xlsx)</div>
+            </div>
+
+            <div class="mb-4 flex-1 flex flex-col">
+                 <label class="block text-sm font-bold mb-1 text-gray-700">方式一：直接貼上文字</label>
+                 <p class="text-xs text-gray-500 mb-2">格式：品名,組數,價格,備註 (逗號分隔)</p>
+                 <textarea id="batch-input" class="border p-3 font-mono text-sm w-full flex-1 rounded mb-4 focus:ring-2 focus:ring-blue-500 resize-none" placeholder="貓罐頭,3,100,售完為止&#10;狗飼料,,500,新品上市"></textarea>
+            </div>
+
+            <div class="mb-4 p-4 bg-green-50 rounded border border-green-100">
+                <label class="block text-sm font-bold mb-2 text-gray-700">方式二：上傳 Excel 檔案</label>
+                <input type="file" id="excel-file" accept=".xls,.xlsx" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200"/>
+                <p class="text-xs text-gray-500 mt-2">系統會自動掃描 Excel 內所有工作表。若有「印出」欄位，則只匯入數值為 1 的資料；若無，則全數匯入。</p>
+            </div>
+
+            <div class="flex justify-end gap-2 mt-auto">
+                <button onclick="closeBatchModal()" class="px-4 py-3 bg-gray-300 rounded-lg hover:bg-gray-400 font-bold">取消</button>
+                <button onclick="processBatch()" class="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold">匯入</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 【使用者設定區】
+        // 資料夾內實際存在的字型清單
+        // ==========================================
+        const fontList = [
+            { label: '預設黑體 (Noto Sans TC)', filename: 'default' },
+            { label: '宇文天穹', filename: '宇文天穹.ttf' },
+            { label: '清松手寫體 4', filename: '清松手寫體 4.ttf' },
+            { label: '源泉圓體-b', filename: '源泉圓體-b.otf' },
+            { label: '霞鶩漫黑', filename: '霞鶩漫黑.ttf' }
+        ];
+        // ==========================================
+
+        let cards = [];
+        let currentSize = 'small';
+        // 強制預設背景
+        let currentBackgroundImage = 'url("background.jpg")'; 
+        let currentFontFamily = '"Noto Sans TC", sans-serif'; 
+
+        const configs = {
+            small: {
+                name: '小卡', width: 85, height: 55, sheetClass: 'sheet-portrait', rows: 5, cols: 2, limit: 10
+            },
+            medium: {
+                name: '中卡', width: 125, height: 55, sheetClass: 'sheet-landscape', rows: 3, cols: 2, limit: 6
+            },
+            large: {
+                name: '大卡', width: 185, height: 65, sheetClass: 'sheet-portrait', rows: 4, cols: 1, limit: 4
+            }
+        };
+
+        window.onload = function() {
+            initFontSelector();
+            render();
+            // 手機版預設縮放稍微小一點，避免超出螢幕太多
+            if (window.innerWidth < 768) {
+                updateZoom(0.4);
+                // 更新 Range Input 的值
+                document.querySelector('input[type=range]').value = 0.4;
+            } else {
+                updateZoom(0.6);
+            }
+        };
+
+        // --- 手機版分頁切換功能 ---
+        function switchTab(tabName) {
+            const editorPanel = document.getElementById('editor-panel');
+            const previewPanel = document.getElementById('preview-panel');
+            const tabEdit = document.getElementById('tab-edit');
+            const tabPreview = document.getElementById('tab-preview');
+
+            if (tabName === 'edit') {
+                editorPanel.classList.remove('hidden');
+                previewPanel.classList.add('hidden');
+                
+                tabEdit.classList.add('active');
+                tabPreview.classList.remove('active');
+            } else {
+                editorPanel.classList.add('hidden');
+                previewPanel.classList.remove('hidden');
+                previewPanel.classList.add('flex'); // 確保 flex 屬性回來
+                
+                tabEdit.classList.remove('active');
+                tabPreview.classList.add('active');
+            }
+        }
+
+        // 初始化字型選單
+        function initFontSelector() {
+            const selector = document.getElementById('font-selector');
+            selector.innerHTML = '';
+            fontList.forEach(font => {
+                const option = document.createElement('option');
+                option.value = font.filename;
+                option.text = font.label;
+                selector.appendChild(option);
+            });
+        }
+
+        // 切換本地字型
+        function changeLocalFont() {
+            const selector = document.getElementById('font-selector');
+            const filename = selector.value;
+
+            if (filename === 'default') {
+                currentFontFamily = '"Noto Sans TC", sans-serif';
+                return;
+            }
+
+            // 定義唯一的 FontFace 名稱，避免衝突
+            const fontName = 'LocalFont_' + filename.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+            const fontUrl = `url("${filename}")`;
+            
+            // 檢查瀏覽器是否已經載入過這個字型
+            const isLoaded = Array.from(document.fonts).some(f => f.family === fontName);
+
+            if (isLoaded) {
+                currentFontFamily = `"${fontName}", "Noto Sans TC", sans-serif`;
+            } else {
+                // 嘗試載入
+                const fontFace = new FontFace(fontName, fontUrl);
+                fontFace.load().then(function(loadedFace) {
+                    document.fonts.add(loadedFace);
+                    currentFontFamily = `"${fontName}", "Noto Sans TC", sans-serif`;
+                }).catch(function(error) {
+                    // 為了不讓預覽報錯，這裡使用 console.log 代替 alert
+                    console.log(`找不到檔案 "${filename}" \n請確認檔案已放入同一資料夾，且檔名完全一致！`);
+                    console.error(error);
+                    // 失敗則切回預設
+                    selector.value = 'default';
+                    currentFontFamily = '"Noto Sans TC", sans-serif';
+                });
+            }
+        }
+
+        function changeSize() {
+            let selectedSize = '';
+            const radios = document.getElementsByName('size');
+            for (let r of radios) {
+                if (r.checked) {
+                    selectedSize = r.value;
+                    break;
+                }
+            }
+            if (selectedSize === currentSize) return;
+
+            if (cards.length > 0) {
+                if (confirm('切換後會清除資料')) {
+                    cards = [];
+                    currentSize = selectedSize;
+                    render();
+                } else {
+                    for (let r of radios) {
+                        if (r.value === currentSize) {
+                            r.checked = true;
+                        }
+                    }
+                }
+            } else {
+                currentSize = selectedSize;
+                render();
+            }
+        }
+
+        // 新增：切換自訂文字輸入框狀態
+        function toggleCustomInput() {
+            const radios = document.getElementsByName('price-type');
+            let selected = 'special';
+            for(let r of radios) {
+                if(r.checked) selected = r.value;
+            }
+            
+            const customInput = document.getElementById('input-custom-text');
+            if (selected === 'custom') {
+                customInput.disabled = false;
+                customInput.focus();
+            } else {
+                customInput.disabled = true;
+                customInput.value = ''; // 選擇其他時清空
+            }
+        }
+
+        function addCard() {
+            const name = document.getElementById('input-name').value.trim();
+            const qty = document.getElementById('input-qty').value.trim();
+            const price = document.getElementById('input-price').value.trim();
+            const note = document.getElementById('input-note').value.trim();
+
+            // 取得類別資料
+            const typeRadios = document.getElementsByName('price-type');
+            let categoryType = 'special';
+            for (let r of typeRadios) {
+                if(r.checked) categoryType = r.value;
+            }
+            const customText = document.getElementById('input-custom-text').value.trim();
+
+            if (!name || !price) {
+                alert('請至少輸入品名與價格！');
+                return;
+            }
+            
+            if (categoryType === 'custom' && !customText) {
+                alert('請輸入自訂文字 (3字內)');
+                return;
+            }
+
+            cards.push({ 
+                name, qty, price, note, 
+                categoryType,
+                customText,
+                bg: currentBackgroundImage,
+                font: currentFontFamily
+            });
+            render();
+            
+            // 提示用戶
+            const badge = document.getElementById('mobile-badge');
+            badge.innerText = cards.length;
+            badge.classList.remove('hidden');
+
+            document.getElementById('input-name').focus();
+        }
+
+        function copyLast() {
+            if (cards.length === 0) {
+                alert('目前沒有資料可複製');
+                return;
+            }
+            const last = cards[cards.length - 1];
+            cards.push({ 
+                name: last.name,
+                qty: last.qty,
+                price: last.price,
+                note: last.note,
+                categoryType: last.categoryType,
+                customText: last.customText,
+                bg: currentBackgroundImage,
+                font: currentFontFamily
+            });
+            render();
+            
+            const badge = document.getElementById('mobile-badge');
+            badge.innerText = cards.length;
+            badge.classList.remove('hidden');
+        }
+
+        function deleteCard(index) {
+            cards.splice(index, 1);
+            render();
+            updateBadge();
+        }
+
+        function deletePage(pageNumber) {
+            const config = configs[currentSize];
+            const limit = config.limit;
+            const startIndex = (pageNumber - 1) * limit;
+            cards.splice(startIndex, limit);
+            render();
+            updateBadge();
+        }
+        
+        function updateBadge() {
+            const badge = document.getElementById('mobile-badge');
+            badge.innerText = cards.length;
+            if (cards.length === 0) badge.classList.add('hidden');
+            else badge.classList.remove('hidden');
+        }
+
+        function clearAll() {
+            if (confirm('確定要清除所有卡片嗎？')) {
+                cards = [];
+                render();
+                updateBadge();
+            }
+        }
+
+        function render() {
+            const previewArea = document.getElementById('preview-area');
+            previewArea.innerHTML = '';
+            
+            const config = configs[currentSize];
+            const totalCards = cards.length;
+            
+            document.getElementById('card-count').innerText = totalCards;
+            const totalPages = Math.ceil(totalCards / config.limit) || 1;
+            document.getElementById('page-count').innerText = totalPages;
+
+            if (totalCards === 0) {
+                 previewArea.innerHTML = `
+                    <div class="text-white text-center mt-10 opacity-50">
+                        <i class="fas fa-arrow-left md:hidden mr-2"></i>
+                        <span class="md:hidden">請切換至「編輯設定」新增卡片</span>
+                        <span class="hidden md:inline">請從左側新增卡片</span>
+                    </div>
+                 `;
+                 return;
+            }
+
+            let cardIndex = 0;
+            for (let i = 1; i <= totalPages; i++) {
+                const sheet = document.createElement('div');
+                sheet.className = `a4-sheet ${config.sheetClass}`;
+                sheet.id = `page-${i}`;
+
+                const pageDelBtn = document.createElement('div');
+                pageDelBtn.className = 'page-delete-btn no-print';
+                pageDelBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                pageDelBtn.title = '刪除整頁';
+                pageDelBtn.onclick = function() {
+                    if(confirm(`確定要刪除第 ${i} 頁的所有卡片嗎？\n(後面的卡片會自動遞補)`)) {
+                        deletePage(i);
+                    }
+                };
+                sheet.appendChild(pageDelBtn);
+                
+                const grid = document.createElement('div');
+                grid.className = `grid-container grid-${currentSize}`;
+                grid.style.gridTemplateColumns = `repeat(${config.cols}, ${config.width}mm)`;
+                grid.style.gridTemplateRows = `repeat(${config.rows}, ${config.height}mm)`;
+
+                for (let j = 0; j < config.limit; j++) {
+                    if (cardIndex >= totalCards) break;
+                    
+                    const data = cards[cardIndex];
+                    const card = createCardElement(data, cardIndex, currentSize);
+                    grid.appendChild(card);
+                    
+                    cardIndex++;
+                }
+
+                const pageNum = document.createElement('div');
+                pageNum.className = 'page-number';
+                pageNum.innerText = `第 ${i} 頁`;
+                
+                sheet.appendChild(grid);
+                sheet.appendChild(pageNum);
+                previewArea.appendChild(sheet);
+            }
+        }
+
+        function createCardElement(data, index, size) {
+            const div = document.createElement('div');
+            div.className = `card card-${size} pop-bg`;
+            
+            div.style.backgroundImage = data.bg || 'url("background.jpg")';
+            div.style.fontFamily = data.font || '"Noto Sans TC", sans-serif';
+
+            const delBtn = document.createElement('div');
+            delBtn.className = 'delete-btn';
+            delBtn.innerHTML = '<i class="fas fa-times"></i>';
+            delBtn.onclick = () => deleteCard(index);
+            div.appendChild(delBtn);
+
+            // 判斷顯示文字
+            let labelText = '特價';
+            if (data.categoryType === 'addon') {
+                labelText = '加購價';
+            } else if (data.categoryType === 'custom') {
+                labelText = data.customText || '';
+            }
+
+            if (size === 'small' || size === 'medium') {
+                const mainText = document.createElement('div');
+                mainText.className = 'main-text';
+                let qtyHtml = data.qty ? `<span class="highlight qty-val">${data.qty}</span>入` : '';
+                let priceHtml = `<span class="highlight price-val">${data.price}</span>元`;
+                // 小卡/中卡 增加顯示前綴
+                mainText.innerHTML = `${data.name} ${labelText}${qtyHtml}${priceHtml}`;
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'note';
+                noteDiv.innerText = data.note;
+                div.appendChild(mainText);
+                div.appendChild(noteDiv);
+            } else if (size === 'large') {
+                const lineName = document.createElement('div');
+                lineName.className = 'line-name';
+                lineName.innerText = data.name;
+                const lineNote = document.createElement('div');
+                lineNote.className = 'line-note';
+                lineNote.innerText = data.note;
+                const linePrice = document.createElement('div');
+                linePrice.className = 'line-price';
+                let qtyHtml = data.qty ? `<span class="highlight">${data.qty}</span>入` : '';
+                let priceHtml = `<span class="highlight">${data.price}</span>元`;
+                // 大卡 替換前綴
+                linePrice.innerHTML = `${labelText}${qtyHtml}${priceHtml}`;
+                div.appendChild(lineName);
+                div.appendChild(lineNote);
+                div.appendChild(linePrice);
+            }
+            return div;
+        }
+
+        function updateZoom(val) {
+            // 在手機版上限制最大縮放，以免操作困難
+            document.getElementById('preview-area').style.transform = `scale(${val})`;
+            document.getElementById('zoom-val').innerText = Math.round(val * 100) + '%';
+        }
+
+        function jumpToPage() {
+            const page = document.getElementById('jump-page').value;
+            const target = document.getElementById(`page-${page}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('找不到該頁面');
+            }
+        }
+
+        function openBatchModal() {
+            document.getElementById('batch-modal').classList.remove('hidden');
+            document.getElementById('batch-modal').classList.add('flex');
+        }
+        function closeBatchModal() {
+            document.getElementById('batch-modal').classList.add('hidden');
+            document.getElementById('batch-modal').classList.remove('flex');
+            document.getElementById('excel-file').value = ''; 
+        }
+
+        function processBatch() {
+            const fileInput = document.getElementById('excel-file');
+            const textInput = document.getElementById('batch-input');
+            
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    // 遍歷所有工作表
+                    let addedCount = 0;
+                    workbook.SheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        // 使用 { defval: '' } 強制所有欄位出現，解決第一列空值導致欄位遺失的問題
+                        const json = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+                        
+                        if (json.length === 0) return;
+
+                        let hasPrintColumn = false;
+                        // 檢查該工作表是否有 "印出" 欄位
+                        if (json.length > 0) {
+                            const firstRowKeys = Object.keys(json[0]);
+                            for (const key of firstRowKeys) {
+                                if (key.replace(/\s/g, '').includes('印出')) {
+                                    hasPrintColumn = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        json.forEach(row => {
+                            let name = '', qty = '', price = '', note = '';
+                            let printValue = null;
+
+                            for (const key in row) {
+                                const cleanKey = key.replace(/\s/g, '');
+                                if (cleanKey.includes('品名')) name = row[key];
+                                else if (cleanKey.includes('組數')) qty = row[key];
+                                else if (cleanKey.includes('價格')) price = row[key];
+                                else if (cleanKey.includes('備註')) note = row[key];
+                                else if (cleanKey.includes('印出')) printValue = row[key];
+                            }
+
+                            let shouldImport = true;
+                            // 如果有 "印出" 欄位，必須為 1 才印；否則預設印出
+                            if (hasPrintColumn) {
+                                // 嚴格檢查：轉成字串後去除空白，必須等於 '1'
+                                if (String(printValue).trim() !== '1') {
+                                    shouldImport = false;
+                                }
+                            }
+
+                            if (shouldImport && name) {
+                                cards.push({ 
+                                    name: String(name).trim(), 
+                                    qty: qty ? String(qty).trim() : '', 
+                                    price: price ? String(price).trim() : '', 
+                                    note: note ? String(note).trim() : '',
+                                    categoryType: 'special', // 批量匯入預設為特價
+                                    customText: '',
+                                    bg: currentBackgroundImage,
+                                    font: currentFontFamily
+                                });
+                                addedCount++;
+                            }
+                        });
+                    });
+                    
+                    finishBatch(addedCount);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                const text = textInput.value;
+                const lines = text.split('\n');
+                let addedCount = 0;
+                lines.forEach(line => {
+                    if (!line.trim()) return;
+                    const parts = line.split(/[,，]/);
+                    if (parts.length >= 1) {
+                        const name = parts[0].trim();
+                        const qty = parts[1] ? parts[1].trim() : '';
+                        const price = parts[2] ? parts[2].trim() : '';
+                        const note = parts[3] ? parts[3].trim() : '';
+                        if (name && (price || parts.length > 2)) {
+                            cards.push({ 
+                                name, qty, price, note,
+                                categoryType: 'special', // 批量匯入預設為特價
+                                customText: '',
+                                bg: currentBackgroundImage,
+                                font: currentFontFamily
+                            });
+                            addedCount++;
+                        }
+                    }
+                });
+                finishBatch(addedCount);
+            }
+        }
+
+        function finishBatch(count) {
+            if (count > 0) {
+                render();
+                updateBadge();
+                closeBatchModal();
+                document.getElementById('batch-input').value = '';
+                alert(`成功匯入 ${count} 筆資料`);
+            } else {
+                alert('格式錯誤或無資料');
+            }
+        }
+
+        function printPop() {
+            let printStyle = document.getElementById('print-style');
+            if (!printStyle) {
+                printStyle = document.createElement('style');
+                printStyle.id = 'print-style';
+                document.head.appendChild(printStyle);
+            }
+
+            if (currentSize === 'medium') {
+                printStyle.innerHTML = `
+                    @media print { 
+                        @page { size: landscape; margin: 0; } 
+                    }
+                `;
+                // 手機通常不支援自動切換列印方向，提示使用者
+                if (window.innerWidth < 768) {
+                     alert("請在列印選項中手動選擇「橫向」");
+                }
+            } else {
+                printStyle.innerHTML = `
+                    @media print { 
+                        @page { size: portrait; margin: 0; } 
+                    }
+                `;
+            }
+            window.print();
+        }
+
+        document.getElementById('input-note').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addCard();
+            }
+        });
+    </script>
+</body>
+</html>
