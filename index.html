@@ -210,6 +210,24 @@
             margin-top: auto;
             margin-bottom: 5mm;
         }
+        .card-smallRound .line-note.align-right {
+            text-align: right;
+        }
+        /* 類別選擇為「不顯示」時，價格放大為 72pt，故品名與備註需縮減留白以避免品名被擠壓裁切 */
+        .card-smallRound.price-only-mode .line-name {
+            margin-top: 0;
+            flex-shrink: 0;
+        }
+        .card-smallRound.price-only-mode .line-note {
+            font-size: 16pt;
+            line-height: 1.1;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .card-smallRound.price-only-mode .line-price {
+            margin-top: auto;
+            margin-bottom: 0;
+        }
         .card-smallRound .line-price {
             font-weight: bold;
             text-align: center;
@@ -231,6 +249,10 @@
             font-size: 34pt;
             color: #cc3300;
             line-height: 1;
+        }
+        /* 類別選擇為「不顯示」時，價格放大為 72pt */
+        .card-smallRound .line-price.price-only .highlight {
+            font-size: 72pt;
         }
 
         /* 3. 大卡修正版 */
@@ -277,6 +299,21 @@
             font-size: 66pt;
             color: #cc3300;
             line-height: 1; 
+        }
+
+        /* 形狀分類按鈕 */
+        .shape-cat-btn {
+            transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .shape-cat-btn.active-cat {
+            background-color: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+        .shape-cat-btn.inactive-cat {
+            background-color: #fff;
+            color: #374151;
+            border-color: #d1d5db;
         }
 
         /* 頁碼標示 */
@@ -379,7 +416,14 @@
             <!-- 尺寸選擇 -->
             <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
                 <h3 class="font-bold text-gray-700 mb-2 text-sm"><i class="fas fa-ruler-combined mr-1"></i> 1. 選擇尺寸</h3>
-                <div class="space-y-2">
+
+                <!-- 形狀分類切換 -->
+                <div class="flex gap-2 mb-2">
+                    <button type="button" id="cat-sharp" class="shape-cat-btn active-cat flex-1 py-2 rounded border text-sm font-bold" onclick="switchShapeCategory('sharp')">直角</button>
+                    <button type="button" id="cat-round" class="shape-cat-btn inactive-cat flex-1 py-2 rounded border text-sm font-bold" onclick="switchShapeCategory('round')">圓角</button>
+                </div>
+
+                <div class="space-y-2" id="size-group-sharp">
                     <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
                         <input type="radio" name="size" value="small" class="mr-3 w-5 h-5 text-blue-600" checked onchange="changeSize()">
                         <div>
@@ -395,17 +439,20 @@
                         </div>
                     </label>
                     <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
-                        <input type="radio" name="size" value="smallRound" class="mr-3 w-5 h-5 text-blue-600" onchange="changeSize()">
-                        <div>
-                            <div class="font-bold text-sm">小卡圓角 (8.5x5.5cm)</div>
-                            <div class="text-xs text-gray-500">直式A4 | 10張/頁 | 圓角背景</div>
-                        </div>
-                    </label>
-                    <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
                         <input type="radio" name="size" value="large" class="mr-3 w-5 h-5 text-blue-600" onchange="changeSize()">
                         <div>
                             <div class="font-bold text-sm">大卡 (18.5x6.5cm)</div>
                             <div class="text-xs text-gray-500">直式A4 | 4張/頁</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="space-y-2 hidden" id="size-group-round">
+                    <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50 active:bg-blue-100 transition">
+                        <input type="radio" name="size" value="smallRound" class="mr-3 w-5 h-5 text-blue-600" onchange="changeSize()">
+                        <div>
+                            <div class="font-bold text-sm">小卡圓角 (8.5x5.5cm)</div>
+                            <div class="text-xs text-gray-500">直式A4 | 10張/頁 | 圓角背景</div>
                         </div>
                     </label>
                 </div>
@@ -418,6 +465,21 @@
                     <div>
                         <label class="block text-xs font-bold mb-1 text-gray-600">品名</label>
                         <input type="text" id="input-name" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="例如：貓罐頭">
+                    </div>
+
+                    <!-- 品名字體大小 (僅圓角小卡) -->
+                    <div id="name-fontsize-group" class="p-2 bg-gray-50 border rounded hidden">
+                        <label class="block text-xs font-bold mb-2 text-gray-600">品名字體大小</label>
+                        <div class="flex flex-wrap items-center gap-2 text-sm">
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="name-font-size" value="large" class="mr-1 text-blue-600" checked>
+                                大字 (46pt)
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="name-font-size" value="small" class="mr-1 text-blue-600">
+                                小字 (34pt)
+                            </label>
+                        </div>
                     </div>
 
                     <!-- 價格類別選擇 -->
@@ -436,6 +498,10 @@
                                 <input type="radio" name="price-type" value="custom" class="mr-1 text-blue-600" onchange="toggleCustomInput()">
                                 自訂
                             </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="price-type" value="none" class="mr-1 text-blue-600" onchange="toggleCustomInput()">
+                                不顯示
+                            </label>
                             <input type="text" id="input-custom-text" disabled maxlength="3" class="border rounded p-1 w-20 text-center text-sm disabled:bg-gray-200 outline-none focus:ring-1 focus:ring-blue-500" placeholder="3字內">
                         </div>
                     </div>
@@ -453,6 +519,21 @@
                     <div>
                         <label class="block text-xs font-bold mb-1 text-gray-600">備註</label>
                         <input type="text" id="input-note" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="售完為止">
+                    </div>
+
+                    <!-- 備註對齊方式 (僅圓角小卡) -->
+                    <div id="note-align-group" class="p-2 bg-gray-50 border rounded hidden">
+                        <label class="block text-xs font-bold mb-2 text-gray-600">備註對齊方式</label>
+                        <div class="flex flex-wrap items-center gap-2 text-sm">
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="note-align" value="center" class="mr-1 text-blue-600" checked>
+                                置中
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="note-align" value="right" class="mr-1 text-blue-600">
+                                靠右
+                            </label>
+                        </div>
                     </div>
                 </div>
                 
@@ -613,6 +694,7 @@
 
         window.onload = function() {
             initFontSelector();
+            updateNameFontSizeVisibility();
             render();
             // 手機版預設縮放稍微小一點，避免超出螢幕太多
             if (window.innerWidth < 768) {
@@ -701,6 +783,46 @@
                 : 'url("background.jpg")';
         }
 
+        // 切換「直角 / 圓角」分類，並自動選取該分類第一個尺寸
+        function switchShapeCategory(cat) {
+            const sharpBtn = document.getElementById('cat-sharp');
+            const roundBtn = document.getElementById('cat-round');
+            const sharpGroup = document.getElementById('size-group-sharp');
+            const roundGroup = document.getElementById('size-group-round');
+
+            const activeGroup = (cat === 'round') ? roundGroup : sharpGroup;
+            const inactiveGroup = (cat === 'round') ? sharpGroup : roundGroup;
+            const activeBtn = (cat === 'round') ? roundBtn : sharpBtn;
+            const inactiveBtn = (cat === 'round') ? sharpBtn : roundBtn;
+
+            activeBtn.classList.add('active-cat');
+            activeBtn.classList.remove('inactive-cat');
+            inactiveBtn.classList.add('inactive-cat');
+            inactiveBtn.classList.remove('active-cat');
+
+            activeGroup.classList.remove('hidden');
+            inactiveGroup.classList.add('hidden');
+
+            const firstRadio = activeGroup.querySelector('input[type=radio]');
+            if (firstRadio && !firstRadio.checked) {
+                firstRadio.checked = true;
+                changeSize();
+            }
+        }
+
+        // 切換「品名字體大小」與「備註對齊方式」設定區塊的顯示 (僅圓角小卡可調整)
+        function updateNameFontSizeVisibility() {
+            const group = document.getElementById('name-fontsize-group');
+            const noteAlignGroup = document.getElementById('note-align-group');
+            if (currentSize === 'smallRound') {
+                group.classList.remove('hidden');
+                noteAlignGroup.classList.remove('hidden');
+            } else {
+                group.classList.add('hidden');
+                noteAlignGroup.classList.add('hidden');
+            }
+        }
+
         function changeSize() {
             let selectedSize = '';
             const radios = document.getElementsByName('size');
@@ -717,6 +839,7 @@
                     cards = [];
                     currentSize = selectedSize;
                     updateBackgroundForSize();
+                    updateNameFontSizeVisibility();
                     render();
                 } else {
                     for (let r of radios) {
@@ -728,6 +851,7 @@
             } else {
                 currentSize = selectedSize;
                 updateBackgroundForSize();
+                updateNameFontSizeVisibility();
                 render();
             }
         }
@@ -764,6 +888,20 @@
             }
             const customText = document.getElementById('input-custom-text').value.trim();
 
+            // 取得品名字體大小 (僅圓角小卡使用)
+            const nameFontRadios = document.getElementsByName('name-font-size');
+            let nameFontSize = 'large';
+            for (let r of nameFontRadios) {
+                if (r.checked) nameFontSize = r.value;
+            }
+
+            // 取得備註對齊方式 (僅圓角小卡使用)
+            const noteAlignRadios = document.getElementsByName('note-align');
+            let noteAlign = 'center';
+            for (let r of noteAlignRadios) {
+                if (r.checked) noteAlign = r.value;
+            }
+
             if (!name || !price) {
                 alert('請至少輸入品名與價格！');
                 return;
@@ -774,15 +912,17 @@
                 return;
             }
 
-            cards.push({ 
-                name, qty, price, note, 
+            cards.push({
+                name, qty, price, note,
                 categoryType,
                 customText,
+                nameFontSize,
+                noteAlign,
                 bg: currentBackgroundImage,
                 font: currentFontFamily
             });
             render();
-            
+
             // 提示用戶
             const badge = document.getElementById('mobile-badge');
             badge.innerText = cards.length;
@@ -797,13 +937,15 @@
                 return;
             }
             const last = cards[cards.length - 1];
-            cards.push({ 
+            cards.push({
                 name: last.name,
                 qty: last.qty,
                 price: last.price,
                 note: last.note,
                 categoryType: last.categoryType,
                 customText: last.customText,
+                nameFontSize: last.nameFontSize,
+                noteAlign: last.noteAlign,
                 bg: currentBackgroundImage,
                 font: currentFontFamily
             });
@@ -927,6 +1069,8 @@
                 labelText = '加購價';
             } else if (data.categoryType === 'custom') {
                 labelText = data.customText || '';
+            } else if (data.categoryType === 'none') {
+                labelText = '';
             }
 
             if (size === 'small' || size === 'medium') {
@@ -945,15 +1089,26 @@
                 const lineName = document.createElement('div');
                 lineName.className = 'line-name';
                 lineName.innerText = data.name;
+                if (size === 'smallRound') {
+                    lineName.style.fontSize = data.nameFontSize === 'small' ? '34pt' : '46pt';
+                }
                 const lineNote = document.createElement('div');
                 lineNote.className = 'line-note';
+                if (size === 'smallRound' && data.noteAlign === 'right') {
+                    lineNote.classList.add('align-right');
+                }
                 lineNote.innerText = data.note;
                 const linePrice = document.createElement('div');
                 linePrice.className = 'line-price';
+                if (size === 'smallRound' && data.categoryType === 'none') {
+                    linePrice.classList.add('price-only');
+                    div.classList.add('price-only-mode');
+                }
                 let qtyHtml = data.qty ? `<span class="highlight">${data.qty}</span><span class="unit">入</span>` : '';
                 let priceHtml = `<span class="highlight">${data.price}</span><span class="unit">元</span>`;
                 // 大卡 替換前綴
-                linePrice.innerHTML = `<span class="label">${labelText}</span>${qtyHtml}${priceHtml}`;
+                const labelHtml = labelText ? `<span class="label">${labelText}</span>` : '';
+                linePrice.innerHTML = `${labelHtml}${qtyHtml}${priceHtml}`;
                 div.appendChild(lineName);
                 div.appendChild(lineNote);
                 div.appendChild(linePrice);
