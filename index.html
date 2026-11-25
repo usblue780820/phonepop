@@ -504,6 +504,7 @@
         .card.theme-etpet { color: #0b3a5b; }
         .card.theme-etpet .main-text,
         .card.theme-etpet .line-name,
+        .card.theme-etpet .line-category,
         .card.theme-etpet .line-note,
         .card.theme-etpet .line-price { color: #0b3a5b; }
         .card.theme-etpet .highlight { color: #E60012 !important; }
@@ -511,9 +512,65 @@
         .card.theme-red { color: #FFFFFF; }
         .card.theme-red .main-text,
         .card.theme-red .line-name,
+        .card.theme-red .line-category,
         .card.theme-red .line-note,
         .card.theme-red .line-price { color: #FFFFFF; }
         .card.theme-red .highlight { color: #FFE600 !important; }
+
+        /* 任務 38b：長類別獨立置中行與 B1 價格防換行樣式 */
+        .line-category[data-promoted-cat="1"] {
+            text-align: center;
+            width: 100%;
+            font-weight: bold;
+            line-height: 1.05;
+            white-space: nowrap !important;
+            margin: 0 0 0.5mm 0;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+        .card-a4two .line-category[data-promoted-cat="1"] {
+            margin-bottom: 1.5mm !important;
+        }
+        .promoted-price-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            flex: 0 0 auto;
+        }
+        .a1-side-right-wrap {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .a1-side-right-wrap .line-category[data-promoted-cat="1"] {
+            width: auto;
+            margin-bottom: 0.3mm;
+            line-height: 1;
+        }
+        .card.tpl-B1 .b1-price-tail {
+            white-space: nowrap !important;
+        }
+        .b1-promoted-block {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .b1-promoted-block .b1-promoted-cat {
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.1;
+            white-space: nowrap !important;
+            margin: 0.5mm 0;
+        }
+        .b1-promoted-block .b1-promoted-price {
+            white-space: nowrap !important;
+        }
 
         /* 備註位置對齊樣式 */
         /* 使用者在左側選的備註位置，優先於各模板自己的備註對齊（重複 class 提高優先順序） */
@@ -838,6 +895,19 @@
             width: 3.2em;
             height: 3.2em;
         }
+        .tpl-A3 .price-badge.badge-multi {
+            white-space: normal !important;
+            padding: 0;
+        }
+        .tpl-A3 .price-badge .badge-text {
+            display: block;
+            width: 70%;
+            text-align: center;
+            line-height: 1.1;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+        }
         .card-small.tpl-A3 .price-badge { font-size: 12pt; }
         .card-medium.tpl-A3 .price-badge { font-size: 20pt; }
         .card-smallRound.tpl-A3 .price-badge { font-size: 21pt; }
@@ -1054,6 +1124,17 @@
             background: #d7001b; color: #fff !important;
             padding: 2.5mm 1.5mm; border-radius: 2mm; margin-right: 3mm;
             align-self: center;
+        }
+        .card.card-large.tpl-B2 .line-price .label.badge-horiz {
+            writing-mode: horizontal-tb !important;
+            text-orientation: mixed !important;
+            white-space: normal !important;
+            text-align: center !important;
+            line-height: 1.15 !important;
+            letter-spacing: 0 !important;
+            padding: 1.5mm 2.5mm !important;
+            word-break: normal !important;
+            overflow-wrap: anywhere !important;
         }
         .card.card-large.tpl-B2.theme-etpet .line-price .label { background: #0b6db6; color: #fff !important; }
         .card.card-large.tpl-B2.theme-red .line-price .label { background: #ffe600; color: #c40012 !important; }
@@ -1579,7 +1660,7 @@
         .card-large.tpl-B3 .line-name { font-size: 37pt; }
         .card-large.tpl-B3 .line-price { font-size: 30pt; }
         .card-large.tpl-B3 .highlight { font-size: 58pt; }
-        .card-large.tpl-B3 .line-note { font-size: 17.5pt; }
+        .card-large.tpl-B3 .line-note { font-size: 17.5pt; margin-bottom: 0; }
 
         .card-a4two.tpl-B3 { padding: 5mm !important; }
         .card-a4two.tpl-B3 .white-panel { border-width: 3px; border-radius: 6mm; padding: 5mm; }
@@ -1605,6 +1686,7 @@
         .card.theme-red.tpl-B3 .white-panel,
         .card.theme-red.tpl-B3 .white-panel .main-text,
         .card.theme-red.tpl-B3 .white-panel .line-name,
+        .card.theme-red.tpl-B3 .white-panel .line-category,
         .card.theme-red.tpl-B3 .white-panel .line-note,
         .card.theme-red.tpl-B3 .white-panel .line-price {
             color: #000000 !important;
@@ -1948,6 +2030,25 @@
         }
         .card-a4one.tpl-B3 .line-name { font-size: 114pt !important; }
         .card-a4two.tpl-B3 .line-name { font-size: 72pt !important; }
+
+        /* 任務 38c：a4two 長類別移至價格上方獨立一行時，佔用實際版面高度避免與品名重疊 */
+        .card-a4two.has-promoted-cat .a4-content,
+        .card-a4two.tpl-B3.has-promoted-cat .white-panel {
+            justify-content: space-evenly !important;
+        }
+        .card-a4two.has-promoted-cat .a4-content > .line-name,
+        .card-a4two.has-promoted-cat .a4-price-group,
+        .card-a4two.has-promoted-cat .a4-content > .line-note {
+            flex: 0 0 auto !important;
+            min-height: auto !important;
+        }
+        .card-a4two.has-promoted-cat .a4-content > * {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+        .card-a4two.has-promoted-cat .a4-content > .line-note:empty {
+            display: none !important;
+        }
 
         /* 任務 7：a4one 內容三段等距垂直排列；不改動 a4two */
         .card-a4one .a4-content {
@@ -2543,6 +2644,17 @@
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
+        .card-a4one .b2one-badge.badge-horiz,
+        .card-a4two .b2one-badge.badge-horiz {
+            writing-mode: horizontal-tb !important;
+            text-orientation: mixed !important;
+            white-space: normal !important;
+            text-align: center !important;
+            line-height: 1.15 !important;
+            padding: 0.22em 0.35em !important;
+            word-break: normal !important;
+            overflow-wrap: anywhere !important;
+        }
         .card-a4one .b2one-qty,
         .card-a4two .b2one-qty {
             display: flex !important;
@@ -2587,6 +2699,482 @@
         .card-a4two.tpl-A2 .a4-content > .line-note {
             padding-right: 4% !important;
             box-sizing: border-box !important;
+        }
+
+        /* ==========================================
+           任務 34：C1 POP 與 C2 公告 專用樣式
+           ========================================== */
+
+        /* --- C1 POP --- */
+        .card.tpl-C1 {
+            padding: 0 3% 3% 3% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            justify-content: flex-start !important;
+            box-sizing: border-box !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card.tpl-C1.card-small {
+            padding: 0 2.5mm 2.5mm 2.5mm !important;
+            border-radius: 0 !important;
+        }
+        .card.tpl-C1.card-medium {
+            padding: 0 3mm 2.5mm 3mm !important;
+        }
+        .card.tpl-C1.card-large {
+            padding: 0 4mm 3mm 4mm !important;
+        }
+        .card.tpl-C1.card-a4two {
+            padding: 0 5mm 4.5mm 5mm !important;
+        }
+        .card.tpl-C1.card-a4one {
+            padding: 0 6mm 6mm 6mm !important;
+        }
+
+        .pop-c1-header {
+            flex: 0 0 26%;
+            height: 26%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .pop-c1-header.pop-c1-header-empty {
+            flex: 0 0 12%;
+            height: 12%;
+            padding: 0;
+        }
+        .pop-c1-capsule {
+            width: 63.8%;
+            height: 80%;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, #fbe7b0 0%, #f3c66b 100%) !important;
+            border: 0.6mm solid #c9a24b;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4%;
+            box-sizing: border-box;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .pop-c1-cat {
+            color: #c8102e !important;
+            font-weight: 900;
+            line-height: 1;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .pop-c1-panel {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            background: #ffffff !important;
+            border: 0.6mm solid #c9a24b;
+            box-shadow: inset 0 0 0 0.5mm #f3dfa8, 0 1mm 3mm rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            padding: 2mm 3mm 1.5mm 3mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card-small .pop-c1-panel { border-radius: 3.3mm; padding: 2mm 3mm 1.5mm 3mm; }
+        .card-medium .pop-c1-panel { border-radius: 3.3mm; padding: 2mm 4mm 1.5mm 4mm; }
+        .card-large .pop-c1-panel { border-radius: 3.9mm; padding: 2.5mm 5mm 2mm 5mm; }
+        .card-a4two .pop-c1-panel { border-radius: 8.16mm; padding: 4.5mm 7mm 3.5mm 7mm; }
+        .card-a4one .pop-c1-panel { border-radius: 16.62mm; padding: 7mm 3.5mm 5mm 3.5mm; }
+
+        .pop-c1-top {
+            flex: 0 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 3%;
+            box-sizing: border-box;
+        }
+        .pop-c1-brand {
+            flex: 0 1 auto;
+            max-width: 45%;
+            min-width: 0;
+            font-weight: 900;
+            color: #111111 !important;
+            line-height: 1.1;
+            text-align: left;
+            word-break: normal;
+            overflow-wrap: normal;
+            white-space: normal;
+        }
+        .pop-c1-name {
+            flex: 1 1 0;
+            min-width: 0;
+            font-weight: 400;
+            color: #111111 !important;
+            line-height: 1.1;
+            text-align: left;
+            word-break: normal;
+            overflow-wrap: normal;
+            white-space: normal;
+        }
+        .pop-c1-line {
+            display: block;
+            white-space: nowrap;
+        }
+        .pop-c1-tok {
+            white-space: nowrap;
+        }
+        .pop-c1-name.pop-c1-name-nobrand {
+            font-weight: 900;
+        }
+
+        .pop-c1-hcols {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 2.5%;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .pop-c1-left-col {
+            flex: 0 1 auto;
+            max-width: 42%;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+        .pop-c1-left-col .pop-c1-brand {
+            flex: 0 0 auto;
+            max-width: 100%;
+        }
+        .pop-c1-left-col .pop-c1-qty {
+            margin-top: 0;
+        }
+        .pop-c1-left-col .pop-c1-brand + .pop-c1-qty {
+            margin-top: 0.18em;
+        }
+        .pop-c1-left-col .pop-c1-note {
+            margin-top: auto;
+            margin-bottom: auto;
+            align-self: flex-start;
+        }
+        .pop-c1-right-col {
+            flex: 1 1 0;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+        .pop-c1-right-col .pop-c1-name {
+            flex: 0 0 auto;
+            width: 100%;
+        }
+        .pop-c1-right-col .pop-c1-promo-wrap {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            margin-top: 0.5mm;
+        }
+
+        .pop-c1-bottom {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            margin-top: 0.5mm;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 2%;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .pop-c1-left {
+            flex: 0 1 auto;
+            align-self: center;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 1%;
+            box-sizing: border-box;
+        }
+        .pop-c1-note {
+            width: auto;
+            max-width: 100%;
+            font-weight: 400;
+            color: #111111 !important;
+            line-height: 1.15;
+            text-align: left;
+            word-break: normal;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        .pop-c1-qty {
+            display: inline-flex;
+            align-items: baseline;
+            justify-content: center;
+            background: #ffffff !important;
+            border: 0.12em solid #c8102e;
+            border-radius: 999px;
+            color: #c8102e !important;
+            font-weight: 900;
+            line-height: 1.05;
+            padding: 0.1em 0.45em;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .pop-c1-promo-wrap {
+            flex: 1 1 0;
+            min-width: 0;
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .pop-c1-promo-row {
+            flex: 0 0 auto;
+            width: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            justify-content: center;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+            line-height: 1;
+        }
+        .pop-c1-price,
+        .pop-c1-promo-num,
+        .pop-c1-promo-txt,
+        .pop-c1-promo-txt-only {
+            color: #c8102e !important;
+            font-weight: 900;
+            line-height: 1;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .pop-c1-unit {
+            color: #111111 !important;
+            font-weight: 900;
+            line-height: 1;
+            margin-left: 0.06em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* A4 單張直式：面板內由上而下置中排列 */
+        .card-a4one.tpl-C1 .pop-c1-top {
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1.5mm;
+        }
+        .card-a4one.tpl-C1 .pop-c1-brand {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 100%;
+            text-align: center;
+        }
+        .card-a4one.tpl-C1 .pop-c1-name {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 100%;
+            text-align: center;
+        }
+        .card-a4one.tpl-C1 .pop-c1-note {
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 100%;
+            text-align: center;
+        }
+        .card-a4one.tpl-C1 .pop-c1-promo-wrap {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3mm;
+        }
+        .card-a4one.tpl-C1 .pop-c1-qty {
+            width: auto;
+            text-align: center;
+            margin-right: 0;
+            align-self: center;
+        }
+        .card-a4one.tpl-C1 .pop-c1-unit {
+            margin-left: 0.04em;
+        }
+
+        /* C1 價格數字跟隨價格數字字型選單（只套用數字，中文字不變） */
+        .card.tpl-C1.num-mont-bi .pop-c1-price,
+        .card.tpl-C1.num-mont-bi .pop-c1-promo-num,
+        .card.tpl-C1.num-mont-bi .pop-c1-qty-val,
+        .card.tpl-C1.num-mont-b .pop-c1-price,
+        .card.tpl-C1.num-mont-b .pop-c1-promo-num,
+        .card.tpl-C1.num-mont-b .pop-c1-qty-val,
+        .card.tpl-C1.num-mont-eb .pop-c1-price,
+        .card.tpl-C1.num-mont-eb .pop-c1-promo-num,
+        .card.tpl-C1.num-mont-eb .pop-c1-qty-val {
+            font-family: 'Montserrat', 'Noto Sans TC', sans-serif !important;
+            font-style: normal !important;
+            font-weight: 900 !important;
+            letter-spacing: -0.02em;
+        }
+        .card.tpl-C1.num-mont-eb .pop-c1-price,
+        .card.tpl-C1.num-mont-eb .pop-c1-promo-num,
+        .card.tpl-C1.num-mont-eb .pop-c1-qty-val { font-weight: 800 !important; }
+        .card.tpl-C1.num-mont-bi .pop-c1-price,
+        .card.tpl-C1.num-mont-bi .pop-c1-promo-num,
+        .card.tpl-C1.num-mont-bi .pop-c1-qty-val {
+            font-style: italic !important;
+            padding-left: 0.12em !important;
+            padding-right: 0.08em !important;
+        }
+        .card.tpl-C1.num-poppins .pop-c1-price,
+        .card.tpl-C1.num-poppins .pop-c1-promo-num,
+        .card.tpl-C1.num-poppins .pop-c1-qty-val {
+            font-family: 'Poppins', 'Noto Sans TC', sans-serif !important;
+            font-style: normal !important;
+            font-weight: 900 !important;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- C2 公告 --- */
+        .card.tpl-C2 {
+            padding: 6% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            justify-content: flex-start !important;
+            box-sizing: border-box !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card.tpl-C2.card-a4one {
+            padding: 10mm !important;
+        }
+        .card.tpl-C2.card-a4two {
+            padding: 6mm 8mm !important;
+        }
+        .notice-c2-panel {
+            width: 100%;
+            height: 100%;
+            flex: 1 1 0;
+            min-height: 0;
+            background-color: #ffffff !important;
+            border-radius: 7.6mm;
+            padding: 4% 5%;
+            box-sizing: border-box;
+            box-shadow: 0 1mm 3mm rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card.tpl-C2.card-a4one .notice-c2-panel {
+            padding: 6mm 8mm;
+        }
+        .card.tpl-C2.card-a4two .notice-c2-panel {
+            padding: 4mm 6mm;
+        }
+        .notice-c2-title-row {
+            flex: 0 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35em;
+            margin-bottom: 1.5%;
+            white-space: nowrap;
+        }
+        .card.tpl-C2.card-a4two .notice-c2-title-row {
+            margin-bottom: 2mm;
+        }
+        .notice-c2-sq {
+            display: inline-block;
+            width: 0.72em;
+            height: 0.72em;
+            flex-shrink: 0;
+            background-color: #4a8fd8 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card.tpl-C2.theme-etpet .notice-c2-sq {
+            background-color: #0b6db6 !important;
+        }
+        .card.tpl-C2.theme-red .notice-c2-sq {
+            background-color: #c62828 !important;
+        }
+        .notice-c2-title {
+            color: #1f4e8c !important;
+            font-size: 1em;
+            font-weight: 900;
+            line-height: 1.15;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .notice-c2-body {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            overflow: hidden;
+        }
+        .notice-c2-line {
+            color: #333333 !important;
+            font-size: 1em;
+            font-weight: 700;
+            line-height: 1.3;
+            text-align: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .notice-c2-line.notice-c2-line-lg {
+            font-size: 1.3em;
+        }
+        .notice-c2-em {
+            color: #c0392b !important;
+        }
+        .notice-c2-em-lg {
+            color: #c0392b !important;
+            font-size: 1.4em;
+            line-height: 1;
         }
     </style>
 </head>
@@ -2781,6 +3369,39 @@
                     </div>
                 </div>
 
+                <!-- C 類：促銷／公告 -->
+                <div class="mb-2" id="tpl-c-block">
+                    <div class="text-xs font-bold text-gray-600 mb-1">
+                        <span>C 類：促銷／公告</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button type="button" class="tpl-btn bg-white p-1.5 rounded flex flex-col items-center text-xs" onclick="selectTemplate('C1')" id="btn-tpl-C1" title="C1 POP：漸層外框、上方金色膠囊、雙層金邊白框與超大價格">
+                            <div class="tpl-preview-thumb mb-1" style="background:linear-gradient(180deg,#b5174f,#f4b6c8); padding:2px; justify-content:space-between; gap:2px;">
+                                <div style="align-self:flex-end; width:62%; height:7px; border-radius:999px; background:linear-gradient(180deg,#fbe7b0,#f3c66b); border:1px solid #c9a24b;"></div>
+                                <div style="width:100%; flex:1; background:#fff; border:1px solid #c9a24b; border-radius:3px; display:flex; flex-direction:column; justify-content:space-around; padding:1px 2px; box-sizing:border-box;">
+                                    <div style="display:flex; gap:2px; align-items:center;">
+                                        <div class="thumb-bar" style="width:45%; height:3px; margin:0; background:#111;"></div>
+                                        <div class="thumb-bar" style="width:45%; height:2px; margin:0; background:#9ca3af;"></div>
+                                    </div>
+                                    <div class="thumb-bar price" style="width:65%; height:6px; background:#c8102e;"></div>
+                                </div>
+                            </div>
+                            <span class="text-[11px] leading-tight">C1 POP</span>
+                        </button>
+                        <button type="button" class="tpl-btn bg-white p-1.5 rounded flex flex-col items-center text-xs hidden" onclick="selectTemplate('C2')" id="btn-tpl-C2" title="C2 公告：藍色外框、白底面板、支援標題與內文重點標記（僅 A4）">
+                            <div class="tpl-preview-thumb mb-1" style="background:#4a8fd8; padding:3px;">
+                                <div style="width:100%; height:100%; background:#fff; border-radius:3px; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; padding:2px; box-sizing:border-box;">
+                                    <div class="thumb-bar" style="width:55%; height:3px; background:#1f4e8c;"></div>
+                                    <div class="thumb-bar" style="width:82%; height:2px; background:#4b5563;"></div>
+                                    <div class="thumb-bar" style="width:76%; height:2px; background:#c0392b;"></div>
+                                    <div class="thumb-bar" style="width:80%; height:2px; background:#4b5563;"></div>
+                                </div>
+                            </div>
+                            <span class="text-[11px] leading-tight">C2 公告</span>
+                        </button>
+                    </div>
+                </div>
+
                 <button type="button" onclick="applyTemplateToAll()" class="mt-2 w-full py-1.5 px-2 bg-white hover:bg-blue-50 active:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm">
                     <i class="fas fa-magic"></i> 套用目前模板至全部卡片
                 </button>
@@ -2790,9 +3411,52 @@
             <div class="mb-4">
                 <h3 class="font-bold text-gray-700 mb-2 text-sm"><i class="fas fa-keyboard mr-1"></i> 2. 輸入資料</h3>
                 <div class="space-y-3">
+                    <!-- 品牌 (僅 C1 POP 顯示) -->
+                    <div id="brand-group" class="hidden">
+                        <label for="input-brand" class="block text-xs font-bold mb-1 text-gray-600">品牌</label>
+                        <input type="text" id="input-brand" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="例如：CHARM 野性魅力（選填）">
+                    </div>
                     <div>
-                        <label class="block text-xs font-bold mb-1 text-gray-600">品名</label>
+                        <label id="input-name-label" class="block text-xs font-bold mb-1 text-gray-600">品名</label>
                         <input type="text" id="input-name" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="例如：貓罐頭">
+                    </div>
+
+                    <!-- 公告內文 (僅 C2 公告顯示) -->
+                    <div id="notice-body-group" class="hidden">
+                        <label for="input-body" class="block text-xs font-bold mb-1 text-gray-600">公告內文（每行一句）</label>
+                        <textarea id="input-body" rows="6" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-y" placeholder="此為本店購物專用臨時停車位&#10;僅提供顧客**購物期間**停車&#10;酌收*停車費一小時$500起*&#10;# 感謝您的配合!!!"></textarea>
+                        <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                            標記說明：<code class="bg-gray-100 px-1 rounded text-red-700 font-bold">**文字**</code> 紅字放大 1.4 倍、
+                            <code class="bg-gray-100 px-1 rounded text-red-700">*文字*</code> 紅字同字級、
+                            行首 <code class="bg-gray-100 px-1 rounded font-bold"># </code>（# 後加空白）整行放大 1.3 倍
+                        </p>
+                    </div>
+
+                    <!-- 公告內文字體大小 (僅 C2 公告顯示) -->
+                    <div id="notice-fontsize-group" class="p-2 bg-gray-50 border rounded hidden">
+                        <label class="block text-xs font-bold mb-2 text-gray-600">公告內文字體大小</label>
+                        <div class="flex flex-wrap items-center gap-2 text-sm">
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="notice-font-size" value="xl" class="mr-1 text-blue-600">
+                                <span data-notice-fs-label="xl">特大 (48pt)</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="notice-font-size" value="l" class="mr-1 text-blue-600">
+                                <span data-notice-fs-label="l">大 (40pt)</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="notice-font-size" value="m" class="mr-1 text-blue-600" checked>
+                                <span data-notice-fs-label="m">中 (32pt)</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="notice-font-size" value="s" class="mr-1 text-blue-600">
+                                <span data-notice-fs-label="s">小 (26pt)</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
+                                <input type="radio" name="notice-font-size" value="xs" class="mr-1 text-blue-600">
+                                <span data-notice-fs-label="xs">特小 (20pt)</span>
+                            </label>
+                        </div>
                     </div>
 
                     <!-- 品名字體大小 (僅圓角小卡) -->
@@ -2811,7 +3475,7 @@
                     </div>
 
                     <!-- 價格類別選擇 -->
-                    <div class="p-2 bg-gray-50 border rounded">
+                    <div id="price-type-group" class="p-2 bg-gray-50 border rounded">
                         <label class="block text-xs font-bold mb-2 text-gray-600">類別選擇</label>
                         <div class="flex flex-wrap items-center gap-2 text-sm">
                             <label class="flex items-center cursor-pointer bg-white px-2 py-1 rounded border">
@@ -2830,22 +3494,22 @@
                                 <input type="radio" name="price-type" value="none" class="mr-1 text-blue-600" onchange="toggleCustomInput()">
                                 不顯示
                             </label>
-                            <input type="text" id="input-custom-text" disabled maxlength="3" class="border rounded p-1 w-20 text-center text-sm disabled:bg-gray-200 outline-none focus:ring-1 focus:ring-blue-500" placeholder="3字內">
+                            <input type="text" id="input-custom-text" disabled class="border rounded p-1 w-36 text-center text-sm disabled:bg-gray-200 outline-none focus:ring-1 focus:ring-blue-500" placeholder="自訂類別">
                         </div>
                     </div>
 
-                    <div class="flex gap-2">
+                    <div id="qty-price-group" class="flex gap-2">
                         <div class="w-1/3">
-                            <label class="block text-xs font-bold mb-1 text-gray-600">組數 (選填)</label>
+                            <label id="input-qty-label" class="block text-xs font-bold mb-1 text-gray-600">組數 (選填)</label>
                             <input type="number" inputmode="numeric" id="input-qty" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="3">
                         </div>
                         <div class="w-2/3">
-                            <label class="block text-xs font-bold mb-1 text-gray-600">價格</label>
+                            <label id="input-price-label" class="block text-xs font-bold mb-1 text-gray-600">價格</label>
                             <input type="number" inputmode="numeric" id="input-price" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="100">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold mb-1 text-gray-600">備註</label>
+                        <label id="input-note-label" class="block text-xs font-bold mb-1 text-gray-600">備註</label>
                         <input type="text" id="input-note" class="w-full border rounded p-3 text-base focus:ring-2 focus:ring-blue-500 outline-none" placeholder="售完為止">
                     </div>
 
@@ -3177,12 +3841,118 @@
             render();
         }
 
+        const C2_FONT_SIZE_PT = {
+            a4one: { xl: 48, l: 40, m: 32, s: 26, xs: 20 },
+            a4two: { xl: 36, l: 30, m: 24, s: 20, xs: 16 }
+        };
+        const C2_FONT_SIZE_LABELS = { xl: '特大', l: '大', m: '中', s: '小', xs: '特小' };
+
+        function normalizeNoticeFontSize(val) {
+            return ['xl', 'l', 'm', 's', 'xs'].includes(val) ? val : 'm';
+        }
+
+        function getSelectedNoticeFontSize() {
+            const radios = document.getElementsByName('notice-font-size');
+            for (let r of radios) {
+                if (r.checked) return normalizeNoticeFontSize(r.value);
+            }
+            return 'm';
+        }
+
+        function updateNoticeFontSizeUI() {
+            const ptMap = currentSize === 'a4two' ? C2_FONT_SIZE_PT.a4two : C2_FONT_SIZE_PT.a4one;
+            document.querySelectorAll('[data-notice-fs-label]').forEach(span => {
+                const key = span.getAttribute('data-notice-fs-label');
+                if (ptMap[key] != null) {
+                    span.textContent = `${C2_FONT_SIZE_LABELS[key]} (${ptMap[key]}pt)`;
+                }
+            });
+        }
+
+        function updateTemplateInputVisibility() {
+            const isC1 = currentTemplate === 'C1';
+            const isC2 = currentTemplate === 'C2';
+            const brandGroup = document.getElementById('brand-group');
+            const nameLabel = document.getElementById('input-name-label');
+            const nameInput = document.getElementById('input-name');
+            const bodyGroup = document.getElementById('notice-body-group');
+            const noticeFontGroup = document.getElementById('notice-fontsize-group');
+            const priceTypeGroup = document.getElementById('price-type-group');
+            const qtyPriceGroup = document.getElementById('qty-price-group');
+            const qtyLabel = document.getElementById('input-qty-label');
+            const qtyInput = document.getElementById('input-qty');
+            const priceLabel = document.getElementById('input-price-label');
+            const priceInput = document.getElementById('input-price');
+            const noteInput = document.getElementById('input-note');
+            const customInput = document.getElementById('input-custom-text');
+
+            if (brandGroup) brandGroup.classList.toggle('hidden', !isC1);
+            if (nameLabel) nameLabel.textContent = isC2 ? '公告標題' : '品名';
+            if (nameInput) {
+                nameInput.placeholder = isC2
+                    ? '例如：東森寵物（可空白）'
+                    : (isC1 ? '例如：指定超能精華 犬2KG/貓1.5KG飼料' : '例如：貓罐頭');
+            }
+            if (bodyGroup) bodyGroup.classList.toggle('hidden', !isC2);
+            if (noticeFontGroup) noticeFontGroup.classList.toggle('hidden', !isC2);
+            updateNoticeFontSizeUI();
+            if (priceTypeGroup) priceTypeGroup.classList.toggle('hidden', isC2);
+            if (qtyPriceGroup) qtyPriceGroup.classList.toggle('hidden', isC2);
+
+            const isNumericStr = (val) => val === '' || /^-?\d+(?:\.\d+)?$/.test(val);
+            if (qtyLabel && qtyInput) {
+                if (isC1) {
+                    qtyLabel.textContent = '數量（可打文字）';
+                    qtyInput.type = 'text';
+                    qtyInput.inputMode = 'text';
+                    qtyInput.placeholder = '兩包特價、2';
+                } else {
+                    if (qtyInput.type !== 'number') {
+                        if (!isNumericStr(qtyInput.value.trim())) qtyInput.value = '';
+                        qtyInput.type = 'number';
+                    }
+                    qtyInput.inputMode = 'numeric';
+                    qtyLabel.textContent = '組數 (選填)';
+                    qtyInput.placeholder = '3';
+                }
+            }
+            if (priceLabel && priceInput) {
+                if (isC1) {
+                    priceLabel.textContent = '主打（價格／折數／買一送一）';
+                    priceInput.type = 'text';
+                    priceInput.inputMode = 'text';
+                    priceInput.placeholder = '75折、買一送一、199';
+                } else {
+                    if (priceInput.type !== 'number') {
+                        if (!isNumericStr(priceInput.value.trim())) priceInput.value = '';
+                        priceInput.type = 'number';
+                    }
+                    priceInput.inputMode = 'numeric';
+                    priceLabel.textContent = '價格';
+                    priceInput.placeholder = '100';
+                }
+            }
+            if (noteInput) {
+                noteInput.placeholder = isC1 ? '例如：定價 $1,800~$1,950' : '售完為止';
+            }
+            if (customInput) {
+                customInput.removeAttribute('maxlength');
+                customInput.placeholder = '自訂類別';
+                customInput.classList.remove('w-20');
+                customInput.classList.add('w-36');
+            }
+        }
+
         function updateTemplateUI() {
             // A4 單張／雙張是新增尺寸，沒有「原版」：隱藏原版區塊，若目前選在原版則改為 A1 經典
             const isA4Size = currentSize === 'a4one' || currentSize === 'a4two';
             const originalBlock = document.getElementById('tpl-original-block');
             if (originalBlock) originalBlock.classList.toggle('hidden', isA4Size);
             if (isA4Size && currentTemplate === 'B1') currentTemplate = 'A1';
+            // 非 A4 尺寸沒有 C2 公告：切到非 A4 尺寸時自動改回預設模板 B1
+            if (!isA4Size && currentTemplate === 'C2') currentTemplate = 'B1';
+            const c2Btn = document.getElementById('btn-tpl-C2');
+            if (c2Btn) c2Btn.classList.toggle('hidden', !isA4Size);
             // A4 單張／雙張沒有牌卡預留位置：A 類標題改字、縮圖不畫牌卡位
             const aHeading = document.getElementById('tpl-a-heading');
             if (aHeading) aHeading.textContent = isA4Size ? 'A 類：滿版 (A4 無牌卡位)' : 'A 類：文字靠上 (底部留牌卡位)';
@@ -3213,7 +3983,8 @@
                 }
             }
             const tplCountLabel = document.getElementById('tpl-count-label');
-            if (tplCountLabel) tplCountLabel.textContent = isA4Size ? '6 款' : '原版＋6 款';
+            if (tplCountLabel) tplCountLabel.textContent = isA4Size ? '8 款' : '原版＋7 款';
+            updateTemplateInputVisibility();
         }
 
         function applyTemplateToAll() {
@@ -3221,9 +3992,14 @@
                 alert('目前沒有卡片可套用');
                 return;
             }
+            const selectedNoticeFs = getSelectedNoticeFontSize();
             cards.forEach(c => {
                 c.template = currentTemplate;
                 c.aLayout = currentALayout;
+                if (c.brand == null) c.brand = '';
+                c.noticeFontSize = currentTemplate === 'C2'
+                    ? selectedNoticeFs
+                    : normalizeNoticeFontSize(c.noticeFontSize);
             });
             render();
         }
@@ -3543,10 +4319,14 @@
         }
 
         function addCard() {
+            const brandEl = document.getElementById('input-brand');
+            const brand = (currentTemplate === 'C1' && brandEl) ? brandEl.value.trim() : '';
             const name = document.getElementById('input-name').value.trim();
             const qty = document.getElementById('input-qty').value.trim();
             const price = document.getElementById('input-price').value.trim();
             const note = document.getElementById('input-note').value.trim();
+            const bodyEl = document.getElementById('input-body');
+            const body = bodyEl ? bodyEl.value.replace(/\r\n/g, '\n') : '';
 
             // 取得類別資料
             const typeRadios = document.getElementsByName('price-type');
@@ -3566,21 +4346,39 @@
             // 取得備註對齊方式
             const noteAlign = getSelectedNoteAlign();
 
-            if (!name || !price) {
-                alert('請至少輸入品名與價格！');
-                return;
-            }
-            
-            if (categoryType === 'custom' && !customText) {
-                alert('請輸入自訂文字 (3字內)');
-                return;
+            if (currentTemplate === 'C2') {
+                if (!body.trim()) {
+                    alert('請輸入公告內文！');
+                    if (bodyEl) bodyEl.focus();
+                    return;
+                }
+            } else if (currentTemplate === 'C1') {
+                if (!name || !price) {
+                    alert('請至少輸入品名與主打！');
+                    return;
+                }
+                if (categoryType === 'custom' && !customText) {
+                    alert('請輸入自訂文字');
+                    return;
+                }
+            } else {
+                if (!name || !price) {
+                    alert('請至少輸入品名與價格！');
+                    return;
+                }
+                
+                if (categoryType === 'custom' && !customText) {
+                    alert('請輸入自訂文字');
+                    return;
+                }
             }
 
             cards.push({
-                name, qty, price, note,
+                brand, name, qty, price, note, body,
                 categoryType,
                 customText,
                 nameFontSize,
+                noticeFontSize: currentTemplate === 'C2' ? getSelectedNoticeFontSize() : 'm',
                 noteAlign,
                 template: currentTemplate,
                 aLayout: currentALayout,
@@ -3597,7 +4395,11 @@
             badge.innerText = cards.length;
             badge.classList.remove('hidden');
 
-            document.getElementById('input-name').focus();
+            if (currentTemplate === 'C2' && bodyEl) {
+                bodyEl.focus();
+            } else {
+                document.getElementById('input-name').focus();
+            }
         }
 
         function copyLast() {
@@ -3607,13 +4409,16 @@
             }
             const last = cards[cards.length - 1];
             cards.push({
+                brand: last.brand || '',
                 name: last.name,
                 qty: last.qty,
                 price: last.price,
                 note: last.note,
+                body: last.body || '',
                 categoryType: last.categoryType,
                 customText: last.customText,
                 nameFontSize: last.nameFontSize,
+                noticeFontSize: normalizeNoticeFontSize(last.noticeFontSize),
                 noteAlign: getSelectedNoteAlign(),
                 template: last.template || currentTemplate,
                 aLayout: last.aLayout || currentALayout,
@@ -3661,23 +4466,1373 @@
         }
 
         // ==========================================
+        // 任務 34：C1 POP 與 C2 公告 專用字級計算
+        // ==========================================
+        function fitC1Card(cardEl) {
+            const setSize = (el, px) => el.style.setProperty('font-size', Math.max(1, px) + 'px', 'important');
+            const cardRect = cardEl.getBoundingClientRect();
+            const cardH = cardEl.offsetHeight;
+            const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+            const rectW = el => el.getBoundingClientRect().width / zf;
+            const rectH = el => el.getBoundingClientRect().height / zf;
+            const isA4One = cardEl.classList.contains('card-a4one');
+
+            // 1) 上方膠囊類別字：字級約膠囊高 72%，單行；放不下時等比縮小
+            const capsule = cardEl.querySelector('.pop-c1-capsule');
+            const catEl = capsule ? capsule.querySelector('.pop-c1-cat') : null;
+            if (capsule && catEl && catEl.textContent.trim()) {
+                const csCap = window.getComputedStyle(capsule);
+                const capPadW = parseFloat(csCap.paddingLeft || 0) + parseFloat(csCap.paddingRight || 0);
+                const capInnerW = Math.max(1, (capsule.clientWidth - capPadW) * 0.94);
+                const capH = capsule.offsetHeight;
+                const capInnerH = Math.max(1, capsule.clientHeight * 0.86);
+                let catPx = capH * 0.72;
+                setSize(catEl, catPx);
+
+                const curW = rectW(catEl);
+                const curH = rectH(catEl);
+                if (curW > capInnerW || curH > capInnerH) {
+                    catPx *= Math.min(capInnerW / Math.max(1, curW), capInnerH / Math.max(1, curH));
+                    setSize(catEl, catPx);
+                }
+                for (let i = 0; i < 10; i++) {
+                    if (rectW(catEl) > capInnerW + 0.5 || rectH(catEl) > capInnerH + 0.5) {
+                        catPx *= 0.97;
+                        setSize(catEl, catPx);
+                    } else break;
+                }
+            }
+
+            // 2) 白色內容面板內部的五區塊排版
+            const panel = cardEl.querySelector('.pop-c1-panel');
+            if (!panel) return;
+            const csPanel = window.getComputedStyle(panel);
+            const panelPadL = parseFloat(csPanel.paddingLeft || 0);
+            const panelPadR = parseFloat(csPanel.paddingRight || 0);
+            const panelPadT = parseFloat(csPanel.paddingTop || 0);
+            const panelPadB = parseFloat(csPanel.paddingBottom || 0);
+
+            const panelH = panel.offsetHeight;
+            const panelInnerW = Math.max(1, panel.clientWidth - panelPadL - panelPadR);
+            const panelInnerH = Math.max(1, panel.clientHeight - panelPadT - panelPadB);
+
+            const topEl = panel.querySelector('.pop-c1-top');
+            const brandEl = panel.querySelector('.pop-c1-brand');
+            const nameEl = panel.querySelector('.pop-c1-name');
+            const noteEl = panel.querySelector('.pop-c1-note');
+            const bottomEl = panel.querySelector('.pop-c1-bottom');
+            const leftEl = panel.querySelector('.pop-c1-left');
+            const promoWrap = panel.querySelector('.pop-c1-promo-wrap');
+            const promoRow = promoWrap ? promoWrap.querySelector('.pop-c1-promo-row') : null;
+            const qtyEl = panel.querySelector('.pop-c1-qty');
+
+            const countLines = (el, lhRatio) => {
+                const cs = window.getComputedStyle(el);
+                const fs = parseFloat(el.style.fontSize) || parseFloat(cs.fontSize);
+                const lh = cs.lineHeight === 'normal' ? fs * lhRatio : parseFloat(cs.lineHeight);
+                return Math.round(el.scrollHeight / Math.max(1, lh));
+            };
+
+            const buildTokenNodes = (text) => {
+                const frag = document.createDocumentFragment();
+                const tokenRe = /[A-Za-z0-9]+(?:[.\-][A-Za-z0-9]+)*%?/g;
+                let lastIdx = 0;
+                let m;
+                while ((m = tokenRe.exec(text)) !== null) {
+                    if (m.index > lastIdx) {
+                        frag.appendChild(document.createTextNode(text.slice(lastIdx, m.index)));
+                    }
+                    const tok = document.createElement('span');
+                    tok.className = 'pop-c1-tok';
+                    tok.textContent = m[0];
+                    frag.appendChild(tok);
+                    lastIdx = tokenRe.lastIndex;
+                }
+                if (lastIdx < text.length) {
+                    frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+                }
+                return frag;
+            };
+
+            const findBestSpaceSplit = (el, text, testPx) => {
+                const matches = Array.from(text.matchAll(/\s+/g));
+                if (!matches.length) return null;
+                if (matches.length === 1) {
+                    const m = matches[0];
+                    const p1 = text.slice(0, m.index);
+                    const p2 = text.slice(m.index + m[0].length);
+                    return (p1 && p2) ? [p1, p2] : null;
+                }
+                const probe = document.createElement('span');
+                probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;';
+                el.appendChild(probe);
+                setSize(probe, testPx);
+                const measure = (str) => {
+                    probe.textContent = str;
+                    return probe.getBoundingClientRect().width / zf;
+                };
+                let best = null;
+                let bestDiff = Infinity;
+                let bestMax = Infinity;
+                for (const m of matches) {
+                    const p1 = text.slice(0, m.index);
+                    const p2 = text.slice(m.index + m[0].length);
+                    if (!p1 || !p2) continue;
+                    const w1 = measure(p1);
+                    const w2 = measure(p2);
+                    const diff = Math.abs(w1 - w2);
+                    const mx = Math.max(w1, w2);
+                    if (diff < bestDiff - 0.5 || (Math.abs(diff - bestDiff) <= 0.5 && mx < bestMax)) {
+                        bestDiff = diff;
+                        bestMax = mx;
+                        best = [p1, p2];
+                    }
+                }
+                probe.remove();
+                return best;
+            };
+
+            const fitC1HeadingText = (el, singlePx, twoLinePx, lhRatio, maxH, minSinglePx = 0) => {
+                if (!el) return 0;
+                const rawText = (el.dataset.rawText != null ? el.dataset.rawText : el.textContent).trim();
+                if (!rawText) return 0;
+                el.dataset.rawText = rawText;
+
+                // 1) 一行放得下就不要換行
+                el.style.wordBreak = 'normal';
+                el.style.overflowWrap = 'normal';
+                el.style.whiteSpace = 'nowrap';
+                el.innerHTML = '';
+                el.appendChild(buildTokenNodes(rawText));
+                setSize(el, singlePx);
+
+                if (el.scrollWidth <= el.clientWidth + 0.5 && (maxH <= 0 || rectH(el) <= maxH + 0.5)) {
+                    return singlePx;
+                }
+
+                if (minSinglePx > 0) {
+                    let curSinglePx = singlePx;
+                    if (el.scrollWidth > el.clientWidth + 0.5) {
+                        curSinglePx *= (el.clientWidth / Math.max(1, el.scrollWidth));
+                        setSize(el, curSinglePx);
+                    }
+                    if (maxH > 0 && rectH(el) > maxH + 0.5) {
+                        curSinglePx *= (maxH / Math.max(1, rectH(el)));
+                        setSize(el, curSinglePx);
+                    }
+                    for (let i = 0; i < 15; i++) {
+                        if (curSinglePx * 0.97 < minSinglePx) break;
+                        if (el.scrollWidth > el.clientWidth + 0.5 || (maxH > 0 && rectH(el) > maxH + 0.5)) {
+                            curSinglePx *= 0.97;
+                            setSize(el, curSinglePx);
+                        } else break;
+                    }
+                    if (curSinglePx >= minSinglePx && el.scrollWidth <= el.clientWidth + 0.5 && (maxH <= 0 || rectH(el) <= maxH + 0.5)) {
+                        return curSinglePx;
+                    }
+                }
+
+                // 2) 需要兩行且文字裡有空白：在空白處斷行（選兩行寬度最接近的空白），空白不顯示
+                const splitParts = findBestSpaceSplit(el, rawText, twoLinePx);
+                if (splitParts) {
+                    el.style.whiteSpace = 'normal';
+                    el.innerHTML = '';
+                    splitParts.forEach(part => {
+                        const lineSpan = document.createElement('span');
+                        lineSpan.className = 'pop-c1-line';
+                        lineSpan.appendChild(buildTokenNodes(part));
+                        el.appendChild(lineSpan);
+                    });
+
+                    let curPx = twoLinePx;
+                    setSize(el, curPx);
+                    if (el.scrollWidth > el.clientWidth + 0.5) {
+                        curPx *= (el.clientWidth / Math.max(1, el.scrollWidth));
+                        setSize(el, curPx);
+                    }
+                    if (maxH > 0 && rectH(el) > maxH + 0.5) {
+                        curPx *= (maxH / Math.max(1, rectH(el)));
+                        setSize(el, curPx);
+                    }
+                    for (let i = 0; i < 20; i++) {
+                        if (curPx * 0.97 < twoLinePx * 0.10) break;
+                        if (el.scrollWidth > el.clientWidth + 0.5 || (maxH > 0 && rectH(el) > maxH + 0.5)) {
+                            curPx *= 0.97;
+                            setSize(el, curPx);
+                        } else break;
+                    }
+                    return curPx;
+                }
+
+                // 3) 沒有空白：維持自動換行，但不可拆開連續英數字
+                el.style.whiteSpace = 'normal';
+                el.innerHTML = '';
+                el.appendChild(buildTokenNodes(rawText));
+                let curPx = twoLinePx;
+                setSize(el, curPx);
+                let sc = 1;
+                while (sc * 0.93 >= 0.08 && (countLines(el, lhRatio) > 2 || el.scrollWidth > el.clientWidth + 1 || (maxH > 0 && rectH(el) > maxH + 0.5))) {
+                    sc *= 0.93;
+                    curPx = twoLinePx * sc;
+                    setSize(el, curPx);
+                }
+                if (el.scrollWidth > el.clientWidth + 1) {
+                    el.style.overflowWrap = 'anywhere';
+                }
+                return curPx;
+            };
+
+            const fitTwoLineText = (el, initPx, lhRatio, maxH, minScale = 0.22) => {
+                if (!el || !el.textContent.trim()) return 0;
+                el.style.overflowWrap = 'normal';
+                setSize(el, initPx);
+                let sc = 1;
+                while (sc * 0.93 >= minScale && (countLines(el, lhRatio) > 2 || el.scrollWidth > el.clientWidth + 1 || (maxH > 0 && rectH(el) > maxH))) {
+                    sc *= 0.93;
+                    setSize(el, initPx * sc);
+                }
+                if (el.scrollWidth > el.clientWidth + 1) {
+                    el.style.overflowWrap = 'anywhere';
+                    while (sc * 0.93 >= 0.14 && (countLines(el, lhRatio) > 2 || el.scrollWidth > el.clientWidth + 1 || (maxH > 0 && rectH(el) > maxH))) {
+                        sc *= 0.93;
+                        setSize(el, initPx * sc);
+                    }
+                }
+                return initPx * sc;
+            };
+
+            const getKidsWidth = (nodes) => {
+                const rects = nodes.filter(n => n && n.getBoundingClientRect().width > 0).map(n => n.getBoundingClientRect());
+                if (!rects.length) return 0;
+                return (Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left))) / zf;
+            };
+
+            const fitPromoRow = (availW, availH) => {
+                if (!promoRow || !promoRow.textContent.trim()) return 0;
+                const mode = promoRow.dataset.promoMode || 'pure-number';
+                if (mode === 'pure-number') {
+                    const priceEl = promoRow.querySelector('.pop-c1-price');
+                    const unitEl = promoRow.querySelector('.pop-c1-unit');
+                    if (!priceEl) return 0;
+                    const testPx = 100;
+                    setSize(priceEl, testPx);
+                    if (unitEl) setSize(unitEl, testPx * 0.20);
+                    const w0 = getKidsWidth([priceEl, unitEl]);
+                    const h0 = rectH(priceEl);
+                    let optPx = testPx * Math.min(availW / Math.max(1, w0), availH / Math.max(1, h0));
+                    if (!Number.isFinite(optPx) || optPx <= 0) optPx = testPx;
+                    const apply = (sz) => {
+                        setSize(priceEl, sz);
+                        if (unitEl) setSize(unitEl, Math.max(sz * 0.20, cardH * 0.025));
+                    };
+                    apply(optPx);
+                    for (let i = 0; i < 20; i++) {
+                        const curW = getKidsWidth([priceEl, unitEl]);
+                        const curH = Math.max(rectH(priceEl), unitEl ? rectH(unitEl) : 0);
+                        if (curW > availW + 0.5 || curH > availH + 0.5) {
+                            optPx *= 0.97;
+                            apply(optPx);
+                        } else break;
+                    }
+                    return optPx;
+                } else if (mode === 'mixed') {
+                    const numNodes = Array.from(promoRow.querySelectorAll('.pop-c1-promo-num'));
+                    const txtNodes = Array.from(promoRow.querySelectorAll('.pop-c1-promo-txt'));
+                    const allNodes = Array.from(promoRow.children);
+                    if (!allNodes.length) return 0;
+                    const testPx = 100;
+                    numNodes.forEach(n => setSize(n, testPx));
+                    txtNodes.forEach(n => setSize(n, testPx * 0.45));
+                    const w0 = getKidsWidth(allNodes);
+                    const h0 = Math.max(...allNodes.map(rectH));
+                    let optPx = testPx * Math.min(availW / Math.max(1, w0), availH / Math.max(1, h0));
+                    if (!Number.isFinite(optPx) || optPx <= 0) optPx = testPx;
+                    const apply = (sz) => {
+                        numNodes.forEach(n => setSize(n, sz));
+                        txtNodes.forEach(n => setSize(n, sz * 0.45));
+                    };
+                    apply(optPx);
+                    for (let i = 0; i < 20; i++) {
+                        const curW = getKidsWidth(allNodes);
+                        const curH = Math.max(...allNodes.map(rectH));
+                        if (curW > availW + 0.5 || curH > availH + 0.5) {
+                            optPx *= 0.97;
+                            apply(optPx);
+                        } else break;
+                    }
+                    return optPx;
+                } else {
+                    const txtOnly = promoRow.querySelector('.pop-c1-promo-txt-only');
+                    if (!txtOnly) return 0;
+                    const testPx = 100;
+                    setSize(txtOnly, testPx);
+                    const w0 = rectW(txtOnly);
+                    const h0 = rectH(txtOnly);
+                    let optPx = testPx * Math.min(availW / Math.max(1, w0), availH / Math.max(1, h0));
+                    if (!Number.isFinite(optPx) || optPx <= 0) optPx = testPx;
+                    setSize(txtOnly, optPx);
+                    for (let i = 0; i < 20; i++) {
+                        if (rectW(txtOnly) > availW + 0.5 || rectH(txtOnly) > availH + 0.5) {
+                            optPx *= 0.97;
+                            setSize(txtOnly, optPx);
+                        } else break;
+                    }
+                    return optPx;
+                }
+            };
+
+            const hcolsEl = panel.querySelector('.pop-c1-hcols');
+            const hasBrand = Boolean(brandEl && brandEl.textContent.trim());
+            const hasNote = Boolean(noteEl && (noteEl.dataset.rawText || noteEl.textContent).trim());
+            const hasQty = Boolean(qtyEl && qtyEl.textContent.trim());
+
+            if (isA4One) {
+                const maxTopH = panelInnerH * 0.58;
+                let brandSize = hasBrand ? fitC1HeadingText(brandEl, cardH * 0.08, cardH * 0.065, 1.1, panelInnerH * 0.20, cardH * 0.065) : 0;
+
+                let qtySize = 0;
+                if (hasQty && qtyEl) {
+                    qtySize = panelH * 0.115;
+                    setSize(qtyEl, qtySize);
+                    const maxQtyW = panelInnerW * 0.92;
+                    if (rectW(qtyEl) > maxQtyW + 0.5) {
+                        qtySize *= maxQtyW / Math.max(1, rectW(qtyEl));
+                        setSize(qtyEl, qtySize);
+                    }
+                    for (let i = 0; i < 10; i++) {
+                        if (rectW(qtyEl) > maxQtyW + 0.5) {
+                            qtySize *= 0.97;
+                            setSize(qtyEl, qtySize);
+                        } else break;
+                    }
+                }
+
+                let nameSize = fitC1HeadingText(nameEl, hasBrand ? cardH * 0.055 : cardH * 0.08, hasBrand ? cardH * 0.048 : cardH * 0.065, 1.1, panelInnerH * 0.22, hasBrand ? cardH * 0.048 : cardH * 0.065);
+                let noteSize = hasNote ? fitC1HeadingText(noteEl, panelH * 0.067, panelH * 0.067, 1.15, panelInnerH * 0.20) : 0;
+
+                if (topEl) {
+                    let topScale = 1;
+                    while (topScale * 0.95 >= 0.30 && rectH(topEl) > maxTopH) {
+                        topScale *= 0.95;
+                        if (brandSize > 0) setSize(brandEl, brandSize * topScale);
+                        if (qtySize > 0) setSize(qtyEl, qtySize * topScale);
+                        if (nameSize > 0) setSize(nameEl, nameSize * topScale);
+                        if (noteSize > 0) setSize(noteEl, noteSize * topScale);
+                    }
+                }
+
+                if (promoWrap && promoRow && promoRow.textContent.trim()) {
+                    const topUsedH = topEl ? rectH(topEl) : 0;
+                    const wrapAvailH = Math.max(1, panelInnerH - topUsedH);
+                    const availPromoW = Math.max(1, panelInnerW * 0.92);
+                    const availPromoH = Math.max(1, wrapAvailH * 0.94);
+                    fitPromoRow(availPromoW, availPromoH);
+                }
+            } else {
+                const isLarge = cardEl.classList.contains('card-large');
+                const isA4Two = cardEl.classList.contains('card-a4two');
+                const qtyTarget = isLarge ? panelH * 0.26 : panelH * 0.20;
+                const noteTarget = isLarge ? panelH * 0.125 : panelH * 0.095;
+                const maxLeftW = panelInnerW * 0.42;
+                const maxNoteW = Math.min(panelInnerW * 0.32, maxLeftW);
+
+                if (hcolsEl) {
+                    const leftCol = hcolsEl.querySelector('.pop-c1-left-col');
+                    const rightCol = hcolsEl.querySelector('.pop-c1-right-col');
+                    const maxBrandW = maxLeftW;
+                    const maxQtyW = maxLeftW;
+
+                    let brandSize = 0;
+                    if (hasBrand && brandEl) {
+                        brandEl.style.maxWidth = maxBrandW + 'px';
+                        brandSize = fitC1HeadingText(brandEl, panelH * 0.20, panelH * 0.15, 1.1, panelInnerH * 0.36, panelH * 0.165);
+                    }
+
+                    let qtySize = hasQty ? qtyTarget : 0;
+                    if (qtyEl) {
+                        setSize(qtyEl, qtySize);
+                        if (rectW(qtyEl) > maxQtyW + 0.5 || qtyEl.scrollWidth > maxQtyW + 0.5) {
+                            qtySize *= maxQtyW / Math.max(1, Math.max(rectW(qtyEl), qtyEl.scrollWidth));
+                            setSize(qtyEl, qtySize);
+                        }
+                        for (let i = 0; i < 10; i++) {
+                            if (rectW(qtyEl) > maxQtyW + 0.5 || qtyEl.scrollWidth > maxQtyW + 0.5) {
+                                qtySize *= 0.97;
+                                setSize(qtyEl, qtySize);
+                            } else break;
+                        }
+                    }
+
+                    let noteSize = 0;
+                    if (hasNote && noteEl) {
+                        noteEl.style.maxWidth = maxNoteW + 'px';
+                        if (noteEl.classList.contains('note-align-center') || noteEl.classList.contains('note-align-right')) {
+                            noteEl.style.width = '100%';
+                        }
+                        const usedAbove = (hasBrand ? rectH(brandEl) : 0) + (qtyEl ? rectH(qtyEl) : 0) + panelInnerH * 0.04;
+                        const noteAvailH = Math.max(panelH * 0.10, panelInnerH - usedAbove);
+                        noteSize = fitC1HeadingText(noteEl, noteTarget, noteTarget, 1.15, noteAvailH * 0.94);
+                    }
+
+                    if (leftCol) {
+                        const leftMaxH = Math.min(panelInnerH, leftCol.clientHeight || panelInnerH);
+                        const isLeftTall = () => leftCol.scrollHeight > leftMaxH + 0.5 || rectH(leftCol) > panelInnerH + 0.5;
+                        let nSc = 1;
+                        while (hasNote && noteSize > 0 && nSc * 0.94 >= 0.72 && isLeftTall()) {
+                            nSc *= 0.94;
+                            setSize(noteEl, noteSize * nSc);
+                        }
+                        noteSize *= nSc;
+                        let bSc = 1;
+                        while (hasBrand && brandSize > 0 && bSc * 0.94 >= 0.75 && isLeftTall()) {
+                            bSc *= 0.94;
+                            setSize(brandEl, brandSize * bSc);
+                        }
+                        brandSize *= bSc;
+                        let lSc = 1;
+                        while (lSc * 0.95 >= 0.45 && isLeftTall()) {
+                            lSc *= 0.95;
+                            if (hasBrand && brandSize > 0) setSize(brandEl, brandSize * lSc);
+                            if (qtyEl && qtySize > 0) setSize(qtyEl, qtySize * lSc);
+                            if (hasNote && noteSize > 0) setSize(noteEl, noteSize * lSc);
+                        }
+                        qtySize *= lSc;
+                    }
+
+                    const fitRightCol = () => {
+                        if (!rightCol) return 0;
+                        fitC1HeadingText(nameEl, hasBrand ? panelH * 0.19 : panelH * 0.20, panelH * 0.15, 1.1, panelInnerH * 0.40);
+                        if (promoWrap && promoRow && promoRow.textContent.trim()) {
+                            const nameUsedH = nameEl ? rectH(nameEl) : 0;
+                            const pCs = window.getComputedStyle(promoWrap);
+                            const pMarginT = parseFloat(pCs.marginTop || 0);
+                            const availPromoH = Math.max(1, (panelInnerH - nameUsedH - pMarginT) * 0.90);
+                            const availPromoW = Math.max(1, rectW(rightCol) * 0.95);
+                            return fitPromoRow(availPromoW, availPromoH);
+                        }
+                        return 0;
+                    };
+
+                    const promoMainPx = fitRightCol();
+                    if (qtyEl && qtySize > 0 && promoMainPx > 0 && qtySize > promoMainPx / 1.31) {
+                        qtySize = Math.max(4, promoMainPx / 1.31);
+                        setSize(qtyEl, qtySize);
+                        fitRightCol();
+                    }
+                } else {
+                    const maxTopH = panelInnerH * 0.40;
+                    if (hasBrand && brandEl) fitC1HeadingText(brandEl, panelH * 0.20, panelH * 0.15, 1.1, maxTopH);
+                    fitC1HeadingText(nameEl, hasBrand ? panelH * 0.19 : panelH * 0.20, panelH * 0.15, 1.1, maxTopH);
+
+                    if (bottomEl && promoWrap && promoRow && promoRow.textContent.trim()) {
+                        const topUsedH = topEl ? rectH(topEl) : 0;
+                        const bCs = window.getComputedStyle(bottomEl);
+                        const bMarginT = parseFloat(bCs.marginTop || 0);
+                        const row2AvailH = Math.max(1, panelInnerH - topUsedH - bMarginT);
+
+                        let leftUsedW = 0;
+                        if (leftEl && hasNote && noteEl) {
+                            leftEl.style.maxWidth = maxNoteW + 'px';
+                            noteEl.style.maxWidth = maxNoteW + 'px';
+                            if (noteEl.classList.contains('note-align-center') || noteEl.classList.contains('note-align-right')) {
+                                noteEl.style.width = '100%';
+                            }
+                            fitC1HeadingText(noteEl, noteTarget, noteTarget, 1.15, row2AvailH * 0.92);
+                            const gapPx = panelInnerW * 0.02;
+                            leftUsedW = rectW(leftEl) + gapPx;
+                        }
+
+                        const availPromoW = Math.max(1, (panelInnerW - leftUsedW) * 0.95);
+                        const availPromoH = Math.max(1, row2AvailH * 0.90);
+                        fitPromoRow(availPromoW, availPromoH);
+                    }
+                }
+            }
+        }
+
+        function fitC2Card(cardEl) {
+            const setSize = (el, px) => el.style.setProperty('font-size', Math.max(1, px) + 'px', 'important');
+            const cardRect = cardEl.getBoundingClientRect();
+            const cardH = cardEl.offsetHeight;
+            const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+            const rectH = el => el.getBoundingClientRect().height / zf;
+            const isA4One = cardEl.classList.contains('card-a4one');
+            const panel = cardEl.querySelector('.notice-c2-panel');
+            const titleRow = cardEl.querySelector('.notice-c2-title-row');
+            const bodyEl = cardEl.querySelector('.notice-c2-body');
+            if (!panel || !bodyEl) return;
+
+            setSize(bodyEl, 12);
+
+            const csPanel = window.getComputedStyle(panel);
+            const panelInnerW = Math.max(1, panel.clientWidth - parseFloat(csPanel.paddingLeft || 0) - parseFloat(csPanel.paddingRight || 0));
+            const availTitleW = Math.max(1, panelInnerW * 0.90);
+
+            // 1) 標題列：■ 公告標題 ■ 單行置中
+            if (titleRow) {
+                const titleBase = isA4One ? cardH * 0.048 : cardH * 0.085;
+                setSize(titleRow, titleBase);
+                const kids = Array.from(titleRow.children).filter(n => n.getBoundingClientRect().width > 0);
+                const getRowW = () => {
+                    const rects = kids.map(k => k.getBoundingClientRect());
+                    if (!rects.length) return 0;
+                    return (Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left))) / zf;
+                };
+                const w0 = getRowW();
+                let titlePx = w0 > availTitleW ? titleBase * (availTitleW / Math.max(1, w0)) : titleBase;
+                setSize(titleRow, titlePx);
+                for (let i = 0; i < 8; i++) {
+                    if (getRowW() > availTitleW + 0.5) {
+                        titlePx *= 0.97;
+                        setSize(titleRow, titlePx);
+                    } else break;
+                }
+            }
+
+            // 2) 內文：自動換行＋平衡行寬＋最大基準字級（詞邊界斷行＋最小行寬 45% 限制）
+            if (!cardEl._c2Paragraphs || !cardEl._c2Paragraphs.length) return;
+            const paragraphs = cardEl._c2Paragraphs.map(p => ({
+                ...p,
+                tokens: p.tokens.map(tok => ({ ...tok, parts: tok.parts.map(pt => ({ ...pt })) }))
+            }));
+
+            const bodyH = Math.max(1, rectH(bodyEl));
+            const targetW = Math.max(1, panelInnerW * 0.90);
+            const targetH = Math.max(1, bodyH * 0.90);
+
+            // 先用 100px 量每個 token 的寬度與兩種行高（正常行與含 **...** 放大行）
+            const testPx = 100;
+            const measureParagraphs = () => {
+                setSize(bodyEl, testPx);
+                bodyEl.innerHTML = '';
+
+                const measureLineH = (isLarge, withEmLg) => {
+                    const probe = document.createElement('div');
+                    probe.className = isLarge ? 'notice-c2-line notice-c2-line-lg' : 'notice-c2-line';
+                    if (withEmLg) {
+                        const sp = document.createElement('span');
+                        sp.className = 'notice-c2-em-lg';
+                        sp.textContent = '國';
+                        probe.appendChild(sp);
+                    }
+                    probe.appendChild(document.createTextNode('國'));
+                    bodyEl.appendChild(probe);
+                    return rectH(probe);
+                };
+
+                const normalLineH100 = measureLineH(false, false);
+                const normalEmLgH100 = measureLineH(false, true);
+                const hasAnyLarge = paragraphs.some(p => p.isLarge);
+                const largeLineH100 = hasAnyLarge ? measureLineH(true, false) : normalLineH100 * 1.3;
+                const largeEmLgH100 = hasAnyLarge ? measureLineH(true, true) : normalEmLgH100 * 1.3;
+
+                paragraphs.forEach(p => {
+                    p.baseLineH100 = p.isLarge ? largeLineH100 : normalLineH100;
+                    p.emLgLineH100 = p.isLarge ? largeEmLgH100 : normalEmLgH100;
+                    if (p.isBlank || !p.tokens.length) {
+                        p.prefixW = [0];
+                        p.prefixNonPunct = [0];
+                        p.prefixEmLg = [0];
+                        return;
+                    }
+                    const lineEl = document.createElement('div');
+                    lineEl.className = p.isLarge ? 'notice-c2-line notice-c2-line-lg' : 'notice-c2-line';
+                    const spans = p.tokens.map(tok => {
+                        const tokSpan = document.createElement('span');
+                        tok.parts.forEach(part => {
+                            if (part.type === 'plain') {
+                                tokSpan.appendChild(document.createTextNode(part.text));
+                            } else {
+                                const sp = document.createElement('span');
+                                sp.className = part.type === 'em-lg' ? 'notice-c2-em-lg' : 'notice-c2-em';
+                                sp.textContent = part.text;
+                                tokSpan.appendChild(sp);
+                            }
+                        });
+                        lineEl.appendChild(tokSpan);
+                        return tokSpan;
+                    });
+                    bodyEl.appendChild(lineEl);
+
+                    if (p.tokens.some(t => t.hasEmLg)) {
+                        p.emLgLineH100 = Math.max(p.emLgLineH100, rectH(lineEl));
+                    } else {
+                        p.baseLineH100 = Math.max(p.baseLineH100, rectH(lineEl));
+                    }
+
+                    p.prefixW = [0];
+                    p.prefixNonPunct = [0];
+                    p.prefixEmLg = [0];
+                    spans.forEach((sp, idx) => {
+                        const w = sp.getBoundingClientRect().width / zf;
+                        const tok = p.tokens[idx];
+                        tok.w100 = w;
+                        p.prefixW.push(p.prefixW[idx] + w);
+                        p.prefixNonPunct.push(p.prefixNonPunct[idx] + tok.nonPunct);
+                        p.prefixEmLg.push(p.prefixEmLg[idx] + (tok.hasEmLg ? 1 : 0));
+                    });
+                });
+            };
+            measureParagraphs();
+
+            const sliceNonPunct = (p, i, j) => p.prefixNonPunct[j + 1] - p.prefixNonPunct[i];
+            const firstNonSpaceIdx = (p, i, j) => {
+                for (let idx = i; idx <= j; idx++) {
+                    if (!p.tokens[idx].isSpace) return idx;
+                }
+                return -1;
+            };
+            const lastNonSpaceIdx = (p, i, j) => {
+                for (let idx = j; idx >= i; idx--) {
+                    if (!p.tokens[idx].isSpace) return idx;
+                }
+                return -1;
+            };
+            const trimmedW = (p, i, j, f) => {
+                const s = firstNonSpaceIdx(p, i, j);
+                if (s === -1) return 0;
+                const e = lastNonSpaceIdx(p, s, j);
+                return (p.prefixW[e + 1] - p.prefixW[s]) * (f / 100);
+            };
+
+            const layoutParagraphGreedy = (p, f, maxW) => {
+                if (p.isBlank || !p.tokens.length) {
+                    const h = (f / 100) * p.baseLineH100;
+                    return { lines: [{ start: 0, end: -1 }], totalH: h, fits: true };
+                }
+                const M = p.tokens.length;
+                const clauses = [];
+                let cStart = 0;
+                for (let i = 0; i < M; i++) {
+                    if (p.tokens[i].breakAfter || i === M - 1) {
+                        clauses.push([cStart, i]);
+                        cStart = i + 1;
+                    }
+                }
+
+                const lines = [];
+                let curStart = -1;
+                let curEnd = -1;
+                let fits = true;
+
+                const flushLine = () => {
+                    if (curStart === -1) return;
+                    if (trimmedW(p, curStart, curEnd, f) > maxW + 0.01) fits = false;
+                    const hasEmLg = p.prefixEmLg[curEnd + 1] - p.prefixEmLg[curStart] > 0;
+                    const h = (f / 100) * (hasEmLg ? p.emLgLineH100 : p.baseLineH100);
+                    lines.push({ start: curStart, end: curEnd, height: h });
+                    curStart = -1;
+                    curEnd = -1;
+                };
+
+                for (const [cs, ce] of clauses) {
+                    const cw = trimmedW(p, cs, ce, f);
+                    if (curStart !== -1) {
+                        if (trimmedW(p, curStart, ce, f) <= maxW + 0.01) {
+                            curEnd = ce;
+                            continue;
+                        }
+                        flushLine();
+                    }
+                    if (cw <= maxW + 0.01) {
+                        curStart = cs;
+                        curEnd = ce;
+                    } else {
+                        // 子句本身超過可用寬度時，才允許在子句內詞邊界間斷行
+                        let idx = cs;
+                        while (idx <= ce) {
+                            if (curStart === -1) {
+                                if (p.tokens[idx].isSpace) {
+                                    idx++;
+                                    continue;
+                                }
+                                curStart = idx;
+                                curEnd = idx;
+                                idx++;
+                            }
+                            while (idx <= ce && trimmedW(p, curStart, idx, f) <= maxW + 0.01) {
+                                curEnd = idx;
+                                idx++;
+                            }
+                            if (idx <= ce) {
+                                flushLine();
+                            }
+                        }
+                    }
+                }
+                flushLine();
+                if (!lines.length) {
+                    const h = (f / 100) * p.baseLineH100;
+                    return { lines: [{ start: 0, end: -1, height: h }], totalH: h, fits: true };
+                }
+
+                let totalH = 0;
+                for (const ln of lines) totalH += ln.height;
+                return { lines, totalH, fits };
+            };
+
+            const checkParaMinRatio = (p, ranges, f) => {
+                if (!ranges || ranges.length <= 1) return true;
+                const n = ranges.length;
+                const widths = ranges.map(r => trimmedW(p, r.start, r.end, f));
+                const maxLineW = Math.max(...widths);
+                if (maxLineW <= 0) return true;
+                const minAllowed = maxLineW * 0.45 - 0.01;
+                for (let k = 0; k < n; k++) {
+                    if (widths[k] >= minAllowed) continue;
+                    // 例外：該行是段落最後一個以標點結尾的短子句
+                    if (k === n - 1 && k > 0) {
+                        const prevLast = lastNonSpaceIdx(p, ranges[k - 1].start, ranges[k - 1].end);
+                        const curLast = lastNonSpaceIdx(p, ranges[k].start, ranges[k].end);
+                        if (prevLast >= 0 && p.tokens[prevLast].breakAfter && curLast >= 0 && p.tokens[curLast].breakAfter) {
+                            continue;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            };
+
+            const rebalanceParagraph = (p, greedyRes, f, maxW) => {
+                if (p.isBlank || !p.tokens.length) return greedyRes.lines;
+                const n = greedyRes.lines.length;
+                const M = p.tokens.length;
+                if (n <= 1 || M <= 1 || n >= M) return greedyRes.lines;
+
+                const avgW = trimmedW(p, 0, M - 1, f) / n;
+                const orpScore = (cnt) => (cnt <= 1 ? 100 : (cnt === 2 ? 1 : 0));
+                const isBetter = (a, b) => {
+                    if (!b) return true;
+                    if (a.mid !== b.mid) return a.mid < b.mid;
+                    if (a.orp !== b.orp) return a.orp < b.orp;
+                    const qa = Math.round(a.maxW * 10);
+                    const qb = Math.round(b.maxW * 10);
+                    if (qa !== qb) return qa < qb;
+                    return a.sq < b.sq;
+                };
+
+                const runDP = (capW, minRatio) => {
+                    const minWReq = minRatio > 0 ? capW * minRatio - 0.01 : 0;
+                    let prevDp = new Array(M + 1).fill(null);
+                    for (let j = 0; j <= M - n; j++) {
+                        const lastNon = lastNonSpaceIdx(p, 0, j);
+                        if (lastNon === -1) continue;
+                        const lw = trimmedW(p, 0, j, f);
+                        if (lw > capW + 0.01) {
+                            if (j > 0) break;
+                            continue;
+                        }
+                        if (minWReq > 0 && lw < minWReq) continue;
+                        const mid = p.tokens[lastNon].breakAfter ? 0 : 1;
+                        const orp = orpScore(sliceNonPunct(p, 0, j));
+                        prevDp[j + 1] = { mid, orp, maxW: lw, sq: (lw - avgW) ** 2, prevIdx: 0 };
+                    }
+
+                    const layers = [prevDp];
+                    for (let k = 2; k <= n; k++) {
+                        const curDp = new Array(M + 1).fill(null);
+                        const minStart = k - 1;
+                        const maxEnd = k === n ? M - 1 : M - 1 - (n - k);
+                        for (let i = minStart; i <= maxEnd; i++) {
+                            const prev = prevDp[i];
+                            if (!prev) continue;
+                            const prevLast = lastNonSpaceIdx(p, 0, i - 1);
+                            const prevEndedPunct = prevLast >= 0 && p.tokens[prevLast].breakAfter;
+                            const jStart = k === n ? M - 1 : i;
+                            for (let j = jStart; j <= maxEnd; j++) {
+                                const lastNon = lastNonSpaceIdx(p, i, j);
+                                if (lastNon === -1) continue;
+                                const lw = trimmedW(p, i, j, f);
+                                if (lw > capW + 0.01) {
+                                    if (j > i) break;
+                                    continue;
+                                }
+                                const isExemptLast = (k === n) && prevEndedPunct && p.tokens[lastNon].breakAfter;
+                                if (minWReq > 0 && !isExemptLast && lw < minWReq) continue;
+                                const midAdd = (k < n && !p.tokens[lastNon].breakAfter) ? 1 : 0;
+                                const orpAdd = orpScore(sliceNonPunct(p, i, j));
+                                const cand = {
+                                    mid: prev.mid + midAdd,
+                                    orp: prev.orp + orpAdd,
+                                    maxW: Math.max(prev.maxW, lw),
+                                    sq: prev.sq + (lw - avgW) ** 2,
+                                    prevIdx: i
+                                };
+                                if (isBetter(cand, curDp[j + 1])) {
+                                    curDp[j + 1] = cand;
+                                }
+                            }
+                        }
+                        layers.push(curDp);
+                        prevDp = curDp;
+                    }
+
+                    if (!prevDp[M]) return null;
+                    const ranges = new Array(n);
+                    let endPos = M;
+                    for (let k = n - 1; k >= 0; k--) {
+                        const node = layers[k][endPos];
+                        ranges[k] = { start: node.prevIdx, end: endPos - 1 };
+                        endPos = node.prevIdx;
+                    }
+                    return { ranges, score: prevDp[M] };
+                };
+
+                const baseRes = runDP(maxW, 0);
+                if (baseRes && checkParaMinRatio(p, baseRes.ranges, f)) {
+                    return baseRes.ranges;
+                }
+
+                let bestValid = null;
+                const capFactors = [1.0, 0.94, 0.88, 0.82, 0.76, 0.70, 0.62, 0.54];
+                const testedCaps = new Set();
+                for (const factor of capFactors) {
+                    const capW = maxW * factor;
+                    if (capW + 0.01 < avgW) continue;
+                    const key = Math.round(capW * 10);
+                    if (testedCaps.has(key)) continue;
+                    testedCaps.add(key);
+                    const res = runDP(capW, 0.45);
+                    if (res && checkParaMinRatio(p, res.ranges, f)) {
+                        if (!bestValid || isBetter(res.score, bestValid.score)) {
+                            bestValid = res;
+                        }
+                    }
+                }
+                if (!bestValid && avgW <= maxW) {
+                    const res = runDP(Math.min(maxW, avgW * 1.05), 0.45);
+                    if (res && checkParaMinRatio(p, res.ranges, f)) {
+                        bestValid = res;
+                    }
+                }
+
+                if (bestValid) return bestValid.ranges;
+                return baseRes ? baseRes.ranges : greedyRes.lines;
+            };
+
+            const canFitAt = (f) => {
+                let totalH = 0;
+                for (const p of paragraphs) {
+                    const res = layoutParagraphGreedy(p, f, targetW);
+                    if (!res.fits) return false;
+                    totalH += res.totalH;
+                    if (totalH > targetH + 0.01) return false;
+                }
+                return true;
+            };
+
+            const sizeKey = isA4One ? 'a4one' : 'a4two';
+            const fsKey = normalizeNoticeFontSize(cardEl.dataset.noticeFontSize);
+            const selectedPt = (C2_FONT_SIZE_PT[sizeKey] && C2_FONT_SIZE_PT[sizeKey][fsKey]) || C2_FONT_SIZE_PT[sizeKey].m;
+            const selectedPx = selectedPt * (96 / 72);
+
+            const findOptPx = (maxHi) => {
+                let lo = 1;
+                let hi = maxHi;
+                let best = lo;
+                for (let iter = 0; iter < 32; iter++) {
+                    const mid = (lo + hi) / 2;
+                    if (canFitAt(mid)) {
+                        best = mid;
+                        lo = mid;
+                    } else {
+                        hi = mid;
+                    }
+                }
+                return best;
+            };
+
+            let optPx = selectedPx;
+            let shrunkFromSelected = false;
+            if (!canFitAt(selectedPx)) {
+                shrunkFromSelected = true;
+                optPx = findOptPx(selectedPx);
+            }
+            if (!canFitAt(optPx)) {
+                // 只有當「單一個詞」本身在最小字級下仍超過可用寬度時，才允許在詞中間逐字斷行
+                let splitAny = false;
+                paragraphs.forEach(p => {
+                    if (p.isBlank || !p.tokens.length) return;
+                    const nextTokens = [];
+                    let pSplit = false;
+                    for (const tok of p.tokens) {
+                        if (tok.w100 * (optPx / 100) > targetW + 0.01) {
+                            const charParts = [];
+                            tok.parts.forEach(part => {
+                                for (const ch of Array.from(part.text)) {
+                                    charParts.push({ type: part.type, text: ch });
+                                }
+                            });
+                            if (charParts.length > 1) {
+                                pSplit = true;
+                                splitAny = true;
+                                charParts.forEach((chPart, ci) => {
+                                    const isLast = ci === charParts.length - 1;
+                                    const isPunct = C2_PUNCT_SET.has(chPart.text);
+                                    if (isPunct && nextTokens.length > 0) {
+                                        const prev = nextTokens[nextTokens.length - 1];
+                                        const lastP = prev.parts[prev.parts.length - 1];
+                                        if (lastP && lastP.type === chPart.type) lastP.text += chPart.text;
+                                        else prev.parts.push(chPart);
+                                        prev.breakAfter = true;
+                                        prev.isSpace = false;
+                                    } else {
+                                        nextTokens.push({
+                                            parts: [chPart],
+                                            breakAfter: isLast ? tok.breakAfter : false,
+                                            nonPunct: isPunct || /\s/.test(chPart.text) ? 0 : 1,
+                                            hasEmLg: chPart.type === 'em-lg',
+                                            isSpace: /^\s+$/.test(chPart.text)
+                                        });
+                                    }
+                                });
+                                continue;
+                            }
+                        }
+                        nextTokens.push(tok);
+                    }
+                    if (pSplit) p.tokens = nextTokens;
+                });
+                if (splitAny) {
+                    measureParagraphs();
+                    if (canFitAt(selectedPx)) {
+                        optPx = selectedPx;
+                        shrunkFromSelected = false;
+                    } else {
+                        optPx = findOptPx(selectedPx);
+                        shrunkFromSelected = true;
+                    }
+                }
+            }
+
+            const solveAllAt = (f) => {
+                let fitsAll = true;
+                const rangesList = paragraphs.map(p => {
+                    if (p.isBlank || !p.tokens.length) return [{ start: 0, end: -1 }];
+                    const greedy = layoutParagraphGreedy(p, f, targetW);
+                    if (!greedy.fits) fitsAll = false;
+                    return rebalanceParagraph(p, greedy, f, targetW);
+                });
+                const ratioOk = fitsAll && paragraphs.every((p, idx) => checkParaMinRatio(p, rangesList[idx], f));
+                return { fitsAll, ratioOk, rangesList };
+            };
+
+            let chosenPx = optPx;
+            let chosenSol = solveAllAt(chosenPx);
+            if (shrunkFromSelected && !chosenSol.ratioOk) {
+                for (let pct = 1; pct <= 8; pct++) {
+                    const candPx = optPx * (1 - pct / 100);
+                    const candSol = solveAllAt(candPx);
+                    if (candSol.ratioOk) {
+                        chosenPx = candPx;
+                        chosenSol = candSol;
+                        break;
+                    }
+                }
+            }
+            optPx = chosenPx;
+
+            // 產生實際 .notice-c2-line DOM
+            bodyEl.innerHTML = '';
+            setSize(bodyEl, optPx);
+            paragraphs.forEach((p, pIdx) => {
+                if (p.isBlank || !p.tokens.length) {
+                    bodyEl.appendChild(buildC2LineNode(null, p.isLarge));
+                    return;
+                }
+                const ranges = chosenSol.rangesList[pIdx];
+                ranges.forEach(({ start, end }) => {
+                    if (end < start) return;
+                    let s = start;
+                    let e = end;
+                    while (s < e && p.tokens[s].isSpace) s++;
+                    while (e > s && p.tokens[e].isSpace) e--;
+                    const parts = [];
+                    for (let idx = s; idx <= e; idx++) {
+                        p.tokens[idx].parts.forEach(pt => parts.push(pt));
+                    }
+                    bodyEl.appendChild(buildC2LineNode(parts, p.isLarge));
+                });
+            });
+
+            // 實測微調：選定字級放不下（任何一行寬 > targetW 或總高 > targetH）時自動縮小至剛好放得下
+            const lines = Array.from(bodyEl.querySelectorAll('.notice-c2-line'));
+            if (!lines.length) return;
+
+            const getLineRenderWidth = (line) => {
+                if (!line.textContent || line.textContent === '\u00A0') return 0;
+                const range = document.createRange();
+                range.selectNodeContents(line);
+                return range.getBoundingClientRect().width / zf;
+            };
+
+            const measureLines = () => {
+                let maxW = 0;
+                let totalH = 0;
+                lines.forEach(line => {
+                    const w = getLineRenderWidth(line);
+                    const h = rectH(line);
+                    if (w > maxW) maxW = w;
+                    totalH += h;
+                });
+                return { maxW, totalH };
+            };
+
+            for (let i = 0; i < 15; i++) {
+                const m = measureLines();
+                if (m.maxW > targetW + 0.5 || m.totalH > targetH + 0.5) {
+                    optPx *= 0.98;
+                    setSize(bodyEl, optPx);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        // ==========================================
         // P1: 自動縮字機制 fitCardText
         // ==========================================
+        function resetPromotedCategories(cardEl) {
+            cardEl.classList.remove('has-promoted-cat');
+            const oldB1 = cardEl.querySelector('.b1-promoted-block');
+            if (oldB1) oldB1.remove();
+            const mainText = cardEl.querySelector('.main-text');
+            if (mainText) mainText.style.removeProperty('display');
+
+            cardEl.querySelectorAll('.a1-side-right-wrap').forEach(wrap => {
+                const rightPrice = wrap.querySelector('.side-col-right.line-price');
+                if (rightPrice && wrap.parentNode) {
+                    wrap.parentNode.insertBefore(rightPrice, wrap);
+                }
+                wrap.remove();
+            });
+
+            cardEl.querySelectorAll('.promoted-price-group').forEach(group => {
+                const linePrice = group.querySelector('.line-price');
+                if (linePrice && group.parentNode) {
+                    group.parentNode.insertBefore(linePrice, group);
+                }
+                group.remove();
+            });
+
+            cardEl.querySelectorAll('.line-category[data-promoted-cat="1"]').forEach(cat => cat.remove());
+            cardEl.querySelectorAll('.label[data-hidden-by-promote="1"]').forEach(l => {
+                l.style.removeProperty('display');
+                delete l.dataset.hiddenByPromote;
+            });
+
+            if (cardEl.dataset.promotedPadFix) {
+                cardEl.style.removeProperty('padding-top');
+                delete cardEl.dataset.promotedPadFix;
+            }
+            cardEl.querySelectorAll('[data-promoted-note-fix="1"]').forEach(n => {
+                n.style.removeProperty('margin-bottom');
+                delete n.dataset.promotedNoteFix;
+            });
+            cardEl.querySelectorAll('[data-promoted-vert-fix="1"]').forEach(el => {
+                el.style.removeProperty('font-size');
+                delete el.dataset.promotedVertFix;
+            });
+        }
+
+        function fitPromotedCategoryEl(catEl, origFs, availW, zf) {
+            let fs = origFs;
+            catEl.style.setProperty('font-size', fs + 'px', 'important');
+            const getTextW = () => {
+                const range = document.createRange();
+                range.selectNodeContents(catEl);
+                return range.getBoundingClientRect().width / zf;
+            };
+            const minFs = origFs * 0.55;
+            while (fs > minFs + 0.01 && getTextW() > availW + 0.5) {
+                fs = Math.max(minFs, fs * 0.94);
+                catEl.style.setProperty('font-size', fs + 'px', 'important');
+            }
+            while (fs * 0.94 >= 4 && getTextW() > availW + 0.5) {
+                fs *= 0.94;
+                catEl.style.setProperty('font-size', fs + 'px', 'important');
+            }
+            catEl.dataset.origFontSize = fs;
+            return fs;
+        }
+
+        function promoteLinePriceLabel(cardEl, priceLine, labelEl, origLabelFs, availW, zf, options) {
+            const opts = options || {};
+            const labelText = labelEl.textContent.trim();
+            labelEl.style.setProperty('display', 'none', 'important');
+            labelEl.dataset.hiddenByPromote = '1';
+
+            const catEl = document.createElement('div');
+            catEl.className = 'line-category';
+            catEl.dataset.promotedCat = '1';
+            catEl.textContent = labelText;
+            cardEl.classList.add('has-promoted-cat');
+
+            if (opts.a1Side) {
+                const wrap = document.createElement('div');
+                wrap.className = 'a1-side-right-wrap';
+                priceLine.parentNode.insertBefore(wrap, priceLine);
+                wrap.appendChild(catEl);
+                wrap.appendChild(priceLine);
+                if (cardEl.classList.contains('card-small')) {
+                    cardEl.style.setProperty('padding-top', '0.5mm', 'important');
+                    cardEl.dataset.promotedPadFix = '1';
+                }
+            } else if (priceLine.parentElement && priceLine.parentElement.classList.contains('a4-price-group')) {
+                priceLine.parentElement.insertBefore(catEl, priceLine);
+            } else {
+                const group = document.createElement('div');
+                group.className = 'promoted-price-group';
+                priceLine.parentNode.insertBefore(group, priceLine);
+                group.appendChild(catEl);
+                group.appendChild(priceLine);
+                if (cardEl.classList.contains('card-smallRound')) {
+                    const noteEl = cardEl.querySelector('.line-note');
+                    if (noteEl) {
+                        noteEl.style.setProperty('margin-bottom', '1mm', 'important');
+                        noteEl.dataset.promotedNoteFix = '1';
+                    }
+                }
+            }
+
+            fitPromotedCategoryEl(catEl, origLabelFs, availW, zf);
+
+            if (cardEl.classList.contains('card-large') && cardEl.classList.contains('tpl-B1')) {
+                if (cardEl.scrollHeight > cardEl.clientHeight + 1) {
+                    cardEl.style.setProperty('padding-top', '2.5mm', 'important');
+                    cardEl.dataset.promotedPadFix = '1';
+                }
+            }
+
+            if (!opts.a1Side && cardEl.classList.contains('tpl-B1') && !cardEl.classList.contains('card-a4one') && !cardEl.classList.contains('card-a4two')) {
+                const box = priceLine.closest('.white-panel') || cardEl;
+                const nameEl = box.querySelector('.line-name');
+                const noteEl = box.querySelector('.line-note');
+                const nameBase = nameEl ? parseFloat(nameEl.style.fontSize || window.getComputedStyle(nameEl).fontSize) : 0;
+                const noteBase = noteEl ? parseFloat(noteEl.style.fontSize || window.getComputedStyle(noteEl).fontSize) : 0;
+                let vSc = 1;
+                while (vSc * 0.94 >= 0.72 && (box.scrollHeight > box.clientHeight + 1 || cardEl.scrollHeight > cardEl.clientHeight + 1)) {
+                    vSc *= 0.94;
+                    if (nameEl && nameBase > 0) {
+                        nameEl.style.setProperty('font-size', (nameBase * vSc) + 'px', 'important');
+                        nameEl.dataset.promotedVertFix = '1';
+                    }
+                    if (noteEl && noteBase > 0) {
+                        noteEl.style.setProperty('font-size', (noteBase * vSc) + 'px', 'important');
+                        noteEl.dataset.promotedVertFix = '1';
+                    }
+                }
+            }
+            return catEl;
+        }
+
+        function fitLinePriceLabelOrPromote(cardEl, priceLine, labelEl, origLabelFs, availW, zf, options) {
+            const opts = options || {};
+            const applyFs = opts.applyFs || ((node, px) => node.style.setProperty('font-size', px + 'px', 'important'));
+            const getKidsW = () => {
+                const kids = Array.from(priceLine.children).filter(k => k.getBoundingClientRect().width > 0);
+                if (!kids.length) return 0;
+                return (Math.max(...kids.map(k => k.getBoundingClientRect().right)) - Math.min(...kids.map(k => k.getBoundingClientRect().left))) / zf;
+            };
+            const resetPrice = () => {
+                if (opts.resetPriceFn) {
+                    opts.resetPriceFn();
+                } else {
+                    priceLine.querySelectorAll('.highlight, .unit, .qty-val, .price-val').forEach(c => {
+                        if (c.dataset.origFontSize) {
+                            applyFs(c, parseFloat(c.dataset.origFontSize));
+                        } else {
+                            c.style.removeProperty('font-size');
+                        }
+                    });
+                }
+            };
+
+            // 1) 量測不含類別時的價格寬度，維持價格行原本大小（僅在價格本身超過 availW 時才按自身比例縮放）
+            resetPrice();
+            labelEl.style.setProperty('display', 'none', 'important');
+            const priceKids = Array.from(priceLine.children).filter(k => k !== labelEl && k.getBoundingClientRect().width > 0);
+            const priceBases = priceKids.map(k => {
+                const b = parseFloat(k.dataset.origFontSize || window.getComputedStyle(k).fontSize);
+                k.dataset.origFontSize = b;
+                return { node: k, base: b };
+            });
+            let sPrice = 1;
+            const wNoLabel = getKidsW();
+            if (wNoLabel > availW + 0.5 && wNoLabel > 0) {
+                sPrice = availW / wNoLabel;
+                priceBases.forEach(item => applyFs(item.node, item.base * sPrice));
+                for (let i = 0; i < 10 && getKidsW() > availW + 0.5; i++) {
+                    sPrice *= 0.97;
+                    priceBases.forEach(item => applyFs(item.node, item.base * sPrice));
+                }
+            }
+
+            // 2) 放回類別，只縮小類別到最低 55%，測試同一行是否放得下
+            labelEl.style.removeProperty('display');
+            let lFs = origLabelFs;
+            const minL = origLabelFs * 0.55;
+            labelEl.style.setProperty('font-size', lFs + 'px', 'important');
+            const overflows = () => getKidsW() > availW + 0.5 || (opts.extraOverflow && opts.extraOverflow());
+
+            while (lFs > minL + 0.01 && overflows()) {
+                lFs = Math.max(minL, lFs * 0.94);
+                labelEl.style.setProperty('font-size', lFs + 'px', 'important');
+            }
+
+            if (!overflows()) {
+                if (sPrice < 1) {
+                    const adjBase = lFs / sPrice;
+                    if (adjBase <= origLabelFs + 0.5) {
+                        labelEl.dataset.customLabelBase = adjBase;
+                        resetPrice();
+                        return { promoted: false, labelFs: lFs };
+                    }
+                    // 若 sPrice < 1 導致後續統一縮放會把類別壓到 55% 以下，改移至上方獨立行
+                } else {
+                    labelEl.dataset.customLabelBase = lFs;
+                    resetPrice();
+                    return { promoted: false, labelFs: lFs };
+                }
+            }
+
+            // 3) 最小字級 55% 仍放不下同一行 → 移至價格正上方獨立一行置中
+            resetPrice();
+            const catEl = promoteLinePriceLabel(cardEl, priceLine, labelEl, origLabelFs, opts.catAvailW || availW, zf, opts);
+            return { promoted: true, catEl };
+        }
+
         function fitCardText(cardEl) {
             if (!cardEl) return;
 
-            // 鐵則與例外：small / medium / smallRound / large 的 tpl-B1 完全跳過此函式
+            // 若卡片不可見 (例如手機版目前在編輯面板)，待切換至預覽時再執行
+            if (cardEl.clientWidth === 0 || cardEl.clientHeight === 0) {
+                return;
+            }
+
+            resetPromotedCategories(cardEl);
+
+            // 鐵則與例外：small / medium / smallRound / large 的 tpl-B1（3 字以內類別完全跳過；僅 >3 字自訂類別做縮小／獨立行避免溢出或擠到元換行）
             const isB1 = cardEl.classList.contains('tpl-B1');
             const isOriginal4 = cardEl.classList.contains('card-small') ||
                                 cardEl.classList.contains('card-medium') ||
                                 cardEl.classList.contains('card-smallRound') ||
                                 cardEl.classList.contains('card-large');
             if (isB1 && isOriginal4) {
+                const b1Custom = cardEl.querySelector('.b1-custom-label');
+                const b1PriceLabel = cardEl.querySelector('.line-price .label');
+                const csCard = window.getComputedStyle(cardEl);
+                const padL = parseFloat(csCard.paddingLeft || 0);
+                const padR = parseFloat(csCard.paddingRight || 0);
+                const padB = parseFloat(csCard.paddingBottom || 0);
+                const cardRect = cardEl.getBoundingClientRect();
+                const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                const availW = Math.max(1, cardEl.clientWidth - padL - padR);
+                const bottomLimit = cardRect.bottom - padB * zf + 0.5;
+
+                if (b1Custom) {
+                    b1Custom.style.removeProperty('font-size');
+                    b1Custom.style.removeProperty('overflow-wrap');
+                    const mainText = cardEl.querySelector('.main-text');
+                    const noteEl = cardEl.querySelector('.note');
+                    const priceTail = mainText ? mainText.querySelector('.b1-price-tail') : null;
+                    const baseFs = parseFloat(b1Custom.dataset.origFontSize || window.getComputedStyle(b1Custom).fontSize);
+                    b1Custom.dataset.origFontSize = baseFs;
+                    const minCatFs = baseFs * 0.55;
+
+                    const isSameLineAndFits = () => {
+                        if (cardEl.scrollHeight > cardEl.clientHeight + 1) return false;
+                        if (mainText && mainText.scrollWidth > mainText.clientWidth + 1) return false;
+                        if (noteEl && noteEl.getBoundingClientRect().bottom > bottomLimit) return false;
+                        if (mainText && mainText.getBoundingClientRect().bottom > bottomLimit) return false;
+                        const catRects = Array.from(b1Custom.getClientRects()).filter(r => r.width > 0);
+                        if (catRects.length !== 1) return false;
+                        if (priceTail) {
+                            const pRects = Array.from(priceTail.getClientRects()).filter(r => r.width > 0);
+                            if (pRects.length !== 1) return false;
+                            const cR = catRects[0];
+                            const pR = pRects[0];
+                            const vOverlap = Math.min(cR.bottom, pR.bottom) - Math.max(cR.top, pR.top);
+                            if (vOverlap <= 0 || pR.left < cR.right - 2) return false;
+                        }
+                        return true;
+                    };
+
+                    let fs = baseFs;
+                    while (fs > minCatFs + 0.01 && !isSameLineAndFits()) {
+                        fs = Math.max(minCatFs, fs * 0.94);
+                        b1Custom.style.setProperty('font-size', fs + 'px', 'important');
+                    }
+
+                    if (!isSameLineAndFits()) {
+                        // 最小字級 55% 仍放不下同一行 → 類別移至價格正上方獨立一行置中
+                        const nameText = (mainText && mainText.firstChild && mainText.firstChild.nodeType === Node.TEXT_NODE)
+                            ? mainText.firstChild.textContent.trimEnd()
+                            : '';
+                        mainText.style.setProperty('display', 'none', 'important');
+
+                        const block = document.createElement('div');
+                        block.className = 'b1-promoted-block';
+
+                        if (nameText) {
+                            const nameRow = document.createElement('div');
+                            nameRow.className = 'main-text b1-promoted-name';
+                            nameRow.textContent = nameText;
+                            block.appendChild(nameRow);
+                        }
+
+                        const catRow = document.createElement('div');
+                        catRow.className = 'line-category b1-promoted-cat';
+                        catRow.dataset.promotedCat = '1';
+                        catRow.textContent = b1Custom.textContent.trim();
+                        block.appendChild(catRow);
+
+                        if (priceTail) {
+                            const priceRow = document.createElement('div');
+                            priceRow.className = 'main-text b1-promoted-price';
+                            priceRow.innerHTML = priceTail.innerHTML;
+                            block.appendChild(priceRow);
+                        }
+
+                        if (noteEl && noteEl.parentNode === cardEl) {
+                            cardEl.insertBefore(block, noteEl);
+                        } else {
+                            cardEl.appendChild(block);
+                        }
+
+                        fitPromotedCategoryEl(catRow, baseFs, availW, zf);
+
+                        const nameRowEl = block.querySelector('.b1-promoted-name');
+                        if (nameRowEl) {
+                            let nFs = baseFs;
+                            while (nFs * 0.93 >= baseFs * 0.55 && (cardEl.scrollHeight > cardEl.clientHeight + 1 || (noteEl && noteEl.getBoundingClientRect().bottom > bottomLimit))) {
+                                nFs *= 0.93;
+                                nameRowEl.style.setProperty('font-size', nFs + 'px', 'important');
+                            }
+                        }
+                    }
+                } else if (b1PriceLabel && b1PriceLabel.textContent.trim().length > 3) {
+                    b1PriceLabel.style.removeProperty('font-size');
+                    const linePrice = b1PriceLabel.closest('.line-price');
+                    const origL = parseFloat(b1PriceLabel.dataset.origFontSize || window.getComputedStyle(b1PriceLabel).fontSize);
+                    b1PriceLabel.dataset.origFontSize = origL;
+                    const maxW = cardEl.classList.contains('card-large')
+                        ? Math.min(availW, cardEl.clientWidth * 0.97)
+                        : availW;
+                    fitLinePriceLabelOrPromote(cardEl, linePrice, b1PriceLabel, origL, maxW, zf, {
+                        applyFs: (node, px) => node.style.setProperty('font-size', px + 'px', 'important')
+                    });
+                }
                 return;
             }
 
-            // 若卡片不可見 (例如手機版目前在編輯面板)，待切換至預覽時再執行
-            if (cardEl.clientWidth === 0 || cardEl.clientHeight === 0) {
+            // 任務 34：C1 與 C2 專用字級分支（跳過通用縮字迴圈與 A4 通用分支）
+            if (cardEl.classList.contains('tpl-C1')) {
+                fitC1Card(cardEl);
+                return;
+            }
+            if (cardEl.classList.contains('tpl-C2')) {
+                fitC2Card(cardEl);
                 return;
             }
 
@@ -3686,9 +5841,148 @@
             const isLargeSide = cardEl.classList.contains('card-large') && cardEl.classList.contains('alayout-side');
             const isHanger = cardEl.classList.contains('hanger-card') || (cardEl.classList.contains('tpl-B4') && (cardEl.classList.contains('card-medium') || cardEl.classList.contains('card-large') || cardEl.classList.contains('card-a4two')));
             const applyFontSize = (node, px) => {
-                if (isA4 || isHanger) node.style.setProperty('font-size', px + 'px', 'important');
-                else node.style.fontSize = px + 'px';
+                if (isA4 || isHanger || node.style.getPropertyPriority('font-size') === 'important') {
+                    node.style.setProperty('font-size', px + 'px', 'important');
+                } else {
+                    node.style.fontSize = px + 'px';
+                }
             };
+
+            const fitVerticalB2Badge = (badgeEl, maxW, maxH, baseFs, zf) => {
+                if (!badgeEl) return baseFs;
+                const textLen = badgeEl.textContent.trim().length;
+                badgeEl.classList.remove('badge-horiz');
+                badgeEl.style.removeProperty('max-width');
+                badgeEl.style.removeProperty('font-size');
+                if (textLen <= 3) {
+                    applyFontSize(badgeEl, baseFs);
+                    return baseFs;
+                }
+                if (textLen === 4) {
+                    let fs = baseFs;
+                    applyFontSize(badgeEl, fs);
+                    while (fs * 0.95 >= baseFs * 0.25 && badgeEl.getBoundingClientRect().height > maxH + 0.5) {
+                        fs *= 0.95;
+                        badgeEl.style.setProperty('font-size', fs + 'px', 'important');
+                    }
+                    return fs;
+                }
+                badgeEl.classList.add('badge-horiz');
+                badgeEl.style.setProperty('max-width', (maxW / zf) + 'px', 'important');
+                let fs = baseFs;
+                badgeEl.style.setProperty('font-size', fs + 'px', 'important');
+                while (fs * 0.94 >= 4 && (badgeEl.getBoundingClientRect().width > maxW + 0.5 || badgeEl.getBoundingClientRect().height > maxH + 0.5)) {
+                    fs *= 0.94;
+                    badgeEl.style.setProperty('font-size', fs + 'px', 'important');
+                }
+                return fs;
+            };
+
+            cardEl.querySelectorAll('.label').forEach(l => {
+                l.style.removeProperty('font-size');
+                delete l.dataset.customLabelBase;
+            });
+
+            // A1 並排（small / medium / large）：超過 3 字的自訂類別先依左欄保留寬度嘗試縮到最低 55%，放不下則移至價格正上方獨立一行置中
+            if (cardEl.classList.contains('tpl-A1') && cardEl.querySelector('.a1-side-container')) {
+                const sideCont = cardEl.querySelector('.a1-side-container');
+                const leftCol = sideCont ? sideCont.querySelector('.side-col-left') : null;
+                const rightPrice = sideCont ? sideCont.querySelector('.side-col-right.line-price') : null;
+                const labelEl = rightPrice ? rightPrice.querySelector('.label') : null;
+                if (leftCol && rightPrice && labelEl) {
+                    if (labelEl.textContent.trim().length > 3) {
+                        const cComputed = window.getComputedStyle(labelEl);
+                        const origL = parseFloat(labelEl.dataset.origFontSize || cComputed.fontSize);
+                        labelEl.dataset.origFontSize = origL;
+                        const contRect = sideCont.getBoundingClientRect();
+                        const zf = sideCont.offsetWidth > 0 ? contRect.width / sideCont.offsetWidth : 1;
+                        const contW = contRect.width / zf;
+                        const csCont = window.getComputedStyle(sideCont);
+                        const gapPx = parseFloat(csCont.columnGap) || parseFloat(csCont.gap) || 0;
+                        const nameEl = leftCol.querySelector('.line-name');
+                        let leftNaturalW = contW * 0.35;
+                        if (nameEl) {
+                            const prevWs = nameEl.style.whiteSpace;
+                            nameEl.style.setProperty('white-space', 'nowrap', 'important');
+                            leftNaturalW = Math.min(contW * 0.45, Math.max(contW * 0.28, nameEl.scrollWidth));
+                            if (prevWs) nameEl.style.whiteSpace = prevWs;
+                            else nameEl.style.removeProperty('white-space');
+                        }
+                        const maxRightW = Math.max(40, contW - leftNaturalW - gapPx);
+                        fitLinePriceLabelOrPromote(cardEl, rightPrice, labelEl, origL, maxRightW, zf, {
+                            a1Side: true,
+                            catAvailW: maxRightW
+                        });
+                    }
+                }
+            }
+
+            // 大卡 B2 直立類別徽章：4 字縮小、>4 字改橫排並限制在價格列可用高度與寬度內
+            if (cardEl.classList.contains('card-large') && cardEl.classList.contains('tpl-B2')) {
+                const labelEl = cardEl.querySelector('.line-price .label');
+                if (labelEl) {
+                    labelEl.style.removeProperty('font-size');
+                    delete labelEl.dataset.customLabelBase;
+                    const origL = parseFloat(labelEl.dataset.origFontSize || window.getComputedStyle(labelEl).fontSize);
+                    labelEl.dataset.origFontSize = origL;
+                    if (labelEl.textContent.trim().length > 3) {
+                        const cardRect = cardEl.getBoundingClientRect();
+                        const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                        const nameEl = cardEl.querySelector('.line-name');
+                        const csCard = window.getComputedStyle(cardEl);
+                        const padV = (parseFloat(csCard.paddingTop || 0) + parseFloat(csCard.paddingBottom || 0)) * zf;
+                        const nameH = nameEl ? nameEl.getBoundingClientRect().height : 0;
+                        const availH = Math.max(20, (cardRect.height - padV - nameH) * 0.88);
+                        const availW = cardRect.width * 0.28;
+                        const fitted = fitVerticalB2Badge(labelEl, availW, availH, origL, zf);
+                        labelEl.dataset.customLabelBase = fitted;
+                    }
+                }
+            }
+
+            // 其餘含行內 .label (>3 字) 的 .line-price（small/medium B2/B3、smallRound B2/B3、large B3、a4two A1/A2/B3）
+            if (!isHanger && !(isA4One && cardEl.classList.contains('tpl-B4')) && !(cardEl.classList.contains('card-large') && cardEl.classList.contains('tpl-B2'))) {
+                cardEl.querySelectorAll('.line-price').forEach(priceLine => {
+                    if (priceLine.closest('.a1-side-container') || priceLine.closest('.a1-side-right-wrap') || priceLine.closest('.hanger-right')) return;
+                    const customLabel = priceLine.querySelector('.label:not(.a2-inline-name)');
+                    if (!customLabel || customLabel.textContent.trim().length <= 3 || customLabel.dataset.hiddenByPromote === '1') return;
+
+                    const origL = parseFloat(customLabel.dataset.origFontSize || window.getComputedStyle(customLabel).fontSize);
+                    customLabel.dataset.origFontSize = origL;
+                    const cardRect = cardEl.getBoundingClientRect();
+                    const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+
+                    let availW;
+                    let extraOverflow = null;
+                    if (isA4) {
+                        const panel = cardEl.classList.contains('tpl-B3') ? (priceLine.closest('.white-panel') || cardEl) : cardEl;
+                        const panelRect = panel.getBoundingClientRect();
+                        const lineRect = priceLine.getBoundingClientRect();
+                        const lineW = lineRect.width > 0 ? lineRect.width * 0.98 : panelRect.width * 0.92;
+                        availW = Math.max(1, Math.min(panelRect.width * 0.92, lineW) / zf);
+                    } else {
+                        const rowEl = priceLine.closest('.a2-round-bottom-row') || priceLine;
+                        const parentBox = rowEl.closest('.white-panel') || rowEl.closest('.badge-body') || rowEl.closest('.a2-body') || rowEl.closest('.a2-round-side-body') || cardEl;
+                        const pCs = window.getComputedStyle(parentBox);
+                        const pRect = parentBox.getBoundingClientRect();
+                        const pInnerLeft = pRect.left + parseFloat(pCs.paddingLeft || 0) * zf;
+                        const pInnerRight = pRect.right - parseFloat(pCs.paddingRight || 0) * zf;
+                        availW = Math.max(1, (pInnerRight - pInnerLeft) / zf);
+                        if (rowEl !== priceLine) {
+                            extraOverflow = () => {
+                                if (rowEl.scrollWidth > rowEl.clientWidth + 1) return true;
+                                const rRect = rowEl.getBoundingClientRect();
+                                return rRect.left < pInnerLeft - 1 || rRect.right > pInnerRight + 1;
+                            };
+                        }
+                    }
+
+                    fitLinePriceLabelOrPromote(cardEl, priceLine, customLabel, origL, availW, zf, {
+                        applyFs: applyFontSize,
+                        extraOverflow
+                    });
+                });
+            }
 
             // 1. 各文字行橫向 / 行數自動縮字
             // 目標：.line-name, .line-category, .line-price, .main-text, .banner-title, 以及 .badge-body / side 佈局內的文字行
@@ -3731,6 +6025,8 @@
             }
 
             targetElements.forEach(el => {
+                // 已在獨立行預先縮放的類別，不重複跑通用縮字
+                if (el.dataset.promotedCat === '1') return;
                 // A4 單張 A3 價格群由下方專用演算法處理，不走固定 0.92 階梯縮字。
                 if (isA4One && cardEl.classList.contains('tpl-A3') && el.closest('.a4-price-group')) return;
                 // A4 單張 B4 與橫式吊牌由專用演算法處理，不走通用階梯縮字
@@ -3745,16 +6041,29 @@
                 // 收集元素內具有顯式字級的子元素 (.highlight, .label, .unit, .qty-val, .price-val, .line-note, .line-name)
                 const childNodes = Array.from(el.querySelectorAll('.highlight, .label, .unit, .qty-val, .price-val, .line-note, .line-name'));
                 const childData = childNodes.map(c => {
+                    if (c.classList.contains('label') && !c.dataset.customLabelBase) {
+                        c.style.removeProperty('font-size');
+                    }
                     const cComputed = window.getComputedStyle(c);
                     const cOrig = parseFloat(c.dataset.origFontSize || cComputed.fontSize);
                     c.dataset.origFontSize = cOrig;
-                    return { node: c, orig: cOrig };
+                    const effOrig = c.dataset.customLabelBase ? parseFloat(c.dataset.customLabelBase) : cOrig;
+                    return { node: c, orig: effOrig };
                 });
 
                 // 重設至基準 1.0
                 applyFontSize(el, origSize);
                 childData.forEach(c => {
-                    applyFontSize(c.node, c.orig);
+                    if (c.node.classList.contains('label')) {
+                        if (c.node.dataset.customLabelBase) {
+                            c.node.style.setProperty('font-size', c.orig + 'px', 'important');
+                        } else {
+                            c.node.style.removeProperty('font-size');
+                            applyFontSize(c.node, c.orig);
+                        }
+                    } else {
+                        applyFontSize(c.node, c.orig);
+                    }
                 });
 
                 const isSideA1 = (cardEl.classList.contains('card-large') && cardEl.classList.contains('alayout-side'))
@@ -3785,9 +6094,10 @@
                 }
 
                 let scale = 1.0;
+                const isCategoryText = el.classList.contains('line-category') || (el.classList.contains('banner-title') && !isA4 && !cardEl.classList.contains('card-smallRound'));
                 const minScale = isA4One && (el.classList.contains('line-name') || el.classList.contains('banner-title'))
                     ? 0.6
-                    : (isTwoLineName ? 0.25 : 0.45);
+                    : (isTwoLineName ? 0.25 : (isCategoryText ? 0.04 : 0.45));
                 const step = 0.92;
 
                 while (scale * step >= minScale && isOverflowing()) {
@@ -3798,6 +6108,27 @@
                     });
                 }
             });
+
+            // 非 A4 且非 A 類的卡片若有類別移至上方獨立行，於寬度縮字後再檢查垂直空間是否溢出
+            if (!isA4 && !isHanger && !cardEl.classList.contains('tpl-A') && cardEl.querySelector('.line-category[data-promoted-cat="1"]')) {
+                const box = cardEl.querySelector('.white-panel') || cardEl;
+                const nameEl = box.querySelector('.line-name');
+                const noteEl = box.querySelector('.line-note');
+                const nameBase = nameEl ? parseFloat(nameEl.style.fontSize || window.getComputedStyle(nameEl).fontSize) : 0;
+                const noteBase = noteEl ? parseFloat(noteEl.style.fontSize || window.getComputedStyle(noteEl).fontSize) : 0;
+                let vSc = 1;
+                while (vSc * 0.94 >= 0.72 && (box.scrollHeight > box.clientHeight + 1 || cardEl.scrollHeight > cardEl.clientHeight + 1)) {
+                    vSc *= 0.94;
+                    if (nameEl && nameBase > 0) {
+                        nameEl.style.setProperty('font-size', (nameBase * vSc) + 'px', 'important');
+                        nameEl.dataset.promotedVertFix = '1';
+                    }
+                    if (noteEl && noteBase > 0) {
+                        noteEl.style.setProperty('font-size', (noteBase * vSc) + 'px', 'important');
+                        noteEl.dataset.promotedVertFix = '1';
+                    }
+                }
+            }
 
             // 任務 33：A4 單張品名允許兩行，但短品名只差一點就放得下一行時（例如 4 個字被擠成 2 行），
             // 稍微縮小（最多到 75%）改成一行；真的太長才維持兩行。
@@ -3839,20 +6170,20 @@
                     const maxRatio = Math.max(0.01, Math.min((panelRect.width / cardRect.width) * 0.92, lineRatio));
                     const bases = children.map(node => ({
                         node,
-                        base: parseFloat(node.dataset.origFontSize || window.getComputedStyle(node).fontSize)
+                        base: parseFloat((node.classList.contains('label') && node.dataset.customLabelBase) || node.dataset.origFontSize || window.getComputedStyle(node).fontSize)
                     })).filter(item => item.base > 0);
                     const contentRatio = () => {
                         const rects = children.map(node => node.getBoundingClientRect());
                         return (Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left))) / cardEl.getBoundingClientRect().width;
                     };
                     bases.forEach(item => {
-                        item.node.dataset.origFontSize = item.base;
+                        if (!item.node.dataset.origFontSize) item.node.dataset.origFontSize = item.base;
                         applyFontSize(item.node, item.base);
                     });
                     let scale = 1;
                     // 任務 32：基準字級很大（例如 400px）時，舊的 0.35 下限會讓長價格縮不夠而溢出。
                     // 先按比例一次算到剛好放得下，再用 0.97 微調（字寬不完全線性）。
-                    const r0 = contentRatio();
+                    let r0 = contentRatio();
                     if (r0 > maxRatio + 0.001) {
                         scale = maxRatio / r0;
                         bases.forEach(item => applyFontSize(item.node, item.base * scale));
@@ -3980,7 +6311,7 @@
                         const labelBase = parseFloat(bannerLabel.dataset.origFontSize || window.getComputedStyle(bannerLabel).fontSize);
                         bannerLabel.dataset.origFontSize = labelBase;
                         let labelScale = 1;
-                        while (labelScale * 0.95 >= 0.45 && bannerLabel.scrollWidth > bannerLabel.clientWidth + 1) {
+                        while (labelScale * 0.95 >= 0.04 && bannerLabel.scrollWidth > bannerLabel.clientWidth + 1) {
                             labelScale *= 0.95;
                             applyFontSize(bannerLabel, labelBase * labelScale);
                         }
@@ -4000,7 +6331,7 @@
                     bannerCat.dataset.origFontSize = initCatSize;
                     applyFontSize(bannerCat, initCatSize);
                     let catScale = 1;
-                    while (catScale * 0.95 >= 0.35 && bannerCat.scrollWidth > bannerCat.clientWidth + 1) {
+                    while (catScale * 0.95 >= 0.04 && bannerCat.scrollWidth > bannerCat.clientWidth + 1) {
                         catScale *= 0.95;
                         applyFontSize(bannerCat, initCatSize * catScale);
                     }
@@ -4202,8 +6533,14 @@
                     shrinkToWidth(noteEl, cardH * R.note, wrapped ? innerW : Math.max(innerW * 0.25, innerW - nameW - 16 * zf));
                 }
 
-                // 2) 中排：直立類別徽章約卡高 6.5%；數量數字約卡高 15%、「入」約卡高 6.5%
-                if (badgeEl) applyFontSize(badgeEl, cardH * R.badge);
+                // 2) 中排：直立類別徽章約卡高 6.5%（4 字直排縮小、>4 字改橫排）；數量數字約卡高 15%、「入」約卡高 6.5%
+                if (badgeEl) {
+                    const badgeMaxW = isRow ? innerW * 0.28 : (qtyBox ? innerW * 0.44 : innerW * 0.72);
+                    const badgeMaxH = isRow
+                        ? Math.max(20, (wrap.getBoundingClientRect().height - topEl.getBoundingClientRect().height) * 0.82)
+                        : (badgeEl.textContent.trim().length === 4 ? cardH * 0.28 * zf : cardH * 0.22 * zf);
+                    fitVerticalB2Badge(badgeEl, badgeMaxW, badgeMaxH, cardH * R.badge, zf);
+                }
                 if (qtyBox) {
                     const qv = qtyBox.querySelector('.qty-val');
                     const qu = qtyBox.querySelector('.unit');
@@ -4291,7 +6628,7 @@
                         }
                     }
 
-                    // 3) 價格數字約卡高 18%（整行寬 ≤ 卡寬 90%，超出等比縮小）
+                    // 3) 價格數字約卡高 18%（整行寬 ≤ 卡寬 90%，超出時類別先縮至最低 55%，放不下則移至價格正上方獨立一行置中）
                     if (priceEl) {
                         priceEl.style.setProperty('margin', '0', 'important');
                         priceEl.style.setProperty('justify-content', 'center', 'important');
@@ -4305,11 +6642,16 @@
 
                         const baseUnitSize = Math.max(12, basePriceSize * 0.20);
                         const baseSubSize = basePriceSize * 0.55;
+                        const zfB4 = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                        const availWB4 = usableW / zfB4;
 
-                        if (priceVal) applyFontSize(priceVal, basePriceSize);
-                        if (labelEl) applyFontSize(labelEl, baseSubSize);
-                        if (qtyVal) applyFontSize(qtyVal, baseSubSize);
-                        units.forEach(u => applyFontSize(u, baseUnitSize));
+                        const resetB4Price = () => {
+                            if (priceVal) applyFontSize(priceVal, basePriceSize);
+                            if (labelEl) applyFontSize(labelEl, baseSubSize);
+                            if (qtyVal) applyFontSize(qtyVal, baseSubSize);
+                            units.forEach(u => applyFontSize(u, baseUnitSize));
+                        };
+                        resetB4Price();
 
                         const getPriceRowWidth = () => {
                             const kids = Array.from(priceEl.children).filter(k => k.getBoundingClientRect().width > 0);
@@ -4317,11 +6659,25 @@
                             return Math.max(...kids.map(k => k.getBoundingClientRect().right)) - Math.min(...kids.map(k => k.getBoundingClientRect().left));
                         };
 
+                        let curSubBase = baseSubSize;
+                        let promotedB4 = false;
+                        if (labelEl && labelEl.textContent.trim().length > 3) {
+                            const res = fitLinePriceLabelOrPromote(cardEl, priceEl, labelEl, baseSubSize, availWB4, zfB4, {
+                                applyFs: applyFontSize,
+                                resetPriceFn: resetB4Price
+                            });
+                            promotedB4 = res.promoted;
+                            if (!promotedB4 && res.labelFs) {
+                                curSubBase = res.labelFs;
+                                applyFontSize(labelEl, curSubBase);
+                            }
+                        }
+
                         let pScale = 1;
-                        while (pScale * 0.97 >= 0.35 && getPriceRowWidth() > usableW + 0.5) {
+                        while (pScale * 0.97 >= 0.15 && getPriceRowWidth() > usableW + 0.5) {
                             pScale *= 0.97;
                             if (priceVal) applyFontSize(priceVal, basePriceSize * pScale);
-                            if (labelEl) applyFontSize(labelEl, baseSubSize * pScale);
+                            if (labelEl && !promotedB4) applyFontSize(labelEl, curSubBase * pScale);
                             if (qtyVal) applyFontSize(qtyVal, baseSubSize * pScale);
                             units.forEach(u => applyFontSize(u, baseUnitSize * pScale));
                         }
@@ -4330,25 +6686,102 @@
             } else if (isA4) {
                 const content = cardEl.querySelector('.a4-content');
                 if (content) {
-                    const nameNodes = Array.from(cardEl.querySelectorAll('.line-name, .banner-title'));
-                    const noteNodes = Array.from(cardEl.querySelectorAll('.a4-content > .line-note, .a4-a3-one-top > .line-note'));
-                    const priceNodes = Array.from(cardEl.querySelectorAll('.a4-price-group .line-price, .a4-content > .line-price, .a4-price-group .line-category, .a4-a3-row > .price-badge, .a4-price-group > .price-badge'));
-                    const scaleNodes = nodes => nodes.map(node => ({
-                        node,
-                        base: parseFloat(node.dataset.origFontSize || window.getComputedStyle(node).fontSize)
-                    }));
-                    const nameNote = scaleNodes([...nameNodes, ...noteNodes]);
-                    const priceGroup = scaleNodes(priceNodes);
-                    const applyScale = (items, scale) => items.forEach(item => applyFontSize(item.node, item.base * scale));
-                    let contentScale = 1;
-                    while (content.scrollHeight > content.clientHeight + 1 && contentScale * 0.92 >= 0.6) {
-                        contentScale *= 0.92;
-                        applyScale(nameNote, contentScale);
-                    }
-                    let priceScale = 1;
-                    while (content.scrollHeight > content.clientHeight + 1 && priceScale * 0.92 >= 0.45) {
-                        priceScale *= 0.92;
-                        applyScale(priceGroup, priceScale);
+                    if (!isA4One && cardEl.classList.contains('has-promoted-cat')) {
+                        const cardRect = cardEl.getBoundingClientRect();
+                        const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                        const nameNodes = Array.from(cardEl.querySelectorAll('.line-name, .banner-title'));
+                        const catNodes = Array.from(content.querySelectorAll('.line-category[data-promoted-cat="1"]'));
+                        const noteNodes = Array.from(content.querySelectorAll('.line-note'));
+                        const priceNodes = Array.from(content.querySelectorAll(
+                            '.a4-price-group .line-price, .a4-price-group .line-price .highlight, .a4-price-group .line-price .unit, .a4-price-group .line-price .label, .a4-price-group .line-price .qty-val, .a4-price-group .line-price .price-val'
+                        ));
+
+                        const captureCur = (nodes) => nodes.map(node => ({
+                            node,
+                            base: parseFloat(window.getComputedStyle(node).fontSize)
+                        })).filter(item => item.base > 0);
+
+                        const catItems = captureCur(catNodes);
+                        const nameItems = captureCur(nameNodes);
+                        const priceItems = captureCur(priceNodes);
+                        const noteItems = captureCur(noteNodes);
+                        const applyScale = (items, scale) => items.forEach(item => applyFontSize(item.node, item.base * scale));
+
+                        const priceLine = content.querySelector('.a4-price-group .line-price');
+                        const checkEls = [
+                            ...nameNodes.filter(n => n.closest('.a4-content') === content),
+                            ...catNodes,
+                            ...(priceLine ? [priceLine] : []),
+                            ...noteNodes
+                        ].filter(el => el && el.textContent.trim());
+
+                        const isVerticalBad = () => {
+                            if (content.scrollHeight > content.clientHeight + 1) return true;
+                            const cRect = content.getBoundingClientRect();
+                            const csC = window.getComputedStyle(content);
+                            const topLim = cRect.top + parseFloat(csC.paddingTop || 0) * zf;
+                            const botLim = cRect.bottom - parseFloat(csC.paddingBottom || 0) * zf;
+                            const rects = checkEls.map(el => el.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
+                            for (const r of rects) {
+                                if (r.top < topLim - 0.5 || r.bottom > botLim + 0.5) return true;
+                            }
+                            for (let i = 0; i < rects.length - 1; i++) {
+                                if (rects[i].bottom > rects[i + 1].top - 1) return true;
+                            }
+                            return false;
+                        };
+
+                        const shrinkStage = (items, startScale, minScale, step = 0.96) => {
+                            if (!items.length) return startScale;
+                            let sc = startScale;
+                            while (isVerticalBad() && sc > minScale + 0.001) {
+                                sc = Math.max(minScale, sc * step);
+                                applyScale(items, sc);
+                            }
+                            return sc;
+                        };
+
+                        // 空間不夠時依序縮小：類別 → 品名 → 價格（最多縮到原本 80%）
+                        let catSc = shrinkStage(catItems, 1, 0.80);
+                        let nameSc = shrinkStage(nameItems, 1, 0.80);
+                        let priceSc = shrinkStage(priceItems, 1, 0.80);
+
+                        // 若三者皆縮至 80% 仍不足（如兩行長品名＋備註），繼續依序微調至完全不重疊、不溢出
+                        if (isVerticalBad()) {
+                            catSc = shrinkStage(catItems, catSc, 0.55);
+                            nameSc = shrinkStage(nameItems, nameSc, 0.55);
+                            priceSc = shrinkStage(priceItems, priceSc, 0.55);
+                            shrinkStage(noteItems, 1, 0.70);
+                        }
+                    } else {
+                        const nameNodes = Array.from(cardEl.querySelectorAll('.line-name, .banner-title'));
+                        const noteNodes = Array.from(cardEl.querySelectorAll('.a4-content > .line-note, .a4-a3-one-top > .line-note'));
+                        const priceNodes = Array.from(cardEl.querySelectorAll(
+                            '.a4-price-group .line-price, .a4-price-group .line-price .highlight, .a4-price-group .line-price .unit, .a4-price-group .line-price .label, .a4-price-group .line-price .qty-val, .a4-price-group .line-price .price-val, ' +
+                            '.a4-content > .line-price, .a4-content > .line-price .highlight, .a4-content > .line-price .unit, .a4-content > .line-price .label, .a4-content > .line-price .qty-val, .a4-content > .line-price .price-val, ' +
+                            '.a4-price-group .line-category, .a4-a3-row > .price-badge, .a4-price-group > .price-badge'
+                        ));
+                        const nameNote = [...nameNodes, ...noteNodes].map(node => {
+                            const base = parseFloat(node.dataset.origFontSize || window.getComputedStyle(node).fontSize);
+                            node.dataset.origFontSize = base;
+                            return { node, base };
+                        });
+                        const priceGroup = priceNodes.map(node => ({
+                            node,
+                            base: parseFloat(node.style.fontSize || window.getComputedStyle(node).fontSize)
+                        }));
+                        const applyScale = (items, scale) => items.forEach(item => applyFontSize(item.node, item.base * scale));
+                        applyScale(nameNote, 1);
+                        let contentScale = 1;
+                        while (content.scrollHeight > content.clientHeight + 1 && contentScale * 0.92 >= 0.6) {
+                            contentScale *= 0.92;
+                            applyScale(nameNote, contentScale);
+                        }
+                        let priceScale = 1;
+                        while (content.scrollHeight > content.clientHeight + 1 && priceScale * 0.92 >= 0.45) {
+                            priceScale *= 0.92;
+                            applyScale(priceGroup, priceScale);
+                        }
                     }
                 }
             }
@@ -4460,11 +6893,33 @@
                     while (slotScale * step >= minSlotScale && isTextOverflowing()) {
                         slotScale *= step;
                         baseData.forEach(item => {
-                            item.node.style.fontSize = (item.base * slotScale) + 'px';
+                            if (item.node.style.getPropertyPriority('font-size') === 'important') {
+                                item.node.style.setProperty('font-size', (item.base * slotScale) + 'px', 'important');
+                            } else {
+                                item.node.style.fontSize = (item.base * slotScale) + 'px';
+                            }
                         });
                     }
                 }
             }
+
+            // A3 圓形類別徽章：超過 3 字時依圓章直徑等比縮小多行文字，確保不超出圓框
+            cardEl.querySelectorAll('.price-badge.badge-multi').forEach(badge => {
+                const badgeText = badge.querySelector('.badge-text');
+                if (!badgeText) return;
+                const D = Math.min(badge.clientWidth, badge.clientHeight);
+                if (!(D > 0)) return;
+                const maxDim = D * 0.70;
+                badgeText.style.setProperty('width', maxDim + 'px', 'important');
+                badgeText.style.setProperty('max-height', maxDim + 'px', 'important');
+                let fs = D * 0.34;
+                const applyBadgeFs = px => badgeText.style.setProperty('font-size', Math.max(1, px) + 'px', 'important');
+                applyBadgeFs(fs);
+                while (fs * 0.94 >= 3 && (badgeText.scrollWidth > badgeText.clientWidth + 0.5 || badgeText.scrollHeight > maxDim + 0.5)) {
+                    fs *= 0.94;
+                    applyBadgeFs(fs);
+                }
+            });
         }
 
         function render() {
@@ -4601,7 +7056,7 @@
             const body = document.createElement('div');
             body.className = 'hanger-body';
 
-            // 左欄（約 45% 寬，靠左，左邊距約卡寬 4%）：品名（粗體，最多兩行）、下方備註、再下方數量圓角膠囊「2入」（沒數量不顯示）
+            // 左欄（約 40% 寬，靠左，左邊距約卡寬 4%）：品名（粗體，最多兩行），中卡／大卡順序為數量圓角膠囊「2入」→ 備註；A4 雙張維持備註 → 數量膠囊
             const leftCol = document.createElement('div');
             leftCol.className = 'hanger-left';
 
@@ -4610,19 +7065,30 @@
             lineName.innerText = data.name || '';
             leftCol.appendChild(lineName);
 
-            if (data.note) {
+            const appendQty = () => {
+                if (!data.qty) return;
+                const qtyEl = document.createElement('div');
+                qtyEl.className = 'hanger-qty';
+                qtyEl.innerText = `${data.qty}入`;
+                leftCol.appendChild(qtyEl);
+            };
+
+            const appendNote = () => {
+                if (!data.note) return;
                 const lineNote = document.createElement('div');
                 lineNote.className = 'line-note hanger-note';
                 applyNoteAlignment(lineNote, data.noteAlign);
                 lineNote.innerText = data.note;
                 leftCol.appendChild(lineNote);
-            }
+            };
 
-            if (data.qty) {
-                const qtyEl = document.createElement('div');
-                qtyEl.className = 'hanger-qty';
-                qtyEl.innerText = `${data.qty}入`;
-                leftCol.appendChild(qtyEl);
+            // 任務 39：僅中卡、大卡 B4 吊牌將數量膠囊置於備註上方；A4 雙張 B4 維持原順序不動
+            if (div.classList.contains('card-medium') || div.classList.contains('card-large')) {
+                appendQty();
+                appendNote();
+            } else {
+                appendNote();
+                appendQty();
             }
             body.appendChild(leftCol);
 
@@ -4640,17 +7106,406 @@
             div.appendChild(container);
         }
 
+        function buildC1CardContent(div, data, renderSize, labelText) {
+            const header = document.createElement('div');
+            header.className = 'pop-c1-header';
+            if (labelText) {
+                const capsule = document.createElement('div');
+                capsule.className = 'pop-c1-capsule';
+                const cat = document.createElement('div');
+                cat.className = 'pop-c1-cat';
+                cat.innerText = labelText;
+                capsule.appendChild(cat);
+                header.appendChild(capsule);
+            } else {
+                header.classList.add('pop-c1-header-empty');
+            }
+            div.appendChild(header);
+
+            const panel = document.createElement('div');
+            panel.className = 'pop-c1-panel';
+
+            const isA4One = renderSize === 'a4one';
+            const brandText = data.brand != null ? String(data.brand).trim() : '';
+            const nameText = data.name != null ? String(data.name).trim() : '';
+            const noteText = data.note != null ? String(data.note).trim() : '';
+            const qtyText = data.qty != null ? String(data.qty).trim() : '';
+            const priceText = data.price != null ? String(data.price).trim() : '';
+
+            let brandEl = null;
+            if (brandText) {
+                brandEl = document.createElement('div');
+                brandEl.className = 'pop-c1-brand';
+                brandEl.dataset.rawText = brandText;
+                brandEl.innerText = brandText;
+            }
+
+            const nameEl = document.createElement('div');
+            nameEl.className = 'pop-c1-name' + (brandText ? '' : ' pop-c1-name-nobrand');
+            nameEl.dataset.rawText = nameText;
+            nameEl.innerText = nameText;
+
+            const makeNoteEl = () => {
+                const noteEl = document.createElement('div');
+                noteEl.className = 'pop-c1-note';
+                applyNoteAlignment(noteEl, data.noteAlign);
+                noteEl.dataset.rawText = noteText;
+                noteEl.innerText = noteText;
+                return noteEl;
+            };
+
+            const makeQtyEl = () => {
+                const qtyEl = document.createElement('div');
+                qtyEl.className = 'pop-c1-qty';
+                if (/^\d+(?:\.\d+)?$/.test(qtyText)) {
+                    const qtyVal = document.createElement('span');
+                    qtyVal.className = 'pop-c1-qty-val';
+                    qtyVal.textContent = qtyText;
+                    qtyEl.appendChild(qtyVal);
+                    qtyEl.appendChild(document.createTextNode('入'));
+                } else {
+                    const parts = qtyText.split(/(\d+(?:\.\d+)?)/g).filter(Boolean);
+                    parts.forEach(part => {
+                        if (/^\d+(?:\.\d+)?$/.test(part)) {
+                            const qv = document.createElement('span');
+                            qv.className = 'pop-c1-qty-val';
+                            qv.textContent = part;
+                            qtyEl.appendChild(qv);
+                        } else {
+                            qtyEl.appendChild(document.createTextNode(part));
+                        }
+                    });
+                }
+                return qtyEl;
+            };
+
+            const makePromoRow = () => {
+                const promoRow = document.createElement('div');
+                promoRow.className = 'pop-c1-promo-row';
+                if (!priceText) return promoRow;
+
+                if (/^\d+(?:\.\d+)?$/.test(priceText)) {
+                    promoRow.dataset.promoMode = 'pure-number';
+                    const priceEl = document.createElement('span');
+                    priceEl.className = 'pop-c1-price';
+                    priceEl.textContent = priceText;
+                    promoRow.appendChild(priceEl);
+                    const unitEl = document.createElement('span');
+                    unitEl.className = 'pop-c1-unit';
+                    unitEl.textContent = '元';
+                    promoRow.appendChild(unitEl);
+                } else if (/\d/.test(priceText)) {
+                    promoRow.dataset.promoMode = 'mixed';
+                    const parts = priceText.split(/(\d+(?:\.\d+)?)/g).filter(Boolean);
+                    parts.forEach(part => {
+                        const sp = document.createElement('span');
+                        sp.className = /^\d+(?:\.\d+)?$/.test(part) ? 'pop-c1-promo-num' : 'pop-c1-promo-txt';
+                        sp.textContent = part;
+                        promoRow.appendChild(sp);
+                    });
+                } else {
+                    promoRow.dataset.promoMode = 'pure-text';
+                    const sp = document.createElement('span');
+                    sp.className = 'pop-c1-promo-txt-only';
+                    sp.textContent = priceText;
+                    promoRow.appendChild(sp);
+                }
+                return promoRow;
+            };
+
+            if (isA4One) {
+                const top = document.createElement('div');
+                top.className = 'pop-c1-top';
+                if (brandEl) top.appendChild(brandEl);
+                if (qtyText) top.appendChild(makeQtyEl());
+                top.appendChild(nameEl);
+                if (noteText) top.appendChild(makeNoteEl());
+                panel.appendChild(top);
+
+                const promoWrap = document.createElement('div');
+                promoWrap.className = 'pop-c1-promo-wrap';
+                promoWrap.appendChild(makePromoRow());
+                panel.appendChild(promoWrap);
+            } else {
+                const hcols = document.createElement('div');
+                hcols.className = 'pop-c1-hcols';
+
+                if (brandText || qtyText || noteText) {
+                    const leftCol = document.createElement('div');
+                    leftCol.className = 'pop-c1-left-col';
+                    if (brandEl) leftCol.appendChild(brandEl);
+                    if (qtyText) leftCol.appendChild(makeQtyEl());
+                    if (noteText) leftCol.appendChild(makeNoteEl());
+                    hcols.appendChild(leftCol);
+                }
+
+                const rightCol = document.createElement('div');
+                rightCol.className = 'pop-c1-right-col';
+                rightCol.appendChild(nameEl);
+                const promoWrap = document.createElement('div');
+                promoWrap.className = 'pop-c1-promo-wrap';
+                promoWrap.appendChild(makePromoRow());
+                rightCol.appendChild(promoWrap);
+                hcols.appendChild(rightCol);
+
+                panel.appendChild(hcols);
+            }
+
+            div.appendChild(panel);
+        }
+
+        const C2_PUNCT_SET = new Set('，。、；：！？,.;:!?）」』'.split(''));
+
+        function tokenizeC2LineText(text) {
+            const tokens = [];
+            const pattern = /\*\*(.+?)\*\*|\*(.+?)\*/g;
+            const openPunctSet = new Set('（「『(《〈【［“‘$＄'.split(''));
+            const attachPrevNoBreakSet = new Set('%％°℃'.split(''));
+            const segmenter = (typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function')
+                ? (tokenizeC2LineText._segmenter || (tokenizeC2LineText._segmenter = new Intl.Segmenter('zh-Hant', { granularity: 'word' })))
+                : null;
+            let lastIdx = 0;
+            let match;
+            let pendingPrefix = '';
+
+            const pushToken = (part, textForCount) => {
+                let nonPunct = 0;
+                let hasPunct = false;
+                const isAlnumDot = part.type === 'plain' && /^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)+$/.test(textForCount);
+                for (const ch of textForCount) {
+                    if (C2_PUNCT_SET.has(ch) && !isAlnumDot) hasPunct = true;
+                    else if (!/\s/.test(ch)) nonPunct++;
+                }
+                const isSpace = !hasPunct && /^\s+$/.test(textForCount);
+                if (isSpace && pendingPrefix) {
+                    const pref = pendingPrefix;
+                    pendingPrefix = '';
+                    tokens.push({
+                        parts: [{ type: 'plain', text: pref }],
+                        breakAfter: false,
+                        nonPunct: 0,
+                        hasEmLg: false,
+                        isSpace: false
+                    });
+                }
+                const parts = [];
+                if (pendingPrefix) {
+                    if (part.type === 'plain') {
+                        parts.push({ type: 'plain', text: pendingPrefix + part.text });
+                    } else {
+                        parts.push({ type: 'plain', text: pendingPrefix });
+                        parts.push(part);
+                    }
+                    pendingPrefix = '';
+                } else {
+                    parts.push(part);
+                }
+                tokens.push({
+                    parts,
+                    breakAfter: hasPunct,
+                    nonPunct,
+                    hasEmLg: part.type === 'em-lg',
+                    isSpace
+                });
+            };
+
+            const appendPunctToLast = (ch, markBreakAfter = true) => {
+                if (pendingPrefix) {
+                    const pref = pendingPrefix;
+                    pendingPrefix = '';
+                    tokens.push({
+                        parts: [{ type: 'plain', text: pref }],
+                        breakAfter: false,
+                        nonPunct: 0,
+                        hasEmLg: false,
+                        isSpace: false
+                    });
+                }
+                if (tokens.length === 0) {
+                    pushToken({ type: 'plain', text: ch }, ch);
+                    return;
+                }
+                const last = tokens[tokens.length - 1];
+                const lastPart = last.parts[last.parts.length - 1];
+                if (lastPart && lastPart.type === 'plain') {
+                    lastPart.text += ch;
+                } else {
+                    last.parts.push({ type: 'plain', text: ch });
+                }
+                if (markBreakAfter) last.breakAfter = true;
+                else last.nonPunct += 1;
+                last.isSpace = false;
+            };
+
+            const processPlain = (plainStr) => {
+                if (!plainStr) return;
+                if (segmenter) {
+                    for (const { segment: seg } of segmenter.segment(plainStr)) {
+                        if (!seg) continue;
+                        const chars = Array.from(seg);
+                        if (chars.every(ch => C2_PUNCT_SET.has(ch))) {
+                            chars.forEach(ch => appendPunctToLast(ch, true));
+                        } else if (chars.every(ch => attachPrevNoBreakSet.has(ch)) && tokens.length > 0 && !tokens[tokens.length - 1].isSpace && !pendingPrefix) {
+                            chars.forEach(ch => appendPunctToLast(ch, false));
+                        } else if (chars.every(ch => openPunctSet.has(ch))) {
+                            pendingPrefix += seg;
+                        } else {
+                            pushToken({ type: 'plain', text: seg }, seg);
+                        }
+                    }
+                } else {
+                    const unitRe = /[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*|[\s\S]/gu;
+                    let m;
+                    while ((m = unitRe.exec(plainStr)) !== null) {
+                        const unit = m[0];
+                        if (unit.length === 1 && C2_PUNCT_SET.has(unit)) {
+                            appendPunctToLast(unit, true);
+                        } else if (unit.length === 1 && openPunctSet.has(unit)) {
+                            pendingPrefix += unit;
+                        } else {
+                            pushToken({ type: 'plain', text: unit }, unit);
+                        }
+                    }
+                }
+            };
+
+            while ((match = pattern.exec(text)) !== null) {
+                if (match.index > lastIdx) {
+                    processPlain(text.slice(lastIdx, match.index));
+                }
+                if (match[1] !== undefined) {
+                    pushToken({ type: 'em-lg', text: match[1] }, match[1]);
+                } else {
+                    pushToken({ type: 'em', text: match[2] }, match[2]);
+                }
+                lastIdx = pattern.lastIndex;
+            }
+            if (lastIdx < text.length) {
+                processPlain(text.slice(lastIdx));
+            }
+            if (pendingPrefix) {
+                const pref = pendingPrefix;
+                pendingPrefix = '';
+                tokens.push({
+                    parts: [{ type: 'plain', text: pref }],
+                    breakAfter: false,
+                    nonPunct: 0,
+                    hasEmLg: false,
+                    isSpace: false
+                });
+            }
+            return tokens;
+        }
+
+        function buildC2LineNode(parts, isLarge) {
+            const lineEl = document.createElement('div');
+            lineEl.className = isLarge ? 'notice-c2-line notice-c2-line-lg' : 'notice-c2-line';
+            if (!parts || !parts.length) {
+                lineEl.textContent = '\u00A0';
+                return lineEl;
+            }
+            parts.forEach(part => {
+                if (part.type === 'plain') {
+                    const lastChild = lineEl.lastChild;
+                    if (lastChild && lastChild.nodeType === Node.TEXT_NODE) {
+                        lastChild.nodeValue += part.text;
+                    } else {
+                        lineEl.appendChild(document.createTextNode(part.text));
+                    }
+                } else {
+                    const span = document.createElement('span');
+                    span.className = part.type === 'em-lg' ? 'notice-c2-em-lg' : 'notice-c2-em';
+                    span.textContent = part.text;
+                    lineEl.appendChild(span);
+                }
+            });
+            return lineEl;
+        }
+
+        function buildC2CardContent(div, data) {
+            div.dataset.noticeFontSize = normalizeNoticeFontSize(data.noticeFontSize);
+            const panel = document.createElement('div');
+            panel.className = 'notice-c2-panel';
+
+            const titleText = (data.name || '').trim();
+            if (titleText) {
+                const titleRow = document.createElement('div');
+                titleRow.className = 'notice-c2-title-row';
+
+                const sqLeft = document.createElement('span');
+                sqLeft.className = 'notice-c2-sq';
+                const titleEl = document.createElement('span');
+                titleEl.className = 'notice-c2-title';
+                titleEl.textContent = titleText;
+                const sqRight = document.createElement('span');
+                sqRight.className = 'notice-c2-sq';
+
+                titleRow.appendChild(sqLeft);
+                titleRow.appendChild(titleEl);
+                titleRow.appendChild(sqRight);
+                panel.appendChild(titleRow);
+            }
+
+            const bodyEl = document.createElement('div');
+            bodyEl.className = 'notice-c2-body';
+
+            const rawLines = String(data.body || '').split(/\r?\n/);
+            while (rawLines.length > 0 && rawLines[0].trim() === '') rawLines.shift();
+            while (rawLines.length > 0 && rawLines[rawLines.length - 1].trim() === '') rawLines.pop();
+
+            const paragraphs = rawLines.map(rawLine => {
+                const isLarge = rawLine.startsWith('# ');
+                const lineText = isLarge ? rawLine.slice(2) : rawLine;
+                if (!lineText || !lineText.trim()) {
+                    return { isLarge, isBlank: true, tokens: [] };
+                }
+                const tokens = tokenizeC2LineText(lineText);
+                return { isLarge, isBlank: tokens.length === 0, tokens };
+            });
+
+            div._c2Paragraphs = paragraphs;
+
+            paragraphs.forEach(p => {
+                if (p.isBlank) {
+                    bodyEl.appendChild(buildC2LineNode(null, p.isLarge));
+                } else {
+                    const parts = [];
+                    p.tokens.forEach(tok => tok.parts.forEach(pt => parts.push(pt)));
+                    bodyEl.appendChild(buildC2LineNode(parts, p.isLarge));
+                }
+            });
+
+            panel.appendChild(bodyEl);
+            div.appendChild(panel);
+        }
+
+        function setA3BadgeContent(badge, labelText) {
+            badge.className = 'price-badge';
+            if (labelText.length >= 3) badge.classList.add('chars-3');
+            if (labelText.length > 3) {
+                badge.classList.add('badge-multi');
+                const span = document.createElement('span');
+                span.className = 'badge-text';
+                span.innerText = labelText;
+                badge.appendChild(span);
+            } else {
+                badge.innerText = labelText;
+            }
+        }
+
         function createCardElement(data, index, size) {
             const originalTpl = data.template || 'B1';
             const renderSize = size === 'small' && originalTpl === 'B4' ? 'smallRound' : size;
             const tpl = renderSize === 'smallRound' && originalTpl === 'B4' ? 'B1' : originalTpl;
-            const tplType = tpl.startsWith('A') ? 'tpl-A' : 'tpl-B';
+            const tplType = tpl.startsWith('A') ? 'tpl-A' : (tpl.startsWith('C') ? 'tpl-C' : 'tpl-B');
             const bgKey = data.bgKey || 'yellow';
             // 任務 28：大卡 A 類排法固定（A1、A3 並排；A2 原版排列），不再提供切換
             const aLayout = (renderSize === 'large' && tplType === 'tpl-A')
                 ? (tpl === 'A2' ? 'stack' : 'side')
                 : (data.aLayout || 'stack');
-            const corner = normalizeCorner(data.corner, size, originalTpl);
+            const corner = (size === 'small' && originalTpl === 'C1')
+                ? 'sharp'
+                : normalizeCorner(data.corner, size, originalTpl);
             const isSide = ((renderSize === 'large' || renderSize === 'smallRound') && aLayout === 'side' && tplType === 'tpl-A')
                            || ((renderSize === 'small' || renderSize === 'medium') && tpl === 'A1');
             const cardALayout = ((renderSize === 'small' || renderSize === 'medium') && tpl === 'A1') ? 'side' : aLayout;
@@ -4682,6 +7537,16 @@
             const qtyHtml = data.qty ? `<span class="highlight qty-val">${data.qty}</span><span class="unit">入</span>` : '';
             const priceHtml = `<span class="highlight price-val">${data.price}</span><span class="unit">元</span>`;
             const labelHtml = labelText ? `<span class="label">${labelText}</span>` : '';
+
+            // 任務 34：C1 POP 與 C2 公告
+            if (tpl === 'C1') {
+                buildC1CardContent(div, data, renderSize, labelText);
+                return div;
+            }
+            if (tpl === 'C2') {
+                buildC2CardContent(div, data);
+                return div;
+            }
 
             // A4 不保留牌卡位置；原四尺寸 A 類仍維持既有牌卡區
             const isA4 = renderSize === 'a4one' || renderSize === 'a4two';
@@ -4790,11 +7655,7 @@
 
                         if (labelText) {
                             const badge = document.createElement('div');
-                            badge.className = 'price-badge';
-                            if (labelText.length >= 3) {
-                                badge.classList.add('chars-3');
-                            }
-                            badge.innerText = labelText;
+                            setA3BadgeContent(badge, labelText);
                             container.appendChild(badge);
                         }
 
@@ -4917,11 +7778,7 @@
 
                         if (labelText) {
                             const badge = document.createElement('div');
-                            badge.className = 'price-badge';
-                            if (labelText.length >= 3) {
-                                badge.classList.add('chars-3');
-                            }
-                            badge.innerText = labelText;
+                            setA3BadgeContent(badge, labelText);
                             container.appendChild(badge);
                         }
 
@@ -5032,11 +7889,7 @@
 
                 if (labelText) {
                     const badge = document.createElement('div');
-                    badge.className = 'price-badge';
-                    if (labelText.length >= 3) {
-                        badge.classList.add('chars-3');
-                    }
-                    badge.innerText = labelText;
+                    setA3BadgeContent(badge, labelText);
                     container.appendChild(badge);
                 }
 
@@ -5150,7 +8003,19 @@
                     mainText.className = 'main-text';
                     let qHtml = data.qty ? `<span class="highlight qty-val">${data.qty}</span>入` : '';
                     let pHtml = `<span class="highlight price-val">${data.price}</span>元`;
-                    mainText.innerHTML = `${data.name} ${labelText}${qHtml}${pHtml}`;
+                    if (labelText.length > 3) {
+                        const catSpan = document.createElement('span');
+                        catSpan.className = 'b1-custom-label';
+                        catSpan.textContent = labelText;
+                        const priceTail = document.createElement('span');
+                        priceTail.className = 'b1-price-tail';
+                        priceTail.innerHTML = `${qHtml}${pHtml}`;
+                        mainText.innerHTML = `${data.name} `;
+                        mainText.appendChild(catSpan);
+                        mainText.appendChild(priceTail);
+                    } else {
+                        mainText.innerHTML = `${data.name} ${labelText}${qHtml}${pHtml}`;
+                    }
                     const noteDiv = document.createElement('div');
                     noteDiv.className = 'note';
                     applyNoteAlignment(noteDiv, data.noteAlign);
@@ -5295,9 +8160,7 @@
                 row.className = 'a4-a3-row';
                 const badge = labelText ? document.createElement('div') : null;
                 if (labelText) {
-                    badge.className = 'price-badge';
-                    if (labelText.length >= 3) badge.classList.add('chars-3');
-                    badge.innerText = labelText;
+                    setA3BadgeContent(badge, labelText);
                     if (!isOne) row.appendChild(badge);
                 }
                 const inner = document.createElement('div');
@@ -5498,6 +8361,7 @@
                                     noteAlign: getSelectedNoteAlign(),
                                     categoryType: 'special', // 批量匯入預設為特價
                                     customText: '',
+                                    noticeFontSize: currentTemplate === 'C2' ? getSelectedNoticeFontSize() : 'm',
                                     template: currentTemplate,
                                     aLayout: currentALayout,
                                     bgKey: currentBgKey,
@@ -5531,6 +8395,7 @@
                                 noteAlign: getSelectedNoteAlign(),
                                 categoryType: 'special', // 批量匯入預設為特價
                                 customText: '',
+                                noticeFontSize: currentTemplate === 'C2' ? getSelectedNoticeFontSize() : 'm',
                                 template: currentTemplate,
                                 aLayout: currentALayout,
                                 bgKey: currentBgKey,
