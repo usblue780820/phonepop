@@ -2481,6 +2481,77 @@
             margin-top: 0 !important;
             margin-bottom: 0 !important;
         }
+        /* A4 單張 B2 巨大價格（與 A1 區隔）：字級全由 fitCardText 的 B2 專用分支設定 */
+        .card-a4one .a4-b2one {
+            flex: 1 1 auto !important;
+            height: 100% !important;
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            align-items: stretch !important;
+            text-align: left !important;
+            margin: 0 !important;
+        }
+        .card-a4one .a4-b2one > * { margin: 0 !important; }
+        /* 類別數量＋價格合成一組，置於品名下方剩餘空間的垂直中央 */
+        .card-a4one .a4-b2one > .b2one-top { margin-bottom: auto !important; }
+        .card-a4one .a4-b2one > .b2one-price { margin-bottom: auto !important; }
+        .card-a4one .b2one-top {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-end !important;
+            gap: 4mm !important;
+            width: 100% !important;
+        }
+        .card-a4one .b2one-name {
+            font-weight: 900 !important;
+            line-height: 1.15 !important;
+            white-space: nowrap !important;
+            border-bottom: 0.08em solid #111 !important;
+            padding-bottom: 0.04em !important;
+        }
+        .card-a4one .b2one-note {
+            line-height: 1.1 !important;
+            white-space: nowrap !important;
+            text-align: right !important;
+        }
+        .card-a4one .b2one-mid {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.35em !important;
+            padding-left: 1% !important;
+        }
+        .card-a4one .b2one-badge {
+            writing-mode: vertical-rl !important;
+            text-orientation: upright !important;
+            background: #d7001b !important;
+            color: #fff !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+            padding: 0.18em 0.12em !important;
+            border-radius: 0.15em !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card-a4one .b2one-qty {
+            display: flex !important;
+            align-items: baseline !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+        }
+        .card-a4one .b2one-qty .unit { color: #111 !important; }
+        .card-a4one .b2one-price {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: baseline !important;
+            white-space: nowrap !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+        }
+        .card-a4one .b2one-price .price-val { line-height: 1 !important; font-weight: 900 !important; }
+        .card-a4one .b2one-price .unit { color: #111 !important; font-weight: 900 !important; margin-left: 0.04em !important; }
+
         /* A4 單張 A2：色帶下方的文字區要撐滿剩餘高度，才能平均分布 */
         .card-a4one.tpl-A2 .a4-content {
             flex: 1 1 auto !important;
@@ -2606,7 +2677,7 @@
                 <!-- A 類：置頂留牌卡位 -->
                 <div class="mb-2">
                     <div class="text-xs font-bold text-gray-600 mb-1">
-                        <span>A 類：文字靠上 (底部留牌卡位)</span>
+                        <span id="tpl-a-heading">A 類：文字靠上 (底部留牌卡位)</span>
                     </div>
                     <div class="grid grid-cols-3 gap-1.5">
                         <button type="button" class="tpl-btn bg-white p-1.5 rounded flex flex-col items-center text-xs" onclick="selectTemplate('A1')" id="btn-tpl-A1" title="A1 經典置頂：同原版文字排列，整體靠上">
@@ -3086,6 +3157,12 @@
             const originalBlock = document.getElementById('tpl-original-block');
             if (originalBlock) originalBlock.classList.toggle('hidden', isA4Size);
             if (isA4Size && currentTemplate === 'B1') currentTemplate = 'A1';
+            // A4 單張／雙張沒有牌卡預留位置：A 類標題改字、縮圖不畫牌卡位
+            const aHeading = document.getElementById('tpl-a-heading');
+            if (aHeading) aHeading.textContent = isA4Size ? 'A 類：滿版 (A4 無牌卡位)' : 'A 類：文字靠上 (底部留牌卡位)';
+            document.querySelectorAll('.thumb-reserved').forEach(el => { el.style.display = isA4Size ? 'none' : ''; });
+            const a1BtnEl = document.getElementById('btn-tpl-A1');
+            if (a1BtnEl) a1BtnEl.title = isA4Size ? 'A1 經典：品名、類別、價格、備註平均分布滿版' : 'A1 經典置頂：同原版文字排列，整體靠上';
             const tplButtons = document.querySelectorAll('.tpl-btn');
             tplButtons.forEach(btn => {
                 btn.classList.remove('active-tpl');
@@ -3614,7 +3691,7 @@
             });
 
             // a4one 品名以價格數字字級的 0.38 倍為基準，最多兩行，僅在放不下時縮小至 60%。
-            if (isA4One && !cardEl.classList.contains('tpl-B4')) {
+            if (isA4One && !cardEl.classList.contains('tpl-B4') && !cardEl.classList.contains('tpl-B2')) {
                 // 先找價格數字 .price-val；有數量時第一個 .highlight 會是數量，不可拿來當基準
                 const priceNode = cardEl.querySelector('.line-price .price-val') || cardEl.querySelector('.line-price .highlight');
                 const priceSize = priceNode ? parseFloat(window.getComputedStyle(priceNode).fontSize) : 0;
@@ -3631,7 +3708,7 @@
                 // A4 單張 A3 價格群由下方專用演算法處理，不走固定 0.92 階梯縮字。
                 if (isA4One && cardEl.classList.contains('tpl-A3') && el.closest('.a4-price-group')) return;
                 // A4 單張 B4 與橫式吊牌由專用演算法處理，不走通用階梯縮字
-                if (isA4One && cardEl.classList.contains('tpl-B4')) return;
+                if (isA4One && (cardEl.classList.contains('tpl-B4') || cardEl.classList.contains('tpl-B2'))) return;
                 if (isHanger) return;
                 // 記錄原始 font-size，反覆執行時以原始值為基準
                 const computed = window.getComputedStyle(el);
@@ -4053,6 +4130,75 @@
                             }
                         }
                     }
+                }
+            } else if (isA4One && cardEl.querySelector('.a4-b2one')) {
+                // A4 單張 B2 巨大價格：所有量測皆用 getBoundingClientRect（縮放後 px），比值與預覽縮放無關
+                const wrap = cardEl.querySelector('.a4-b2one');
+                const nameEl = wrap.querySelector('.b2one-name');
+                const noteEl = wrap.querySelector('.b2one-note');
+                const badgeEl = wrap.querySelector('.b2one-badge');
+                const qtyBox = wrap.querySelector('.b2one-qty');
+                const priceBox = wrap.querySelector('.b2one-price');
+                const priceVal = priceBox.querySelector('.price-val');
+                const unitEl = priceBox.querySelector('.unit');
+                const cardH = cardEl.offsetHeight;
+                const zf = cardEl.offsetWidth > 0 ? cardEl.getBoundingClientRect().width / cardEl.offsetWidth : 1;
+                const innerW = wrap.getBoundingClientRect().width;
+                const rectW = el => el.getBoundingClientRect().width;
+                const shrinkToWidth = (el, base, maxW) => {
+                    applyFontSize(el, base);
+                    let sc = 1;
+                    while (sc * 0.95 >= 0.3 && rectW(el) > maxW + 0.5) { sc *= 0.95; applyFontSize(el, base * sc); }
+                };
+
+                // 1) 上排：品名約卡高 9%（不超過 62% 寬），備註約卡高 4%（填剩餘寬）
+                //    長品名在 62% 寬內會縮到基準 60% 以下時，品名改佔整行、備註換到下一行靠右
+                const topEl = wrap.querySelector('.b2one-top');
+                topEl.style.removeProperty('flex-wrap');
+                if (noteEl) noteEl.style.removeProperty('width');
+                if (nameEl) {
+                    shrinkToWidth(nameEl, cardH * 0.09, innerW * 0.62);
+                    if (parseFloat(nameEl.style.fontSize) < cardH * 0.09 * 0.6 && noteEl && noteEl.innerText.trim()) {
+                        topEl.style.setProperty('flex-wrap', 'wrap', 'important');
+                        shrinkToWidth(nameEl, cardH * 0.09, innerW);
+                        noteEl.style.setProperty('width', '100%', 'important');
+                    }
+                }
+                if (noteEl) {
+                    const wrapped = topEl.style.flexWrap === 'wrap';
+                    const nameW = nameEl ? rectW(nameEl) : 0;
+                    shrinkToWidth(noteEl, cardH * 0.04, wrapped ? innerW : Math.max(innerW * 0.25, innerW - nameW - 16 * zf));
+                }
+
+                // 2) 中排：直立類別徽章約卡高 6.5%；數量數字約卡高 15%、「入」約卡高 6.5%
+                if (badgeEl) applyFontSize(badgeEl, cardH * 0.065);
+                if (qtyBox) {
+                    const qv = qtyBox.querySelector('.qty-val');
+                    const qu = qtyBox.querySelector('.unit');
+                    if (qv) applyFontSize(qv, cardH * 0.15);
+                    if (qu) applyFontSize(qu, cardH * 0.065);
+                }
+
+                // 3) 超大價格：寬 ≤ 卡內寬 96%，高 ≤ 剩餘高度；「元」= 數字 × 0.20（最小卡高 2.5%）
+                const wrapRect = wrap.getBoundingClientRect();
+                const usedH = Array.from(wrap.children).filter(el => el !== priceBox)
+                    .reduce((sum, el) => sum + el.getBoundingClientRect().height, 0);
+                const availH = Math.max(1, (wrapRect.height - usedH) * 0.92);
+                const availW = innerW * 0.96;
+                const applyPrice = sz => {
+                    applyFontSize(priceVal, sz);
+                    if (unitEl) applyFontSize(unitEl, Math.max(sz * 0.20, cardH * 0.025));
+                };
+                const groupW = () => rectW(priceVal) + (unitEl ? rectW(unitEl) : 0);
+                applyPrice(100);
+                const w0 = groupW();
+                const h0 = priceVal.getBoundingClientRect().height;
+                let sz = 100 * Math.min(availW / Math.max(1, w0), availH / Math.max(1, h0));
+                if (!Number.isFinite(sz) || sz <= 0) sz = 100;
+                applyPrice(sz);
+                for (let i = 0; i < 20; i++) {
+                    if (groupW() > availW + 0.5 || priceBox.getBoundingClientRect().bottom > wrapRect.bottom + 1) { sz *= 0.97; applyPrice(sz); }
+                    else break;
                 }
             } else if (isA4One && cardEl.classList.contains('tpl-B4')) {
                 // 錯誤 3 修正：A4 單張 B4 置中版垂直分布與字級規範
@@ -5156,6 +5302,46 @@
                     buildHangerCardContent(div, data, tpl, labelText, priceHtml);
                     return;
                 }
+            }
+
+            // A4 單張 B2 巨大價格：上排品名(左)+備註(右)，中間直立類別徽章＋數量，下方超大價格佔滿寬度
+            if (isB2 && isOne) {
+                const wrap = document.createElement('div');
+                wrap.className = 'a4-content a4-b2one';
+                const top = document.createElement('div');
+                top.className = 'b2one-top';
+                const nm = document.createElement('div');
+                nm.className = 'b2one-name';
+                nm.innerText = data.name || '';
+                const nt = document.createElement('div');
+                nt.className = 'b2one-note';
+                nt.innerText = data.note || '';
+                top.appendChild(nm);
+                top.appendChild(nt);
+                wrap.appendChild(top);
+                if (labelText || data.qty) {
+                    const mid = document.createElement('div');
+                    mid.className = 'b2one-mid';
+                    if (labelText) {
+                        const badge = document.createElement('div');
+                        badge.className = 'b2one-badge';
+                        badge.innerText = labelText;
+                        mid.appendChild(badge);
+                    }
+                    if (data.qty) {
+                        const q = document.createElement('div');
+                        q.className = 'b2one-qty';
+                        q.innerHTML = qtyHtml;
+                        mid.appendChild(q);
+                    }
+                    wrap.appendChild(mid);
+                }
+                const pr = document.createElement('div');
+                pr.className = 'b2one-price';
+                pr.innerHTML = priceHtml;
+                wrap.appendChild(pr);
+                div.appendChild(wrap);
+                return;
             }
 
             const target = isB3 ? document.createElement('div') : content;
