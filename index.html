@@ -2481,8 +2481,9 @@
             margin-top: 0 !important;
             margin-bottom: 0 !important;
         }
-        /* A4 單張 B2 巨大價格（與 A1 區隔）：字級全由 fitCardText 的 B2 專用分支設定 */
-        .card-a4one .a4-b2one {
+        /* A4 單張／雙張 B2 巨大價格（與 A1 區隔）：字級全由 fitCardText 的 B2 專用分支設定 */
+        .card-a4one .a4-b2one,
+        .card-a4two .a4-b2one {
             flex: 1 1 auto !important;
             height: 100% !important;
             width: 100% !important;
@@ -2493,36 +2494,44 @@
             text-align: left !important;
             margin: 0 !important;
         }
-        .card-a4one .a4-b2one > * { margin: 0 !important; }
+        .card-a4one .a4-b2one > *,
+        .card-a4two .a4-b2one > * { margin: 0 !important; }
         /* 類別數量＋價格合成一組，置於品名下方剩餘空間的垂直中央 */
-        .card-a4one .a4-b2one > .b2one-top { margin-bottom: auto !important; }
-        .card-a4one .a4-b2one > .b2one-price { margin-bottom: auto !important; }
-        .card-a4one .b2one-top {
+        .card-a4one .a4-b2one > .b2one-top,
+        .card-a4two .a4-b2one > .b2one-top { margin-bottom: auto !important; }
+        .card-a4one .a4-b2one > .b2one-price,
+        .card-a4two .a4-b2one > .b2one-price { margin-bottom: auto !important; }
+        .card-a4one .b2one-top,
+        .card-a4two .b2one-top {
             display: flex !important;
             justify-content: space-between !important;
             align-items: flex-end !important;
             gap: 4mm !important;
             width: 100% !important;
         }
-        .card-a4one .b2one-name {
+        .card-a4one .b2one-name,
+        .card-a4two .b2one-name {
             font-weight: 900 !important;
             line-height: 1.15 !important;
             white-space: nowrap !important;
             border-bottom: 0.08em solid #111 !important;
             padding-bottom: 0.04em !important;
         }
-        .card-a4one .b2one-note {
+        .card-a4one .b2one-note,
+        .card-a4two .b2one-note {
             line-height: 1.1 !important;
             white-space: nowrap !important;
             text-align: right !important;
         }
-        .card-a4one .b2one-mid {
+        .card-a4one .b2one-mid,
+        .card-a4two .b2one-mid {
             display: flex !important;
             align-items: center !important;
             gap: 0.35em !important;
             padding-left: 1% !important;
         }
-        .card-a4one .b2one-badge {
+        .card-a4one .b2one-badge,
+        .card-a4two .b2one-badge {
             writing-mode: vertical-rl !important;
             text-orientation: upright !important;
             background: #d7001b !important;
@@ -2534,14 +2543,17 @@
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-        .card-a4one .b2one-qty {
+        .card-a4one .b2one-qty,
+        .card-a4two .b2one-qty {
             display: flex !important;
             align-items: baseline !important;
             font-weight: 900 !important;
             line-height: 1 !important;
         }
-        .card-a4one .b2one-qty .unit { color: #111 !important; }
-        .card-a4one .b2one-price {
+        .card-a4one .b2one-qty .unit,
+        .card-a4two .b2one-qty .unit { color: #111 !important; }
+        .card-a4one .b2one-price,
+        .card-a4two .b2one-price {
             display: flex !important;
             justify-content: center !important;
             align-items: baseline !important;
@@ -2549,9 +2561,23 @@
             font-weight: 900 !important;
             line-height: 1 !important;
         }
-        .card-a4one .b2one-price .price-val { line-height: 1 !important; font-weight: 900 !important; }
-        .card-a4one .b2one-price .unit { color: #111 !important; font-weight: 900 !important; margin-left: 0.04em !important; }
+        .card-a4one .b2one-price .price-val,
+        .card-a4two .b2one-price .price-val { line-height: 1 !important; font-weight: 900 !important; }
+        .card-a4one .b2one-price .unit,
+        .card-a4two .b2one-price .unit { color: #111 !important; font-weight: 900 !important; margin-left: 0.04em !important; }
 
+        /* 雙張：下排徽章＋數量＋價格同一排，置於品名下方剩餘空間中央 */
+        .card-a4two .a4-b2one > .b2one-bottom {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.25em !important;
+            margin-bottom: auto !important;
+            width: 100% !important;
+            white-space: nowrap !important;
+        }
+        .card-a4two .b2one-bottom > .b2one-mid { padding-left: 0 !important; flex: 0 0 auto !important; }
+        .card-a4two .b2one-bottom > .b2one-price { flex: 0 1 auto !important; }
         /* A4 單張 A2：色帶下方的文字區要撐滿剩餘高度，才能平均分布 */
         .card-a4one.tpl-A2 .a4-content {
             flex: 1 1 auto !important;
@@ -3709,6 +3735,7 @@
                 if (isA4One && cardEl.classList.contains('tpl-A3') && el.closest('.a4-price-group')) return;
                 // A4 單張 B4 與橫式吊牌由專用演算法處理，不走通用階梯縮字
                 if (isA4One && (cardEl.classList.contains('tpl-B4') || cardEl.classList.contains('tpl-B2'))) return;
+                if (isA4 && cardEl.classList.contains('tpl-B2') && cardEl.querySelector('.a4-b2one')) return;
                 if (isHanger) return;
                 // 記錄原始 font-size，反覆執行時以原始值為基準
                 const computed = window.getComputedStyle(el);
@@ -4131,7 +4158,7 @@
                         }
                     }
                 }
-            } else if (isA4One && cardEl.querySelector('.a4-b2one')) {
+            } else if (isA4 && cardEl.querySelector('.a4-b2one')) {
                 // A4 單張 B2 巨大價格：所有量測皆用 getBoundingClientRect（縮放後 px），比值與預覽縮放無關
                 const wrap = cardEl.querySelector('.a4-b2one');
                 const nameEl = wrap.querySelector('.b2one-name');
@@ -4151,40 +4178,49 @@
                     while (sc * 0.95 >= 0.3 && rectW(el) > maxW + 0.5) { sc *= 0.95; applyFontSize(el, base * sc); }
                 };
 
-                // 1) 上排：品名約卡高 9%（不超過 62% 寬），備註約卡高 4%（填剩餘寬）
+                // 單張與雙張比例：雙張卡高較矮，各元素佔卡高比例放大
+                const isRow = wrap.classList.contains('b2-row');
+                const R = isRow
+                    ? { name: 0.13, note: 0.06, badge: 0.09, qty: 0.24, qtyUnit: 0.09 }
+                    : { name: 0.09, note: 0.04, badge: 0.065, qty: 0.15, qtyUnit: 0.065 };
+                // 1) 上排：品名（不超過 62% 寬），備註（填剩餘寬）
                 //    長品名在 62% 寬內會縮到基準 60% 以下時，品名改佔整行、備註換到下一行靠右
                 const topEl = wrap.querySelector('.b2one-top');
                 topEl.style.removeProperty('flex-wrap');
                 if (noteEl) noteEl.style.removeProperty('width');
                 if (nameEl) {
-                    shrinkToWidth(nameEl, cardH * 0.09, innerW * 0.62);
-                    if (parseFloat(nameEl.style.fontSize) < cardH * 0.09 * 0.6 && noteEl && noteEl.innerText.trim()) {
+                    shrinkToWidth(nameEl, cardH * R.name, innerW * 0.62);
+                    if (parseFloat(nameEl.style.fontSize) < cardH * R.name * 0.6 && noteEl && noteEl.innerText.trim()) {
                         topEl.style.setProperty('flex-wrap', 'wrap', 'important');
-                        shrinkToWidth(nameEl, cardH * 0.09, innerW);
+                        shrinkToWidth(nameEl, cardH * R.name, innerW);
                         noteEl.style.setProperty('width', '100%', 'important');
                     }
                 }
                 if (noteEl) {
                     const wrapped = topEl.style.flexWrap === 'wrap';
                     const nameW = nameEl ? rectW(nameEl) : 0;
-                    shrinkToWidth(noteEl, cardH * 0.04, wrapped ? innerW : Math.max(innerW * 0.25, innerW - nameW - 16 * zf));
+                    shrinkToWidth(noteEl, cardH * R.note, wrapped ? innerW : Math.max(innerW * 0.25, innerW - nameW - 16 * zf));
                 }
 
                 // 2) 中排：直立類別徽章約卡高 6.5%；數量數字約卡高 15%、「入」約卡高 6.5%
-                if (badgeEl) applyFontSize(badgeEl, cardH * 0.065);
+                if (badgeEl) applyFontSize(badgeEl, cardH * R.badge);
                 if (qtyBox) {
                     const qv = qtyBox.querySelector('.qty-val');
                     const qu = qtyBox.querySelector('.unit');
-                    if (qv) applyFontSize(qv, cardH * 0.15);
-                    if (qu) applyFontSize(qu, cardH * 0.065);
+                    if (qv) applyFontSize(qv, cardH * R.qty);
+                    if (qu) applyFontSize(qu, cardH * R.qtyUnit);
                 }
 
                 // 3) 超大價格：寬 ≤ 卡內寬 96%，高 ≤ 剩餘高度；「元」= 數字 × 0.20（最小卡高 2.5%）
                 const wrapRect = wrap.getBoundingClientRect();
-                const usedH = Array.from(wrap.children).filter(el => el !== priceBox)
+                const bottomRow = wrap.querySelector('.b2one-bottom');
+                const midInRow = bottomRow ? bottomRow.querySelector('.b2one-mid') : null;
+                const usedH = Array.from(wrap.children).filter(el => el !== priceBox && el !== bottomRow)
                     .reduce((sum, el) => sum + el.getBoundingClientRect().height, 0);
                 const availH = Math.max(1, (wrapRect.height - usedH) * 0.92);
-                const availW = innerW * 0.96;
+                // 雙張：價格可用寬度扣掉同排的徽章＋數量
+                const midW = midInRow ? midInRow.getBoundingClientRect().width + parseFloat(getComputedStyle(bottomRow).columnGap || 0) * zf : 0;
+                const availW = Math.max(1, innerW * 0.96 - midW);
                 const applyPrice = sz => {
                     applyFontSize(priceVal, sz);
                     if (unitEl) applyFontSize(unitEl, Math.max(sz * 0.20, cardH * 0.025));
@@ -4197,7 +4233,8 @@
                 if (!Number.isFinite(sz) || sz <= 0) sz = 100;
                 applyPrice(sz);
                 for (let i = 0; i < 20; i++) {
-                    if (groupW() > availW + 0.5 || priceBox.getBoundingClientRect().bottom > wrapRect.bottom + 1) { sz *= 0.97; applyPrice(sz); }
+                    const pb = (bottomRow || priceBox).getBoundingClientRect().bottom;
+                    if (groupW() > availW + 0.5 || pb > wrapRect.bottom + 1) { sz *= 0.97; applyPrice(sz); }
                     else break;
                 }
             } else if (isA4One && cardEl.classList.contains('tpl-B4')) {
@@ -5304,10 +5341,12 @@
                 }
             }
 
-            // A4 單張 B2 巨大價格：上排品名(左)+備註(右)，中間直立類別徽章＋數量，下方超大價格佔滿寬度
-            if (isB2 && isOne) {
+            // A4 B2 巨大價格：上排品名(左)+備註(右)
+            //   單張（直式）：中間直立類別徽章＋數量，下方超大價格佔滿寬度
+            //   雙張（橫式）：下排「直立類別徽章＋數量＋超大價格」同一排（比照大卡 B2）
+            if (isB2) {
                 const wrap = document.createElement('div');
-                wrap.className = 'a4-content a4-b2one';
+                wrap.className = 'a4-content a4-b2one' + (isOne ? '' : ' b2-row');
                 const top = document.createElement('div');
                 top.className = 'b2one-top';
                 const nm = document.createElement('div');
@@ -5340,6 +5379,15 @@
                 pr.className = 'b2one-price';
                 pr.innerHTML = priceHtml;
                 wrap.appendChild(pr);
+                if (!isOne) {
+                    // 雙張：把 mid 與 price 包進同一排
+                    const bottom = document.createElement('div');
+                    bottom.className = 'b2one-bottom';
+                    const midEl = wrap.querySelector('.b2one-mid');
+                    if (midEl) bottom.appendChild(midEl);
+                    bottom.appendChild(pr);
+                    wrap.appendChild(bottom);
+                }
                 div.appendChild(wrap);
                 return;
             }
