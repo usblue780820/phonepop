@@ -366,6 +366,21 @@
             color: #cc3300;
             line-height: 1; 
         }
+        /* 任務 43：大卡 B1 價格放大 25%，並微調上內距騰出空間 */
+        .card-large.tpl-B1 {
+            padding-top: 4mm;
+        }
+        .card-large.tpl-B1 .line-price {
+            font-size: 42.5pt;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+        }
+        .card-large.tpl-B1 .line-price > * {
+            flex-shrink: 0;
+        }
+        .card-large.tpl-B1 .highlight {
+            font-size: 82.5pt;
+        }
 
         /* 4. A4單張 */
         .card-a4one {
@@ -638,7 +653,8 @@
             padding-bottom: 39mm !important;
         }
         .card-medium.tpl-A1 {
-            padding-top: 2mm !important;
+            justify-content: flex-start !important;
+            padding-top: 0mm !important;
             padding-left: 4.5mm !important;
             padding-right: 4.5mm !important;
             padding-bottom: 31mm !important;
@@ -653,6 +669,9 @@
             height: 100%;
             box-sizing: border-box;
         }
+        .card-medium.tpl-A1 .a1-side-container {
+            height: auto;
+        }
         .card-small.tpl-A1 .a1-side-container { gap: 2mm; }
         .card-medium.tpl-A1 .a1-side-container { gap: 3mm; }
 
@@ -664,6 +683,9 @@
             flex-direction: column;
             justify-content: center;
             text-align: left;
+        }
+        .card-medium.tpl-A1 .side-col-left {
+            align-self: flex-start;
         }
         .card-small.tpl-A1 .line-name,
         .card-medium.tpl-A1 .line-name {
@@ -823,9 +845,30 @@
         .card-small.tpl-A2 .highlight { font-size: 18pt; }
         .card-small.tpl-A2 .line-note { font-size: 10pt; }
 
-        .card-medium.tpl-A2 .line-price { font-size: 20pt; }
+        .card-medium.tpl-A2 .a2-body {
+            flex-direction: row;
+            align-items: baseline;
+            justify-content: flex-start;
+            gap: 2mm;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .card-medium.tpl-A2 .line-price {
+            font-size: 20pt;
+            flex: 1 1 auto;
+            width: auto;
+            min-width: 0;
+            box-sizing: border-box;
+        }
         .card-medium.tpl-A2 .highlight { font-size: 26pt; }
-        .card-medium.tpl-A2 .line-note { font-size: 14pt; }
+        .card-medium.tpl-A2 .line-note {
+            font-size: 14pt;
+            flex: 0 0 auto;
+            width: auto;
+            margin-top: 0;
+            text-align: right !important;
+            white-space: nowrap;
+        }
 
         .card-smallRound.tpl-A2 .a2-body { padding: 1mm 2mm; }
         .card-smallRound.tpl-A2 .line-price { font-size: 21pt; }
@@ -908,8 +951,8 @@
             word-break: normal;
             overflow-wrap: anywhere;
         }
-        .card-small.tpl-A3 .price-badge { font-size: 12pt; }
-        .card-medium.tpl-A3 .price-badge { font-size: 20pt; }
+        .card-small.tpl-A3 .price-badge { font-size: 9pt; }
+        .card-medium.tpl-A3 .price-badge { font-size: 15pt; }
         .card-smallRound.tpl-A3 .price-badge { font-size: 21pt; }
         .card-large.tpl-A3 .price-badge { font-size: 46.2pt; }
         .card-a4two.tpl-A3 .price-badge { font-size: 37pt; }
@@ -928,7 +971,8 @@
         .card-small.tpl-A3 .line-name { font-size: 12pt; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: clip; width: 100%; }
         .card-small.tpl-A3 .line-price { font-size: 12pt; font-weight: bold; display: flex; align-items: baseline; gap: 1px; }
         .card-small.tpl-A3 .highlight { font-size: 18pt; }
-        .card-small.tpl-A3 .line-note { font-size: 10pt; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+        .card-small.tpl-A3 .line-price .price-val + .unit { font-size: 9pt; }
+        .card-small.tpl-A3 .line-note { font-size: 7.5pt; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: clip; }
 
         /* small A3 只使用卡片上方 16mm；不可讓內容容器以整張卡高度垂直置中 */
         .card-small.tpl-A3 .a3-container {
@@ -949,10 +993,22 @@
         .card-medium.tpl-A3 .badge-body {
             justify-content: flex-start;
         }
-        .card-medium.tpl-A3 .line-name { font-size: 20pt; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: clip; width: 100%; }
-        .card-medium.tpl-A3 .line-price { font-size: 20pt; font-weight: bold; display: flex; align-items: baseline; gap: 1px; }
+        .card-medium.tpl-A3 .a3-top-row {
+            width: 100%;
+            font-size: 20pt;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: baseline;
+            justify-content: flex-start;
+            column-gap: 0.3em;
+            row-gap: 0.5mm;
+        }
+        .card-medium.tpl-A3 .line-name { font-size: 20pt; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: clip; width: auto; flex-shrink: 0; }
+        .card-medium.tpl-A3 .line-price { font-size: 20pt; font-weight: bold; display: flex; align-items: baseline; gap: 1px; flex-shrink: 0; white-space: nowrap; }
         .card-medium.tpl-A3 .highlight { font-size: 26pt; }
-        .card-medium.tpl-A3 .line-note { font-size: 14pt; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+        .card-medium.tpl-A3 .line-price .price-val + .unit { font-size: 13pt; }
+        .card-medium.tpl-A3 .line-note { font-size: 11pt; width: 100%; margin-top: 0.5mm; white-space: nowrap; overflow: hidden; text-overflow: clip; }
 
         .card-smallRound.tpl-A3 .line-name { font-size: 28.5pt; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: clip; width: 100%; }
         .card-smallRound.tpl-A3 .line-price { font-size: 21pt; font-weight: bold; display: flex; align-items: baseline; gap: 1px; }
@@ -1952,6 +2008,7 @@
         .card-a4one .line-price .unit { font-size: 90pt !important; }
         .card-a4two .line-price .unit { font-size: 57pt !important; }
         .card-a4two .line-price .label { font-size: 48pt !important; } /* 特價字縮小約 15% */
+        .card-a4two.tpl-A1 .line-price .label { font-size: 33.6pt !important; } /* 任務 43：A4 雙張 A1 類別縮小為原本 70% */
         .card-a4one .a4-content > .line-note,
         .card-a4two .a4-content > .line-note {
             flex: 1 1 0;
@@ -2541,6 +2598,54 @@
         }
         .card-a4one.tpl-B3 .white-panel {
             box-sizing: border-box !important;
+        }
+        /* 任務 44 / 44b：A4 單張 A1 直式類別方塊（比照 B2）與價格同一行、備註置中 */
+        .card-a4one.tpl-A1 .a4-content > .a4-price-group {
+            width: 100% !important;
+        }
+        .card-a4one.tpl-A1 .line-price {
+            width: 100% !important;
+            font-size: 90pt !important;
+        }
+        .card-a4one.tpl-A1 .line-price .highlight {
+            font-size: 300pt !important;
+        }
+        .card-a4one.tpl-A1 .line-price .label {
+            writing-mode: vertical-rl !important;
+            text-orientation: upright !important;
+            font-size: 75pt !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+            background: #d7001b !important;
+            color: #ffffff !important;
+            padding: 0.20em 0.14em !important;
+            border-radius: 0.18em !important;
+            margin-right: 0.25em !important;
+            align-self: center !important;
+            text-align: center !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card-a4one.tpl-A1.theme-etpet .line-price .label {
+            background: #0b6db6 !important;
+            color: #ffffff !important;
+        }
+        .card-a4one.tpl-A1.theme-red .line-price .label {
+            background: #ffe600 !important;
+            color: #c40012 !important;
+        }
+        .card-a4one.tpl-A1 .line-price .unit {
+            font-size: 75pt !important;
+        }
+        .card-a4one.tpl-A1 .line-price .qty-val + .unit {
+            margin-right: 0.2em;
+        }
+        .card-a4one.tpl-A1 .a4-content > .line-note {
+            text-align: center;
+            overflow-wrap: break-word;
+        }
+        .card-a4one.tpl-A1 .a4-content > .line-note:empty {
+            display: none !important;
         }
 
         /* 圓角 side：品名獨佔第一行，備註跟在價格行右側 */
@@ -5158,6 +5263,8 @@
                                 flushLine();
                             }
                         }
+                        // 被切開的子句，最後一段必須單獨結束在該子句的標點，不可與下一個子句同一行
+                        flushLine();
                     }
                 }
                 flushLine();
@@ -5199,6 +5306,29 @@
                 const M = p.tokens.length;
                 if (n <= 1 || M <= 1 || n >= M) return greedyRes.lines;
 
+                const clauses = [];
+                const tokenClauseId = new Array(M);
+                {
+                    let cStart = 0;
+                    for (let idx = 0; idx < M; idx++) {
+                        tokenClauseId[idx] = clauses.length;
+                        if (p.tokens[idx].breakAfter || idx === M - 1) {
+                            clauses.push({
+                                firstNon: firstNonSpaceIdx(p, cStart, idx),
+                                lastNon: lastNonSpaceIdx(p, cStart, idx)
+                            });
+                            cStart = idx + 1;
+                        }
+                    }
+                }
+                const isLineLegal = (firstNon, lastNon) => {
+                    const cFirst = tokenClauseId[firstNon];
+                    const cLast = tokenClauseId[lastNon];
+                    if (cFirst === cLast) return true;
+                    // 若一行跨過標點包含多個子句，必須完整從第一個子句開頭到最後一個子句結尾，不可從子句中間起訖
+                    return firstNon === clauses[cFirst].firstNon && lastNon === clauses[cLast].lastNon;
+                };
+
                 const avgW = trimmedW(p, 0, M - 1, f) / n;
                 const orpScore = (cnt) => (cnt <= 1 ? 100 : (cnt === 2 ? 1 : 0));
                 const isBetter = (a, b) => {
@@ -5215,13 +5345,15 @@
                     const minWReq = minRatio > 0 ? capW * minRatio - 0.01 : 0;
                     let prevDp = new Array(M + 1).fill(null);
                     for (let j = 0; j <= M - n; j++) {
+                        const firstNon = firstNonSpaceIdx(p, 0, j);
                         const lastNon = lastNonSpaceIdx(p, 0, j);
-                        if (lastNon === -1) continue;
+                        if (firstNon === -1 || lastNon === -1) continue;
                         const lw = trimmedW(p, 0, j, f);
                         if (lw > capW + 0.01) {
                             if (j > 0) break;
                             continue;
                         }
+                        if (!isLineLegal(firstNon, lastNon)) continue;
                         if (minWReq > 0 && lw < minWReq) continue;
                         const mid = p.tokens[lastNon].breakAfter ? 0 : 1;
                         const orp = orpScore(sliceNonPunct(p, 0, j));
@@ -5240,13 +5372,15 @@
                             const prevEndedPunct = prevLast >= 0 && p.tokens[prevLast].breakAfter;
                             const jStart = k === n ? M - 1 : i;
                             for (let j = jStart; j <= maxEnd; j++) {
+                                const firstNon = firstNonSpaceIdx(p, i, j);
                                 const lastNon = lastNonSpaceIdx(p, i, j);
-                                if (lastNon === -1) continue;
+                                if (firstNon === -1 || lastNon === -1) continue;
                                 const lw = trimmedW(p, i, j, f);
                                 if (lw > capW + 0.01) {
                                     if (j > i) break;
                                     continue;
                                 }
+                                if (!isLineLegal(firstNon, lastNon)) continue;
                                 const isExemptLast = (k === n) && prevEndedPunct && p.tokens[lastNon].breakAfter;
                                 if (minWReq > 0 && !isExemptLast && lw < minWReq) continue;
                                 const midAdd = (k < n && !p.tokens[lastNon].breakAfter) ? 1 : 0;
@@ -5719,6 +5853,34 @@
                                 cardEl.classList.contains('card-smallRound') ||
                                 cardEl.classList.contains('card-large');
             if (isB1 && isOriginal4) {
+                const isLargeB1 = cardEl.classList.contains('card-large');
+                if (isLargeB1) {
+                    if (cardEl.dataset.largeB1Tight) {
+                        if (!cardEl.dataset.promotedPadFix) cardEl.style.removeProperty('padding-top');
+                        cardEl.style.removeProperty('padding-bottom');
+                        delete cardEl.dataset.largeB1Tight;
+                    }
+                    const resetNameEl = cardEl.querySelector('.line-name');
+                    const resetNoteEl = cardEl.querySelector('.line-note');
+                    if (resetNameEl) {
+                        resetNameEl.style.removeProperty('margin-bottom');
+                        resetNameEl.style.removeProperty('line-height');
+                    }
+                    if (resetNoteEl) {
+                        resetNoteEl.style.removeProperty('line-height');
+                    }
+                    const lp = cardEl.querySelector('.line-price');
+                    if (lp) {
+                        lp.style.removeProperty('font-size');
+                        lp.style.removeProperty('margin-top');
+                        const pg = lp.closest('.promoted-price-group');
+                        if (pg) pg.style.removeProperty('margin-top');
+                        lp.querySelectorAll('.highlight, .unit, .qty-val, .price-val, .label').forEach(n => {
+                            n.style.removeProperty('font-size');
+                            delete n.dataset.customLabelBase;
+                        });
+                    }
+                }
                 const b1Custom = cardEl.querySelector('.b1-custom-label');
                 const b1PriceLabel = cardEl.querySelector('.line-price .label');
                 const csCard = window.getComputedStyle(cardEl);
@@ -5816,12 +5978,185 @@
                     const linePrice = b1PriceLabel.closest('.line-price');
                     const origL = parseFloat(b1PriceLabel.dataset.origFontSize || window.getComputedStyle(b1PriceLabel).fontSize);
                     b1PriceLabel.dataset.origFontSize = origL;
-                    const maxW = cardEl.classList.contains('card-large')
+                    const maxW = isLargeB1
                         ? Math.min(availW, cardEl.clientWidth * 0.97)
                         : availW;
                     fitLinePriceLabelOrPromote(cardEl, linePrice, b1PriceLabel, origL, maxW, zf, {
                         applyFs: (node, px) => node.style.setProperty('font-size', px + 'px', 'important')
                     });
+                }
+
+                // 任務 43 / 43b：大卡 B1 目標 82.5pt (110px)，僅在寬度放不下或字形壓到備註／超出卡片底時調整，且垂直調適最少不小於 88px
+                if (isLargeB1) {
+                    const linePrice = cardEl.querySelector('.line-price');
+                    if (linePrice) {
+                        const applyFs = (node, px) => node.style.setProperty('font-size', px + 'px', 'important');
+                        const origLineFs = parseFloat(linePrice.dataset.origFontSize || window.getComputedStyle(linePrice).fontSize);
+                        linePrice.dataset.origFontSize = origLineFs;
+                        const priceNodes = Array.from(linePrice.querySelectorAll('.highlight, .unit, .qty-val, .price-val, .label'))
+                            .filter(n => n.dataset.hiddenByPromote !== '1');
+                        const baseData = priceNodes.map(n => {
+                            const cssFs = parseFloat(window.getComputedStyle(n).fontSize);
+                            const orig = parseFloat(n.dataset.origFontSize || cssFs);
+                            n.dataset.origFontSize = orig;
+                            const eff = n.dataset.customLabelBase ? parseFloat(n.dataset.customLabelBase) : orig;
+                            return { node: n, base: eff };
+                        });
+                        const applyPriceScale = sc => {
+                            applyFs(linePrice, origLineFs * sc);
+                            baseData.forEach(item => applyFs(item.node, item.base * sc));
+                        };
+                        applyPriceScale(1);
+
+                        const nameEl = cardEl.querySelector('.line-name');
+                        const noteEl = cardEl.querySelector('.line-note');
+                        const promotedCat = cardEl.querySelector('.line-category[data-promoted-cat="1"]');
+                        const promoGroup = linePrice.closest('.promoted-price-group');
+                        const maxPriceW = Math.min(availW, cardEl.clientWidth * 0.97);
+                        const getKids = () => Array.from(linePrice.children).filter(k => k.getBoundingClientRect().width > 0);
+                        const getKidsW = () => {
+                            const kids = getKids();
+                            if (!kids.length) return 0;
+                            return (Math.max(...kids.map(k => k.getBoundingClientRect().right)) - Math.min(...kids.map(k => k.getBoundingClientRect().left))) / zf;
+                        };
+                        const aboveEl = (noteEl && noteEl.textContent.trim() && noteEl.getBoundingClientRect().height > 0)
+                            ? noteEl
+                            : (nameEl && nameEl.textContent.trim() && nameEl.getBoundingClientRect().height > 0 ? nameEl : null);
+
+                        const highlightNode = linePrice.querySelector('.price-val') || linePrice.querySelector('.highlight');
+                        const origHighlightFs = highlightNode
+                            ? parseFloat(highlightNode.dataset.origFontSize || window.getComputedStyle(highlightNode).fontSize)
+                            : 110;
+                        const minVerticalScale = origHighlightFs > 88 ? (88 / origHighlightFs) : 1;
+
+                        const toCardY = clientY => (clientY - cardRect.top) / zf;
+                        const borderB = parseFloat(csCard.borderBottomWidth || 0);
+                        const cardInnerBot = cardEl.offsetHeight - borderB;
+
+                        const getPriceGlyphBounds = () => {
+                            const kids = getKids();
+                            if (!kids.length) return null;
+                            let minGlyphTop = Infinity;
+                            let maxGlyphBot = -Infinity;
+                            let maxBoxBot = -Infinity;
+                            kids.forEach(k => {
+                                const kr = k.getBoundingClientRect();
+                                const kTop = toCardY(kr.top);
+                                const kBot = toCardY(kr.bottom);
+                                const kFs = parseFloat(window.getComputedStyle(k).fontSize);
+                                const isNum = k.classList.contains('highlight') || k.classList.contains('price-val') || k.classList.contains('qty-val');
+                                const gTop = isNum ? (kTop + kFs * 0.18) : (kTop + kFs * 0.08);
+                                const gBot = isNum ? (kBot - kFs * 0.06) : kBot;
+                                if (gTop < minGlyphTop) minGlyphTop = gTop;
+                                if (gBot > maxGlyphBot) maxGlyphBot = gBot;
+                                if (kBot > maxBoxBot) maxBoxBot = kBot;
+                            });
+                            const pRect = linePrice.getBoundingClientRect();
+                            maxBoxBot = Math.max(maxBoxBot, toCardY(pRect.bottom));
+                            return { glyphTop: minGlyphTop, glyphBot: maxGlyphBot, boxBot: maxBoxBot };
+                        };
+
+                        const getAboveBot = () => (aboveEl ? toCardY(aboveEl.getBoundingClientRect().bottom) : 0);
+
+                        const isVertOverflowing = () => {
+                            const pb = getPriceGlyphBounds();
+                            if (!pb) return false;
+                            const padBCur = parseFloat(window.getComputedStyle(cardEl).paddingBottom || 0);
+                            if (pb.boxBot > cardInnerBot - padBCur + 0.5 || pb.glyphBot > cardInnerBot - 2) return true;
+                            const aboveBot = getAboveBot();
+                            if (promotedCat) {
+                                const cr = promotedCat.getBoundingClientRect();
+                                const cFs = parseFloat(window.getComputedStyle(promotedCat).fontSize);
+                                const cGlyphTop = toCardY(cr.top) + cFs * 0.08;
+                                const cGlyphBot = toCardY(cr.bottom) - cFs * 0.05;
+                                if (aboveEl && cGlyphTop < aboveBot + 0.5) return true;
+                                if (pb.glyphTop < cGlyphBot + 0.5) return true;
+                            } else if (aboveEl) {
+                                if (pb.glyphTop < aboveBot + 0.5) return true;
+                            }
+                            return false;
+                        };
+
+                        const pullUpWithinGlyphRoom = () => {
+                            linePrice.style.removeProperty('margin-top');
+                            if (promoGroup) promoGroup.style.removeProperty('margin-top');
+                            const pb = getPriceGlyphBounds();
+                            if (!pb) return;
+                            const padBCur = parseFloat(window.getComputedStyle(cardEl).paddingBottom || 0);
+                            let pullNeeded = pb.boxBot - (cardInnerBot - padBCur);
+                            if (pullNeeded <= 0.5) return;
+                            const aboveBot = getAboveBot();
+                            if (promotedCat && promoGroup) {
+                                const cr = promotedCat.getBoundingClientRect();
+                                const cFs = parseFloat(window.getComputedStyle(promotedCat).fontSize);
+                                const cGlyphTop = toCardY(cr.top) + cFs * 0.08;
+                                const cGlyphBot = toCardY(cr.bottom) - cFs * 0.05;
+                                const groupRoom = aboveEl ? Math.max(0, cGlyphTop - (aboveBot + 1)) : 0;
+                                const groupPull = Math.min(pullNeeded, groupRoom);
+                                if (groupPull > 0.5) {
+                                    promoGroup.style.setProperty('margin-top', (-groupPull) + 'px', 'important');
+                                    pullNeeded -= groupPull;
+                                }
+                                if (pullNeeded > 0.5) {
+                                    const pbNow = getPriceGlyphBounds();
+                                    const crNow = promotedCat.getBoundingClientRect();
+                                    const cGlyphBotNow = toCardY(crNow.bottom) - cFs * 0.05;
+                                    const priceRoom = pbNow ? Math.max(0, pbNow.glyphTop - (cGlyphBotNow + 1)) : 0;
+                                    const pricePull = Math.min(pullNeeded, priceRoom);
+                                    if (pricePull > 0.5) {
+                                        linePrice.style.setProperty('margin-top', (-pricePull) + 'px', 'important');
+                                    }
+                                }
+                            } else {
+                                const room = aboveEl ? Math.max(0, pb.glyphTop - (aboveBot + 1)) : pullNeeded;
+                                const pull = Math.min(pullNeeded, room);
+                                if (pull > 0.5) {
+                                    linePrice.style.setProperty('margin-top', (-pull) + 'px', 'important');
+                                }
+                            }
+                        };
+
+                        // 1) 僅在寬度放不下時優先縮小到符合寬度
+                        let pScale = 1;
+                        const w0 = getKidsW();
+                        if (w0 > maxPriceW + 0.5 && w0 > 0) {
+                            pScale = Math.min(1, maxPriceW / w0);
+                            applyPriceScale(pScale);
+                        }
+                        while (pScale * 0.97 >= 0.45 && getKidsW() > maxPriceW + 0.5) {
+                            pScale *= 0.97;
+                            applyPriceScale(pScale);
+                        }
+
+                        // 2) 垂直空間判斷改用字形實際範圍；必要時先往上收品名與備註間距（不改品名與備註字級）
+                        if (isVertOverflowing()) {
+                            cardEl.style.setProperty('padding-top', '1.5mm', 'important');
+                            cardEl.style.setProperty('padding-bottom', '1.5mm', 'important');
+                            cardEl.dataset.largeB1Tight = '1';
+                            if (nameEl) {
+                                nameEl.style.setProperty('margin-bottom', '0px', 'important');
+                                nameEl.style.setProperty('line-height', '1', 'important');
+                            }
+                            if (noteEl) {
+                                noteEl.style.setProperty('line-height', '1.05', 'important');
+                            }
+                            pullUpWithinGlyphRoom();
+                        }
+
+                        // 3) 仍有字形壓到備註或超出卡片底時才縮價格，且垂直調適最少不小於 88px
+                        if (isVertOverflowing() && pScale > minVerticalScale) {
+                            while (pScale * 0.97 >= minVerticalScale && isVertOverflowing()) {
+                                pScale *= 0.97;
+                                applyPriceScale(pScale);
+                                pullUpWithinGlyphRoom();
+                            }
+                            if (isVertOverflowing() && pScale > minVerticalScale) {
+                                pScale = minVerticalScale;
+                                applyPriceScale(pScale);
+                                pullUpWithinGlyphRoom();
+                            }
+                        }
+                    }
                 }
                 return;
             }
@@ -5882,6 +6217,11 @@
                 l.style.removeProperty('font-size');
                 delete l.dataset.customLabelBase;
             });
+            if (isA4One && cardEl.classList.contains('tpl-A1')) {
+                cardEl.querySelectorAll('.line-price, .line-price .highlight, .line-price .unit, .line-price .qty-val, .line-price .price-val, .a4-content > .line-note').forEach(node => {
+                    node.style.removeProperty('font-size');
+                });
+            }
 
             // A1 並排（small / medium / large）：超過 3 字的自訂類別先依左欄保留寬度嘗試縮到最低 55%，放不下則移至價格正上方獨立一行置中
             if (cardEl.classList.contains('tpl-A1') && cardEl.querySelector('.a1-side-container')) {
@@ -5940,8 +6280,71 @@
                 }
             }
 
+            // 任務 44b：A4 單張 A1 直式類別方塊（與價格數字垂直置中對齊、總高約為價格數字字形高度的 70～90%；
+            // 自訂長類別直排放不下時縮小字級，最小原本 55%，仍放不下則回到任務 44 規則：獨立一行在價格正上方、橫式）
+            if (isA4One && cardEl.classList.contains('tpl-A1')) {
+                const priceLine = cardEl.querySelector('.line-price');
+                const labelEl = priceLine ? priceLine.querySelector('.label') : null;
+                const priceVal = priceLine ? (priceLine.querySelector('.price-val') || priceLine.querySelector('.highlight:not(.qty-val)')) : null;
+                if (priceLine && labelEl && priceVal) {
+                    labelEl.style.removeProperty('font-size');
+                    delete labelEl.dataset.customLabelBase;
+                    const cardRect = cardEl.getBoundingClientRect();
+                    const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                    const priceFs = parseFloat(priceVal.dataset.origFontSize || window.getComputedStyle(priceVal).fontSize);
+                    const priceGlyphH = priceFs * 0.74;
+                    const origL = parseFloat(labelEl.dataset.origFontSize || window.getComputedStyle(labelEl).fontSize);
+                    labelEl.dataset.origFontSize = origL;
+
+                    const textLen = labelEl.textContent.trim().length;
+                    const getBadgeH = () => labelEl.getBoundingClientRect().height / zf;
+                    const minL = origL * 0.55;
+
+                    let fs = origL;
+                    applyFontSize(labelEl, fs);
+
+                    if (textLen <= 3) {
+                        const maxShortH = priceGlyphH * 0.88;
+                        const minShortH = priceGlyphH * 0.72;
+                        let h = getBadgeH();
+                        if (h > maxShortH && h > 0) {
+                            fs = fs * ((priceGlyphH * 0.82) / h);
+                            applyFontSize(labelEl, fs);
+                            for (let i = 0; i < 12 && getBadgeH() > priceGlyphH * 0.90; i++) {
+                                fs *= 0.97;
+                                applyFontSize(labelEl, fs);
+                            }
+                        } else if (textLen === 2 && h < minShortH && h > 0) {
+                            fs = fs * ((priceGlyphH * 0.80) / h);
+                            applyFontSize(labelEl, fs);
+                        }
+                        labelEl.dataset.customLabelBase = fs;
+                    } else {
+                        let h = getBadgeH();
+                        if (h > priceGlyphH && h > 0) {
+                            const targetFs = fs * ((priceGlyphH * 0.96) / h);
+                            fs = Math.max(minL, targetFs);
+                            applyFontSize(labelEl, fs);
+                            while (fs > minL + 0.01 && getBadgeH() > priceGlyphH) {
+                                fs = Math.max(minL, fs * 0.96);
+                                applyFontSize(labelEl, fs);
+                            }
+                        }
+                        if (getBadgeH() > priceGlyphH) {
+                            const lineW = priceLine.getBoundingClientRect().width / zf;
+                            const availW = Math.max(1, lineW > 0 ? lineW * 0.96 : cardEl.clientWidth * 0.88);
+                            promoteLinePriceLabel(cardEl, priceLine, labelEl, origL, availW, zf, {
+                                applyFs: applyFontSize
+                            });
+                        } else {
+                            labelEl.dataset.customLabelBase = fs;
+                        }
+                    }
+                }
+            }
+
             // 其餘含行內 .label (>3 字) 的 .line-price（small/medium B2/B3、smallRound B2/B3、large B3、a4two A1/A2/B3）
-            if (!isHanger && !(isA4One && cardEl.classList.contains('tpl-B4')) && !(cardEl.classList.contains('card-large') && cardEl.classList.contains('tpl-B2'))) {
+            if (!isHanger && !(isA4One && cardEl.classList.contains('tpl-B4')) && !(isA4One && cardEl.classList.contains('tpl-A1')) && !(cardEl.classList.contains('card-large') && cardEl.classList.contains('tpl-B2'))) {
                 cardEl.querySelectorAll('.line-price').forEach(priceLine => {
                     if (priceLine.closest('.a1-side-container') || priceLine.closest('.a1-side-right-wrap') || priceLine.closest('.hanger-right')) return;
                     const customLabel = priceLine.querySelector('.label:not(.a2-inline-name)');
@@ -6033,6 +6436,9 @@
                 if (isA4One && (cardEl.classList.contains('tpl-B4') || cardEl.classList.contains('tpl-B2'))) return;
                 if (isA4 && cardEl.classList.contains('tpl-B2') && cardEl.querySelector('.a4-b2one')) return;
                 if (isHanger) return;
+                // 中卡 A2 與中卡 A3 由下方專用演算法依優先順序縮放，不走通用縮字
+                if (cardEl.classList.contains('card-medium') && cardEl.classList.contains('tpl-A2') && (el.classList.contains('line-price') || el.classList.contains('line-note'))) return;
+                if (cardEl.classList.contains('card-medium') && cardEl.classList.contains('tpl-A3') && (el.classList.contains('line-name') || el.classList.contains('line-price'))) return;
                 // 記錄原始 font-size，反覆執行時以原始值為基準
                 const computed = window.getComputedStyle(el);
                 const origSize = parseFloat(el.dataset.origFontSize || computed.fontSize);
@@ -6109,6 +6515,176 @@
                 }
             });
 
+            // 中卡 A2：備註與「品名 價格 元」同行靠右；先縮備註（最小 70%），再縮品名，最後縮價格
+            if (cardEl.classList.contains('card-medium') && cardEl.classList.contains('tpl-A2')) {
+                const body = cardEl.querySelector('.a2-body');
+                const priceLine = body ? body.querySelector('.line-price') : null;
+                const nameEl = priceLine ? priceLine.querySelector('.a2-inline-name') : null;
+                const noteEl = body ? body.querySelector('.line-note') : null;
+                if (body && priceLine) {
+                    const cardRect = cardEl.getBoundingClientRect();
+                    const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                    const csBody = window.getComputedStyle(body);
+                    const padL = parseFloat(csBody.paddingLeft || 0);
+                    const padR = parseFloat(csBody.paddingRight || 0);
+                    const availW = Math.max(1, body.clientWidth - padL - padR);
+                    const gapPx = noteEl ? (parseFloat(csBody.columnGap) || parseFloat(csBody.gap) || 0) : 0;
+
+                    priceLine.style.paddingLeft = '0px';
+
+                    const origPriceLineFs = parseFloat(priceLine.dataset.origFontSize || window.getComputedStyle(priceLine).fontSize);
+                    priceLine.dataset.origFontSize = origPriceLineFs;
+                    priceLine.style.fontSize = origPriceLineFs + 'px';
+
+                    let origNameFs = 0;
+                    if (nameEl) {
+                        origNameFs = parseFloat(nameEl.dataset.origFontSize || window.getComputedStyle(nameEl).fontSize);
+                        nameEl.dataset.origFontSize = origNameFs;
+                        nameEl.style.fontSize = origNameFs + 'px';
+                    }
+
+                    let origNoteFs = 0;
+                    if (noteEl) {
+                        origNoteFs = parseFloat(noteEl.dataset.origFontSize || window.getComputedStyle(noteEl).fontSize);
+                        noteEl.dataset.origFontSize = origNoteFs;
+                        noteEl.style.fontSize = origNoteFs + 'px';
+                    }
+
+                    const priceNodes = Array.from(priceLine.querySelectorAll('.qty-val, .price-val, .unit')).map(node => {
+                        const base = parseFloat(node.dataset.origFontSize || window.getComputedStyle(node).fontSize);
+                        node.dataset.origFontSize = base;
+                        node.style.fontSize = base + 'px';
+                        return { node, base };
+                    });
+
+                    const getPriceKidsW = () => {
+                        const kids = Array.from(priceLine.children).filter(k => k.getBoundingClientRect().width > 0);
+                        if (!kids.length) return 0;
+                        return (Math.max(...kids.map(k => k.getBoundingClientRect().right)) - Math.min(...kids.map(k => k.getBoundingClientRect().left))) / zf;
+                    };
+                    const getNoteW = () => (noteEl && noteEl.getBoundingClientRect().width > 0) ? (noteEl.getBoundingClientRect().width / zf) : 0;
+                    const totalNeededW = () => getPriceKidsW() + (noteEl ? gapPx + getNoteW() : 0);
+
+                    // 1) 先縮小備註（最小原本 70%）
+                    let noteScale = 1;
+                    if (noteEl && totalNeededW() > availW + 0.5) {
+                        while (noteScale > 0.70 + 0.001 && totalNeededW() > availW + 0.5) {
+                            noteScale = Math.max(0.70, noteScale * 0.94);
+                            noteEl.style.fontSize = (origNoteFs * noteScale) + 'px';
+                        }
+                    }
+
+                    // 2) 再縮品名
+                    let nameScale = 1;
+                    if (nameEl && totalNeededW() > availW + 0.5) {
+                        while (nameScale > 0.35 + 0.001 && totalNeededW() > availW + 0.5) {
+                            nameScale = Math.max(0.35, nameScale * 0.93);
+                            nameEl.style.fontSize = (origNameFs * nameScale) + 'px';
+                        }
+                    }
+
+                    // 3) 價格最後
+                    let priceScale = 1;
+                    if (totalNeededW() > availW + 0.5) {
+                        while (priceScale > 0.45 + 0.001 && totalNeededW() > availW + 0.5) {
+                            priceScale = Math.max(0.45, priceScale * 0.93);
+                            priceLine.style.fontSize = (origPriceLineFs * priceScale) + 'px';
+                            priceNodes.forEach(item => {
+                                item.node.style.fontSize = (item.base * priceScale) + 'px';
+                            });
+                        }
+                    }
+
+                    // 安全保底：極端超長備註仍超出時再微調備註，避免重疊或超出卡片
+                    if (noteEl && totalNeededW() > availW + 0.5) {
+                        while (noteScale > 0.35 + 0.001 && totalNeededW() > availW + 0.5) {
+                            noteScale = Math.max(0.35, noteScale * 0.93);
+                            noteEl.style.fontSize = (origNoteFs * noteScale) + 'px';
+                        }
+                    }
+
+                    // 置中校正：空間充裕時在整行置中；否則在備註左側剩餘空間內置中
+                    if (noteEl) {
+                        const pW = getPriceKidsW();
+                        const reservedRight = getNoteW() + gapPx;
+                        if (pW <= availW - 2 * reservedRight - 0.5) {
+                            priceLine.style.paddingLeft = reservedRight + 'px';
+                        }
+                    }
+                }
+            }
+
+            // 中卡 A3：品名與價格同一行；長品名先縮品名（最小 60%），仍放不下再把價格＋元換到第 2 行
+            if (cardEl.classList.contains('card-medium') && cardEl.classList.contains('tpl-A3')) {
+                const body = cardEl.querySelector('.badge-body');
+                const topRow = body ? body.querySelector('.a3-top-row') : null;
+                const nameEl = topRow ? topRow.querySelector('.line-name') : null;
+                const priceLine = topRow ? topRow.querySelector('.line-price') : null;
+                if (body && topRow && nameEl && priceLine) {
+                    const cardRect = cardEl.getBoundingClientRect();
+                    const zf = cardEl.offsetWidth > 0 ? cardRect.width / cardEl.offsetWidth : 1;
+                    const availW = Math.max(1, body.getBoundingClientRect().width / zf);
+
+                    topRow.style.flexWrap = 'nowrap';
+                    nameEl.style.width = 'auto';
+
+                    const origNameFs = parseFloat(nameEl.dataset.origFontSize || window.getComputedStyle(nameEl).fontSize);
+                    nameEl.dataset.origFontSize = origNameFs;
+                    nameEl.style.fontSize = origNameFs + 'px';
+
+                    const origPriceLineFs = parseFloat(priceLine.dataset.origFontSize || window.getComputedStyle(priceLine).fontSize);
+                    priceLine.dataset.origFontSize = origPriceLineFs;
+                    priceLine.style.fontSize = origPriceLineFs + 'px';
+
+                    const priceChildren = Array.from(priceLine.querySelectorAll('.qty-val, .price-val, .unit')).map(node => {
+                        const base = parseFloat(node.dataset.origFontSize || window.getComputedStyle(node).fontSize);
+                        node.dataset.origFontSize = base;
+                        node.style.fontSize = base + 'px';
+                        return { node, base };
+                    });
+
+                    const getNameTextW = () => {
+                        const range = document.createRange();
+                        range.selectNodeContents(nameEl);
+                        return range.getBoundingClientRect().width / zf;
+                    };
+                    const getPriceKidsW = () => {
+                        const kids = Array.from(priceLine.children).filter(k => k.getBoundingClientRect().width > 0);
+                        if (!kids.length) return 0;
+                        return (Math.max(...kids.map(k => k.getBoundingClientRect().right)) - Math.min(...kids.map(k => k.getBoundingClientRect().left))) / zf;
+                    };
+                    const csRow = window.getComputedStyle(topRow);
+                    const gapW = parseFloat(csRow.columnGap) || (origNameFs * 0.3);
+
+                    const fitsSameLine = () => (getNameTextW() + gapW + getPriceKidsW()) <= availW + 0.5;
+
+                    let nameScale = 1;
+                    while (nameScale > 0.60 + 0.001 && !fitsSameLine()) {
+                        nameScale = Math.max(0.60, nameScale * 0.94);
+                        nameEl.style.fontSize = (origNameFs * nameScale) + 'px';
+                    }
+
+                    if (!fitsSameLine()) {
+                        topRow.style.flexWrap = 'wrap';
+                        nameEl.style.width = '100%';
+                        nameScale = 1;
+                        nameEl.style.fontSize = origNameFs + 'px';
+                        while (nameScale > 0.35 + 0.001 && getNameTextW() > availW + 0.5) {
+                            nameScale = Math.max(0.35, nameScale * 0.94);
+                            nameEl.style.fontSize = (origNameFs * nameScale) + 'px';
+                        }
+                        let priceScale = 1;
+                        while (priceScale > 0.45 + 0.001 && getPriceKidsW() > availW + 0.5) {
+                            priceScale = Math.max(0.45, priceScale * 0.94);
+                            priceLine.style.fontSize = (origPriceLineFs * priceScale) + 'px';
+                            priceChildren.forEach(item => {
+                                item.node.style.fontSize = (item.base * priceScale) + 'px';
+                            });
+                        }
+                    }
+                }
+            }
+
             // 非 A4 且非 A 類的卡片若有類別移至上方獨立行，於寬度縮字後再檢查垂直空間是否溢出
             if (!isA4 && !isHanger && !cardEl.classList.contains('tpl-A') && cardEl.querySelector('.line-category[data-promoted-cat="1"]')) {
                 const box = cardEl.querySelector('.white-panel') || cardEl;
@@ -6176,9 +6752,14 @@
                         const rects = children.map(node => node.getBoundingClientRect());
                         return (Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left))) / cardEl.getBoundingClientRect().width;
                     };
+                    // 任務 43：A4 雙張 A1 類別基準已縮為 70%，計算價格縮放比例時維持原本標籤寬度，確保價格數字與「元」大小不變
+                    const isA4TwoA1 = !isA4One && cardEl.classList.contains('card-a4two') && cardEl.classList.contains('tpl-A1');
+                    const a4TwoA1Label = isA4TwoA1
+                        ? bases.find(item => item.node.classList.contains('label') && !item.node.dataset.customLabelBase && item.node.textContent.trim().length <= 3)
+                        : null;
                     bases.forEach(item => {
                         if (!item.node.dataset.origFontSize) item.node.dataset.origFontSize = item.base;
-                        applyFontSize(item.node, item.base);
+                        applyFontSize(item.node, item === a4TwoA1Label ? item.base / 0.7 : item.base);
                     });
                     let scale = 1;
                     // 任務 32：基準字級很大（例如 400px）時，舊的 0.35 下限會讓長價格縮不夠而溢出。
@@ -6186,11 +6767,14 @@
                     let r0 = contentRatio();
                     if (r0 > maxRatio + 0.001) {
                         scale = maxRatio / r0;
-                        bases.forEach(item => applyFontSize(item.node, item.base * scale));
+                        bases.forEach(item => applyFontSize(item.node, (item === a4TwoA1Label ? item.base / 0.7 : item.base) * scale));
                     }
                     while (contentRatio() > maxRatio + 0.001 && scale * 0.97 >= 0.05) {
                         scale *= 0.97;
-                        bases.forEach(item => applyFontSize(item.node, item.base * scale));
+                        bases.forEach(item => applyFontSize(item.node, (item === a4TwoA1Label ? item.base / 0.7 : item.base) * scale));
+                    }
+                    if (a4TwoA1Label) {
+                        applyFontSize(a4TwoA1Label.node, a4TwoA1Label.base * scale);
                     }
                 });
             }
@@ -6761,7 +7345,12 @@
                             '.a4-content > .line-price, .a4-content > .line-price .highlight, .a4-content > .line-price .unit, .a4-content > .line-price .label, .a4-content > .line-price .qty-val, .a4-content > .line-price .price-val, ' +
                             '.a4-price-group .line-category, .a4-a3-row > .price-badge, .a4-price-group > .price-badge'
                         ));
+                        const isA4OneA1 = isA4One && cardEl.classList.contains('tpl-A1');
                         const nameNote = [...nameNodes, ...noteNodes].map(node => {
+                            if (isA4OneA1 && nameNodes.includes(node)) {
+                                const cur = parseFloat(node.style.fontSize || window.getComputedStyle(node).fontSize);
+                                return { node, base: cur };
+                            }
                             const base = parseFloat(node.dataset.origFontSize || window.getComputedStyle(node).fontSize);
                             node.dataset.origFontSize = base;
                             return { node, base };
@@ -7255,6 +7844,7 @@
         }
 
         const C2_PUNCT_SET = new Set('，。、；：！？,.;:!?）」』'.split(''));
+        const C2_NUM_UNIT_RE = /^(?:元|塊|角|分|折|入|件|個|顆|粒|包|袋|盒|箱|組|套|份|瓶|罐|桶|杯|碗|盤|條|支|枝|根|隻|頭|尾|張|片|頁|本|冊|雙|對|打|名|位|人|次|回|趟|天|日|週|周|月|年|歲|秒|分鐘|時|小時|點|樓|層|號|室|段|巷|弄|坪|吋|尺|寸|里|碼|克|公克|公斤|毫克|噸|斤|兩|升|公升|毫升|度|倍|成|款|種|樣|台|臺|部|輛|車|格|元起|折起|kg|g|mg|ml|l|cc|cm|mm|m|km|oz|lb|hr|hrs|min|sec)$/i;
 
         function tokenizeC2LineText(text) {
             const tokens = [];
@@ -7309,7 +7899,7 @@
                 });
             };
 
-            const appendPunctToLast = (ch, markBreakAfter = true) => {
+            const appendPunctToLast = (str, markBreakAfter = true) => {
                 if (pendingPrefix) {
                     const pref = pendingPrefix;
                     pendingPrefix = '';
@@ -7322,19 +7912,35 @@
                     });
                 }
                 if (tokens.length === 0) {
-                    pushToken({ type: 'plain', text: ch }, ch);
+                    pushToken({ type: 'plain', text: str }, str);
                     return;
                 }
                 const last = tokens[tokens.length - 1];
                 const lastPart = last.parts[last.parts.length - 1];
                 if (lastPart && lastPart.type === 'plain') {
-                    lastPart.text += ch;
+                    lastPart.text += str;
                 } else {
-                    last.parts.push({ type: 'plain', text: ch });
+                    last.parts.push({ type: 'plain', text: str });
                 }
-                if (markBreakAfter) last.breakAfter = true;
-                else last.nonPunct += 1;
+                if (markBreakAfter) {
+                    last.breakAfter = true;
+                } else {
+                    for (const ch of str) {
+                        if (!/\s/.test(ch)) last.nonPunct += 1;
+                    }
+                }
                 last.isSpace = false;
+            };
+
+            const canAttachNumUnit = (seg) => {
+                if (tokens.length === 0 || pendingPrefix) return false;
+                const last = tokens[tokens.length - 1];
+                if (last.isSpace || last.breakAfter || !last.parts.length) return false;
+                const lastPart = last.parts[last.parts.length - 1];
+                if (!lastPart) return false;
+                if (C2_NUM_UNIT_RE.test(seg) && /\d$/.test(lastPart.text)) return true;
+                if (seg === '起' && /\d(?:元|折)$/.test(lastPart.text)) return true;
+                return false;
             };
 
             const processPlain = (plainStr) => {
@@ -7347,6 +7953,8 @@
                             chars.forEach(ch => appendPunctToLast(ch, true));
                         } else if (chars.every(ch => attachPrevNoBreakSet.has(ch)) && tokens.length > 0 && !tokens[tokens.length - 1].isSpace && !pendingPrefix) {
                             chars.forEach(ch => appendPunctToLast(ch, false));
+                        } else if (canAttachNumUnit(seg)) {
+                            appendPunctToLast(seg, false);
                         } else if (chars.every(ch => openPunctSet.has(ch))) {
                             pendingPrefix += seg;
                         } else {
@@ -7360,6 +7968,8 @@
                         const unit = m[0];
                         if (unit.length === 1 && C2_PUNCT_SET.has(unit)) {
                             appendPunctToLast(unit, true);
+                        } else if (canAttachNumUnit(unit)) {
+                            appendPunctToLast(unit, false);
                         } else if (unit.length === 1 && openPunctSet.has(unit)) {
                             pendingPrefix += unit;
                         } else {
@@ -7875,7 +8485,7 @@
                 if (data.note) {
                     const lineNote = document.createElement('div');
                     lineNote.className = 'line-note';
-                    applyNoteAlignment(lineNote, data.noteAlign);
+                    if (renderSize !== 'medium') applyNoteAlignment(lineNote, data.noteAlign);
                     lineNote.innerText = data.note;
                     body.appendChild(lineNote);
                 }
@@ -7902,7 +8512,6 @@
                 if (renderSize === 'smallRound' && data.nameFontSize === 'small') {
                     lineName.style.fontSize = '21pt';
                 }
-                body.appendChild(lineName);
 
                 const linePrice = document.createElement('div');
                 linePrice.className = 'line-price';
@@ -7911,7 +8520,17 @@
                     div.classList.add('price-only-mode');
                 }
                 linePrice.innerHTML = `${qtyHtml}${priceHtml}`;
-                body.appendChild(linePrice);
+
+                if (renderSize === 'medium') {
+                    const topRow = document.createElement('div');
+                    topRow.className = 'a3-top-row';
+                    topRow.appendChild(lineName);
+                    topRow.appendChild(linePrice);
+                    body.appendChild(topRow);
+                } else {
+                    body.appendChild(lineName);
+                    body.appendChild(linePrice);
+                }
 
                 if (data.note) {
                     const lineNote = document.createElement('div');
@@ -8255,6 +8874,7 @@
                 return;
             }
 
+            const isOneA1 = isOne && tpl === 'A1';
             const target = isB3 ? document.createElement('div') : content;
             if (isB3) {
                 target.className = 'white-panel a4-content';
@@ -8263,8 +8883,8 @@
             target.appendChild(makeName());
             const priceGroup = document.createElement('div');
             priceGroup.className = 'a4-price-group';
-            if (isOne) addCategory(priceGroup);
-            priceGroup.appendChild(makePrice(!isOne));
+            if (isOne && !isOneA1) addCategory(priceGroup);
+            priceGroup.appendChild(makePrice(!isOne || isOneA1));
             target.appendChild(priceGroup);
             target.appendChild(makeNote());
             if (!isB3) div.appendChild(content);
